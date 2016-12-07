@@ -266,6 +266,7 @@ case "$DIRECTIVE" in
       if [ "$RESPONSE" == "y" ] ; then
         cp -r ./.git "$TOOLCHEST_DIR/"
         cp ./.gitignore "$TOOLCHEST_DIR/"
+        cp ./README.rst "$TOOLCHEST_DIR"
       elif [ "$RESPONSE" == "n" ] ; then
         printf ""  # do nothing
       else
