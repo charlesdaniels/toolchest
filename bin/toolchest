@@ -359,10 +359,10 @@ case "$DIRECTIVE" in
         cd "$NET_CDANIELS_TOOLCHEST_DIR/packages/$PACKAGE"
 
         if [ -e "./Makefile" ] ; then
-          make install 
+          NET_CDANIELS_TOOLCHEST_DIR="$NET_CDANIELS_TOOLCHEST_DIR" make install 
           exit $?
         elif [ -e "./makefile" ] ; then
-          make install
+          NET_CDANIELS_TOOLCHEST_DIR="$NET_CDANIELS_TOOLCHEST_DIR" make install
           exit $?
         elif [ -e "./install.sh" ] ; then
           NET_CDANIELS_TOOLCHEST_DIR="$NET_CDANIELS_TOOLCHEST_DIR" ./install.sh "$@"
@@ -383,10 +383,10 @@ case "$DIRECTIVE" in
         cd "$NET_CDANIELS_TOOLCHEST_DIR/packages/$PACKAGE"
 
         if [ -e "./Makefile" ] ; then
-          make uninstall 
+          NET_CDANIELS_TOOLCHEST_DIR="$NET_CDANIELS_TOOLCHEST_DIR" make uninstall 
           exit $?
         elif [ -e "./makefile" ] ; then
-          make uninstall
+          NET_CDANIELS_TOOLCHEST_DIR="$NET_CDANIELS_TOOLCHEST_DIR" make uninstall
           exit $?
         elif [ -e "./uninstall.sh" ] ; then
           NET_CDANIELS_TOOLCHEST_DIR="$NET_CDANIELS_TOOLCHEST_DIR" ./uninstall.sh "$@"
