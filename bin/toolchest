@@ -72,6 +72,8 @@
 #    
 #    package update [package] . . . uninstall, then install [package]
 #    
+#    info . . . . . . . . . . . . . display toolchest's configuration
+#    
 #  PACKAGES
 #  ========
 #  
@@ -161,14 +163,14 @@ LOCAL_INSTALL_DIR="$HOME/.net.cdaniels.toolchest"
 # check if NET_CDANIELS_TOOLCHEST_DIR already exists (from env), and if not
 # try to detect 
 if (: "${NET_CDANIELS_TOOLCHEST_DIR?}") 2>/dev/null; then
-  echo "INFO: toolchest installation specified by environment"
+  printf ""  # do nothing
 else
   if [ -e "$SYSTEM_INSTALL_DIR" ] ; then
-    echo "INFO: found system-wide toolchest installation"
+
     NET_CDANIELS_TOOLCHEST_DIR="$SYSTEM_INSTALL_DIR"
   else
     if [ -e "$LOCAL_INSTALL_DIR" ] ; then
-      echo "INFO: found local toolchest installation"
+  
       NET_CDANIELS_TOOLCHEST_DIR="$LOCAL_INSTALL_DIR"
     else
       echo "WARNING T134: unable to detect any existing toolchest installation"
@@ -182,8 +184,6 @@ else
     fi  # if [ -e "$LOCAL_INSTALL_DIR" ] ; then
   fi  # if [ -e "$SYSTEM_INSTALL_DIR" ] ; then
 fi  # if (: "${NET_CDANIELS_TOOLCHEST_DIR?}") 2>/dev/null; then
-
-echo "INFO: managing toolchest installation in $NET_CDANIELS_TOOLCHEST_DIR"
 
 DIRECTIVE="$1"
 shift
@@ -361,12 +361,26 @@ case "$DIRECTIVE" in
         fi
         
       ;;
+      update)
+        echo "INFO: updating package $PACKAGE"
+        ./"$0" uninstall
+        ./"$0" install
+      ;;
       *)
         echo "ERROR T282: package verb \"$VERB\" was not recognized"
         exit 1
       ;;
     esac
     
+  ;;
+  info)
+    echo "INFO: toolchest configuration: "
+    echo "NET_CDANIELS_TOOLCHEST_DIR . . . $NET_CDANIELS_TOOLCHEST_DIR"
+    echo "LOCAL_INSTALL_DIR  . . . . . . . $LOCAL_INSTALL_DIR"
+    echo "SYSTEM_INSTALL_DIR . . . . . . . $SYSTEM_INSTALL_DIR"
+  ;;
+  "")
+    ./"$0" info
   ;;
   *)
     echo "ERROR T46: no such directive $DIRECTIVE"
