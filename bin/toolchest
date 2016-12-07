@@ -4,7 +4,95 @@
 #  OVERVIEW
 #  ========
 #  
-#  Toolchest utility. 
+#  Utility for managing and installing toolchest, as well as toolchest packages. 
+#  
+#  The toolchest ships with a set of core utilities, kept in the bin/ folder
+#  (the same directory as this file). These are scripts and utilities which
+#  are used commonly enough by toolchest packages that they need to be present
+#  always. They are usually bourne shell scripts, and should be portable
+#  across any POSIX compliant system.
+#  
+#  The toolchest also ships a set of optional packages, in the packages/
+#  directory. These may be installed using `toolchest package install`.
+#  Packages may or may not be fully portable, may have their own dependencies,
+#  and may even involve compilation. Package install scripts should handle any
+#  dependency resolution that is needed.
+#  
+#  Core utilities and libraries are kept in bin/ and lib/ respectively,
+#  relative to installation root. local/bin/ and local/lib/ relative to
+#  project root hold symlinks to build artifacts from packages. Things in
+#  local/ should not be version controlled, but should be re-producible by
+#  script (on the same system).
+#  
+#  NOTE ON MULTIPLE INSTALLS
+#  =========================
+#  
+#  While technically a supported configuration, it is probably not a good idea
+#  to have multiple installs of toolchest (eg. a system and a local install).
+#  This may make both installations difficult to manage. Multiple separate
+#  users having local installations should not cause any problems however.
+#  
+#  
+#  INSTALLATION TYPES
+#  ==================
+#  
+#  There are exactly two supported toolchest installation types: system and
+#  local. System installations live in /opt/net.cdaniels.toolchest, while
+#  local installations live in $HOME/.net.cdaniels.toolchest . Call the 
+#  install folder TOOLCHEST_DIR
+#  
+#  There are two bin folders, $TOOLCHEST_DIR/bin, and $TOOLCHEST_DIR/local/bin .
+#  Both should be added to $PATH in order to use the toolchest coreutils and 
+#  any installed packages. 
+#  
+#  USAGE
+#  =====
+#  
+#    install  . . . . . prompts for install type, then performs the install
+#    
+#    install system . . perform a system-wide toolchest installation
+#    
+#    install local  . . install the toolchest in $HOME
+#    
+#    uninstall  . . . . uninstall the toolchest. If only a local or only a
+#                      system install is present, it will be uninstalled. If
+#                      both are present, the script will error.
+#    
+#    uninstall local  . uninstall the toolchest from $HOME
+#    
+#    uninstall system . uninstall the system-wide installation
+#    
+#  ENVIORNMENT VARIABLES
+#  =====================
+#  
+#    NET_CDANIELS_TOOLCHEST_DIR . . . existing toolchest install directory.
+#                                     This is the toolchest install that the
+#                                     script will manage. This environment
+#                                     variable is the supported method for
+#                                     managing both a local and a system wide
+#                                     installation on the same machine. If not
+#                                     set, it will be extrapolated at runtime.
+#                                     If only a system or only a local
+#                                     installation exists, it will be used. If
+#                                     both exist, the local install will be
+#                                     preferred.
+#    
+#    
+#  AUTHOR'S NOTE ON STOW
+#  =====================
+#  
+#  Typically, stow would make a lot of sense to use for a project with as much
+#  symlinking going on as toolchest. However, in my experience GNU stow is not
+#  widely available on many systems. It is not present in the base
+#  installation of macOS, nor in the base installation of FreeBSD 11 or Ubuntu
+#  16. By removing stow as a dependency, the toolchest should be able to run
+#  on a wide variety of systems without needing either root access (to use
+#  the package manager) or fooling around with compiling stow from source.
+#  
+#  As someone who has used stow fairly extensively, I very much respect stow
+#  and it's capabilities, but sadly re-inventing the wheel in this respect is
+#  a design decision I have made to improve portability.
+#    
 #    
 ########10########20########30##### LICENSE ####50########60########70########80
 #  Copyright (c) 2016, Charles Daniels
@@ -38,10 +126,41 @@
 #  
 ########10########20########30########40########50########60########70########80
 
+SYSTEM_INSTALL_DIR="/opt/net.cdaniels.toolchest"
+LOCAL_INSTALL_DIR="$HOME/.net.cdaniels.toolchest"
+
+# check if NET_CDANIELS_TOOLCHEST_DIR already exists (from env), and if not
+# try to detect 
+if (: "${NET_CDANIELS_TOOLCHEST_DIR?}") 2>/dev/null; then
+  echo "INFO: toolchest installation specified by environment"
+else
+  if [ -e "$SYSTEM_INSTALL_DIR" ] ; then
+    echo "INFO: found system-wide toolchest installation"
+    NET_CDANIELS_TOOLCHEST_DIR="$SYSTEM_INSTALL_DIR"
+  else
+    if [ -e "$LOCAL_INSTALL_DIR" ] ; then
+      echo "INFO: found local toolchest installation"
+      NET_CDANIELS_TOOLCHEST_DIR="$LOCAL_INSTALL_DIR"
+    else
+      echo "WARNING T134: unable to detect any existing toolchest installation"
+      # if we aren't performing an install, then we have no toolchest to
+      # manage.
+      if [ ! "$1" == "install" ] ; then 
+        echo "ERROR T149: no toolchest installation present, unable to process"
+        echo "            directive \"$1\""
+        exit 1
+      fi  # if [ ! "$1" == "install" ] ; then 
+    fi  # if [ -e "$LOCAL_INSTALL_DIR" ] ; then
+  fi  # if [ -e "$SYSTEM_INSTALL_DIR" ] ; then
+fi  # if (: "${NET_CDANIELS_TOOLCHEST_DIR?}") 2>/dev/null; then
+
+echo "INFO: managing toolchest installation in $NET_CDANIELS_TOOLCHEST_DIR"
+
 DIRECTIVE="$1"
 shift
 
 case "$DIRECTIVE" in
+########10########20########30##### INSTALL ####50########60########70########80
   install)
     INSTALL_TYPE="$1"
     shift
@@ -50,7 +169,7 @@ case "$DIRECTIVE" in
         echo "INFO: selected install type local"
 
         # make sure we don't have an existing installation
-        TOOLCHEST_DIR="$HOME/.net.cdaniels.toolchest"
+        TOOLCHEST_DIR="$LOCAL_INSTALL_DIR"
        
       ;;
       system)
@@ -61,7 +180,7 @@ case "$DIRECTIVE" in
           echo "ERROR T88: must be root to perform system install"
           exit 1
         fi
-        TOOLCHEST_DIR="/opt/net.cdaniels.toolchest"
+        TOOLCHEST_DIR="$SYSTEM_INSTALL_DIR"
       ;;
       *)
         printf "install type (system, local) > "
@@ -99,7 +218,77 @@ case "$DIRECTIVE" in
     echo "INFO: please add $TOOLCHEST_DIR/local/bin to \$PATH"
     exit 0 
   ;;
+########10########20########30#### UNINSTALL ###50########60########70########80
+  uninstall)
+    UNINSTALL_TYPE="$1"
+    shift
 
+    case "$UNINSTALL_TYPE" in
+      local)
+        echo "INFO: removing local toolchest installation"
+        TOOLCHEST_DIR="$LOCAL_INSTALL_DIR"
+      ;;
+      system)
+        echo "INFO: removing system toolchest installation"
+        TOOLCHEST_DIR="$SYSTEM_INSTALL_DIR"
+      ;;
+      *)
+        # check to see if there is only one install on the system, if so 
+        # we will uninstall that
+        if [ -e "$SYSTEM_INSTALL_DIR" ] ; then
+         if [ -e "$LOCAL_INSTALL_DIR" ] ; then
+            echo "ERROR T117: both $SYSTEM_INSTALL_DIR and $LOCAL_INSTALL_DIR"
+            echo "            exit. Please specify uninstall type explicitly"
+            exit 1
+          fi
+          ./"$0" uninstall system
+          exit $?
+        fi
+        if [ -e "$LOCAL_INSTALL_DIR" ] ; then
+          ./"$0" uninstall local
+          exit $?
+        fi
+      ;;
+    esac
+    
+    # this shouldent happen, but sanity checking is good
+    echo "INFO: uninstalling toolchest from $TOOLCHEST_DIR"
+    if [ ! -e "$TOOLCHEST_DIR" ] ; then
+      echo "ERROR T136: no toolchest installation found at $TOOLCHEST_DIR"
+      exit 1
+    fi
+
+    # give the uesr time to cancel
+    printf "INFO: sleeping 5 seconds..."
+    sleep 5
+    echo "DONE"
+
+    # actually do the uninstall
+    printf "INFO: performing uninstall... "
+    rm -rf "$TOOLCHEST_DIR"
+    echo "DONE"
+    RET="$?"
+    echo "INFO: uninstall complete."
+    exit "$RET"
+
+  ;;
+########10########20########30##### PACKAGE ####50########60########70########80
+  package)
+    VERB="$1"
+    shift
+
+    case "$VERB" in
+      list)
+        echo "package listing: "
+        ls -1 $NET_CDANIELS_TOOLCHEST_DIR/packages
+      ;;
+      *)
+        echo "ERROR T282: package verb \"$VERB\" was not recognized"
+        exit 1
+      ;;
+    esac
+    
+  ;;
   *)
     echo "ERROR T46: no such directive $DIRECTIVE"
   ;;
