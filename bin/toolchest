@@ -398,8 +398,8 @@ case "$DIRECTIVE" in
       ;;
       update)
         echo "INFO: updating package $PACKAGE"
-        toolchest uninstall
-        toolchest install
+        toolchest package uninstall "$PACKAGE"
+        toolchest package install "$PACKAGE"
       ;;
       *)
         echo "ERROR T282: package verb \"$VERB\" was not recognized"
