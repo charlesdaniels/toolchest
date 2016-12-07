@@ -185,6 +185,19 @@ else
   fi  # if [ -e "$SYSTEM_INSTALL_DIR" ] ; then
 fi  # if (: "${NET_CDANIELS_TOOLCHEST_DIR?}") 2>/dev/null; then
 
+# make sure that we are somewhere in $PATH (toolchest likes to recursively
+# call itself)
+command -v toolchest > /dev/null
+if [ $? -ne 0 ] ; then
+  if [ "$1" == "install" ] ; then 
+    # the installer is not guaranteed to run from $PATH
+    printf ""  # do nothing
+  else
+    echo "ERROR T196: toolchest executable not in \$PATH"
+    exit 1
+  fi
+fi
+
 DIRECTIVE="$1"
 shift
 
@@ -212,7 +225,7 @@ case "$DIRECTIVE" in
         TOOLCHEST_DIR="$SYSTEM_INSTALL_DIR"
       ;;
       *)
-        printf "install type (system, local) > "
+        printf "QUERY: install type (system, local) > "
         read INSTALL_TYPE
         ./"$0" install $INSTALL_TYPE
         exit $?
@@ -242,6 +255,28 @@ case "$DIRECTIVE" in
     mkdir "$TOOLCHEST_DIR/local/log"
     mkdir "$TOOLCHEST_DIR/local/backup"
     mkdir "$TOOLCHEST_DIR/local/config"
+
+    # if we are installing from a git clone, carry over .git and
+    # .gitignore
+    if [ -e ./.git ] ; then
+      echo "INFO: it looks like you are installing from a git clone"
+      printf "QUERY: carry over .git and .gitignore to installation? (y/n) > "
+      read RESPONSE
+
+      if [ "$RESPONSE" == "y" ] ; then
+        cp -r ./.git "$TOOLCHEST_DIR/"
+        cp ./.gitignore "$TOOLCHEST_DIR/"
+      elif [ "$RESPONSE" == "n" ] ; then
+        printf ""  # do nothing
+      else
+        echo "ERROR T259: invalid response (choices are: y, n)"
+        echo "INFO: installation incomplete, cleaning up..."
+        ./"$0" uninstall $INSTALL_TYPE
+        exit 1
+      fi
+    fi  # if [ -e ./.git ] ; then
+
+    # finish up
     echo "INFO: installation complete."
     echo "INFO: please add $TOOLCHEST_DIR/bin to \$PATH"
     echo "INFO: please add $TOOLCHEST_DIR/local/bin to \$PATH"
@@ -270,11 +305,11 @@ case "$DIRECTIVE" in
             echo "            exit. Please specify uninstall type explicitly"
             exit 1
           fi
-          ./"$0" uninstall system
+          toolchest uninstall system
           exit $?
         fi
         if [ -e "$LOCAL_INSTALL_DIR" ] ; then
-          ./"$0" uninstall local
+          toolchest uninstall local
           exit $?
         fi
       ;;
@@ -363,8 +398,8 @@ case "$DIRECTIVE" in
       ;;
       update)
         echo "INFO: updating package $PACKAGE"
-        ./"$0" uninstall
-        ./"$0" install
+        toolchest uninstall
+        toolchest install
       ;;
       *)
         echo "ERROR T282: package verb \"$VERB\" was not recognized"
@@ -380,7 +415,7 @@ case "$DIRECTIVE" in
     echo "SYSTEM_INSTALL_DIR . . . . . . . $SYSTEM_INSTALL_DIR"
   ;;
   "")
-    ./"$0" info
+    toolchest info
   ;;
   *)
     echo "ERROR T46: no such directive $DIRECTIVE"
