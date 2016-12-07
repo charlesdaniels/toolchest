@@ -48,19 +48,48 @@
 #  USAGE
 #  =====
 #  
-#    install  . . . . . prompts for install type, then performs the install
+#    install  . . . . . . . . . . . prompts for install type, then performs
+#                                   the install
+#         
+#    install system . . . . . . . . perform a system-wide toolchest installation
+#         
+#    install local  . . . . . . . . install the toolchest in $HOME
+#         
+#    uninstall  . . . . . . . . . . uninstall the toolchest. If only a local
+#                                   or only a system install is present, it
+#                                   will be uninstalled. If both are present,
+#                                   the script will error.
+#         
+#    uninstall local  . . . . . . . uninstall the toolchest from $HOME
+#         
+#    uninstall system . . . . . . . uninstall the system-wide installation
+#         
+#    package list . . . . . . . . . list available packages
 #    
-#    install system . . perform a system-wide toolchest installation
+#    package install [package]  . . install [package]
 #    
-#    install local  . . install the toolchest in $HOME
+#    package uninstall [package]  . uninstall [package]
 #    
-#    uninstall  . . . . uninstall the toolchest. If only a local or only a
-#                      system install is present, it will be uninstalled. If
-#                      both are present, the script will error.
+#    package update [package] . . . uninstall, then install [package]
 #    
-#    uninstall local  . uninstall the toolchest from $HOME
-#    
-#    uninstall system . uninstall the system-wide installation
+#  PACKAGES
+#  ========
+#  
+#  Packages should reside in directories within packages/ relative to
+#  installation root. Each directory must contain one of: makefile, Makefile,
+#  install.sh. When `toolchest package install` is run, if a makefile is
+#  present in the packages directory, then `make install` will be run.
+#  Otherwise `install.sh` will be run. In either case, the calling shell first
+#  cds to the top level directory of the package.
+#   
+#  If install.sh is used, it will be passed "$@" which will include argv[3]
+#  and on. Further, NET_CDANIELS_TOOLCHEST_DIR will be explicitly set as an
+#  environment variable when executing the installer.
+#  
+#  If using makefiles, packages should also implement `make uninstall` for de-
+#  installation. Packages using install.sh should also make available an
+#  uninstall.sh for the same purpose. uninstall.sh and `make uninstall` are
+#  called in the same way as their counterparts.
 #    
 #  ENVIORNMENT VARIABLES
 #  =====================
@@ -276,11 +305,61 @@ case "$DIRECTIVE" in
   package)
     VERB="$1"
     shift
+    PACKAGE="$1"
+    shift
 
     case "$VERB" in
       list)
         echo "package listing: "
-        ls -1 $NET_CDANIELS_TOOLCHEST_DIR/packages
+        ls -1 "$NET_CDANIELS_TOOLCHEST_DIR/packages"
+      ;;
+      install)
+        # make sure the package exists
+        if [ ! -d "$NET_CDANIELS_TOOLCHEST_DIR/packages/$PACKAGE" ] ; then
+          echo "ERROR T288: no suck package directory $PACKAGE"
+          exit 1
+        fi
+
+        cd "$NET_CDANIELS_TOOLCHEST_DIR/packages/$PACKAGE"
+
+        if [ -e "./Makefile" ] ; then
+          make install 
+          exit $?
+        elif [ -e "./makefile" ] ; then
+          make install
+          exit $?
+        elif [ -e "./install.sh" ] ; then
+          NET_CDANIELS_TOOLCHEST_DIR="$NET_CDANIELS_TOOLCHEST_DIR" ./install.sh "$@"
+          exit $?
+        else
+          echo "ERROR T304: package $PACKAGE has no installer"
+          exit 1
+        fi
+
+      ;;
+      uninstall)
+        # make sure the package exists
+        if [ ! -d "$NET_CDANIELS_TOOLCHEST_DIR/packages/$PACKAGE" ] ; then
+          echo "ERROR T288: no suck package directory $PACKAGE"
+          exit 1
+        fi
+
+        cd "$NET_CDANIELS_TOOLCHEST_DIR/packages/$PACKAGE"
+
+        if [ -e "./Makefile" ] ; then
+          make uninstall 
+          exit $?
+        elif [ -e "./makefile" ] ; then
+          make uninstall
+          exit $?
+        elif [ -e "./uninstall.sh" ] ; then
+          NET_CDANIELS_TOOLCHEST_DIR="$NET_CDANIELS_TOOLCHEST_DIR" ./uninstall.sh "$@"
+          exit $?
+        else
+          echo "ERROR T359: package $PACKAGE has no uninstaller"
+          exit 1
+        fi
+        
       ;;
       *)
         echo "ERROR T282: package verb \"$VERB\" was not recognized"
