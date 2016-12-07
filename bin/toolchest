@@ -212,7 +212,7 @@ case "$DIRECTIVE" in
         TOOLCHEST_DIR="$SYSTEM_INSTALL_DIR"
       ;;
       *)
-        printf "install type (system, local) > "
+        printf "QUERY: install type (system, local) > "
         read INSTALL_TYPE
         ./"$0" install $INSTALL_TYPE
         exit $?
@@ -242,6 +242,28 @@ case "$DIRECTIVE" in
     mkdir "$TOOLCHEST_DIR/local/log"
     mkdir "$TOOLCHEST_DIR/local/backup"
     mkdir "$TOOLCHEST_DIR/local/config"
+
+    # if we are installing from a git clone, carry over .git and
+    # .gitignore
+    if [ -e ./.git ] ; then
+      echo "INFO: it looks like you are installing from a git clone"
+      printf "QUERY: carry over .git and .gitignore to installation? (y/n) > "
+      read RESPONSE
+
+      if [ "$RESPONSE" == "y" ] ; then
+        cp -r ./.git "$TOOLCHEST_DIR/"
+        cp ./.gitignore "$TOOLCHEST_DIR/"
+      elif [ "$RESPONSE" == "n" ] ; then
+        printf ""  # do nothing
+      else
+        echo "ERROR T259: invalid response (choices are: y, n)"
+        echo "INFO: installation incomplete, cleaning up..."
+        ./"$0" uninstall $INSTALL_TYPE
+        exit 1
+      fi
+    fi  # if [ -e ./.git ] ; then
+
+    # finish up
     echo "INFO: installation complete."
     echo "INFO: please add $TOOLCHEST_DIR/bin to \$PATH"
     echo "INFO: please add $TOOLCHEST_DIR/local/bin to \$PATH"
