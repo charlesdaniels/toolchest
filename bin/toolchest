@@ -360,18 +360,22 @@ case "$DIRECTIVE" in
 
         if [ -e "./Makefile" ] ; then
           NET_CDANIELS_TOOLCHEST_DIR="$NET_CDANIELS_TOOLCHEST_DIR" make install 
-          exit $?
+          RET=$?
         elif [ -e "./makefile" ] ; then
           NET_CDANIELS_TOOLCHEST_DIR="$NET_CDANIELS_TOOLCHEST_DIR" make install
-          exit $?
+          RET=$?
         elif [ -e "./install.sh" ] ; then
           NET_CDANIELS_TOOLCHEST_DIR="$NET_CDANIELS_TOOLCHEST_DIR" ./install.sh "$@"
-          exit $?
+          RET=$?
         else
           echo "ERROR T304: package $PACKAGE has no installer"
           exit 1
         fi
 
+        if [ $RET -ne 0 ] ; then
+          echo "ERROR T376: installer failed, attempting to clean up."
+          toolchest package uninstall "$PACKAGE"
+        fi
       ;;
       uninstall)
         # make sure the package exists
