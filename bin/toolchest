@@ -362,6 +362,9 @@ case "$DIRECTIVE" in
       desc)
         toolchest package description $PACKAGE
       ;;
+      description)
+        
+      ;;
       install)
         # make sure the package exists
         if [ ! -d "$NET_CDANIELS_TOOLCHEST_DIR/packages/$PACKAGE" ] ; then
