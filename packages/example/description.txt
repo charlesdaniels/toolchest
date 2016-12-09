@@ -1,0 +1,2 @@
+This is a really simple example package, to show how to use generic-install to
+install a shell script with no dependencies.

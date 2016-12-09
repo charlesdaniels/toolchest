@@ -1,0 +1,1 @@
+a trivial example package

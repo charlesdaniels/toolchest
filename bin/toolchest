@@ -48,31 +48,33 @@
 #  USAGE
 #  =====
 #  
-#    install  . . . . . . . . . . . prompts for install type, then performs
-#                                   the install
+#    install  . . . . . . . . . . . . prompts for install type, then performs
+#                                     the install
 #         
-#    install system . . . . . . . . perform a system-wide toolchest installation
+#    install system . . . . . . . . . perform a system-wide toolchest installation
 #         
-#    install local  . . . . . . . . install the toolchest in $HOME
+#    install local  . . . . . . . . . install the toolchest in $HOME
 #         
-#    uninstall  . . . . . . . . . . uninstall the toolchest. If only a local
-#                                   or only a system install is present, it
-#                                   will be uninstalled. If both are present,
-#                                   the script will error.
+#    uninstall  . . . . . . . . . . . uninstall the toolchest. If only a local
+#                                     or only a system install is present, it
+#                                     will be uninstalled. If both are
+#                                     present, the script will error.
 #         
-#    uninstall local  . . . . . . . uninstall the toolchest from $HOME
+#    uninstall local  . . . . . . . . uninstall the toolchest from $HOME
 #         
-#    uninstall system . . . . . . . uninstall the system-wide installation
+#    uninstall system . . . . . . . . uninstall the system-wide installation
 #         
-#    package list . . . . . . . . . list available packages
+#    package list . . . . . . . . . . list available packages
 #    
-#    package install [package]  . . install [package]
+#    package install [package]  . . . install [package]
 #    
-#    package uninstall [package]  . uninstall [package]
+#    package uninstall [package]  . . uninstall [package]
 #    
-#    package update [package] . . . uninstall, then install [package]
+#    package update [package] . . . . uninstall, then install [package]
 #    
-#    info . . . . . . . . . . . . . display toolchest's configuration
+#    package description [package]  . display [package]'s description
+#    
+#    info . . . . . . . . . . . . . . display toolchest's configuration
 #    
 #  PACKAGES
 #  ========
@@ -346,8 +348,19 @@ case "$DIRECTIVE" in
 
     case "$VERB" in
       list)
-        echo "package listing: "
-        ls -1 "$NET_CDANIELS_TOOLCHEST_DIR/packages"
+        cd "$NET_CDANIELS_TOOLCHEST_DIR/packages"
+        for dir in * ; do
+          if [ -e $dir/brief.txt ] ; then
+            # if a brief is provided, show it
+            printf "%15s - %s\n" "$dir" "`cat $dir/brief.txt`"
+          else
+            # otherwise just show the package name
+            printf "%15s\n" "$dir"
+          fi
+        done
+      ;;
+      desc)
+        toolchest package description $PACKAGE
       ;;
       install)
         # make sure the package exists
