@@ -1,0 +1,2 @@
+Package of shell scripts for formatting text files, and for printing them
+nicely.
