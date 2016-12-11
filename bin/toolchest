@@ -361,10 +361,10 @@ case "$DIRECTIVE" in
         for dir in * ; do
           if [ -e $dir/brief.txt ] ; then
             # if a brief is provided, show it
-            printf "%15s - %s\n" "$dir" "`cat $dir/brief.txt`"
+            printf "%20s - %s\n" "$dir" "`cat $dir/brief.txt`"
           else
             # otherwise just show the package name
-            printf "%15s\n" "$dir"
+            printf "%20s\n" "$dir"
           fi
         done
       ;;
