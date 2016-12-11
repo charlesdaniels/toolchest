@@ -1,0 +1,1 @@
+A collection of small shortcuts and tools specific to macOS systems. 
