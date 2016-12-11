@@ -234,17 +234,26 @@ case "$DIRECTIVE" in
       ;;
     esac
 
-        if [ -e "$TOOLCHEST_DIR" ] ; then
-          echo "ERROR T53: $TOOLCHEST_DIR already exists, refusing to overwrite"
-          exit 1
-        fi
+    # make sure we have things we need
+    printf "INFO: preflight check... "
+    command -v realpath > /dev/null
+    if [ $? -ne 0 ] ; then 
+      echo "FAIL"
+      echo "ERROR T242: realpath is not installed or not in $PATH"
+      exit 1
+    fi
 
-        # make sure the installer is being run from the right folder
-        if [ ! -f ./bin/toolchest ] ; then
-          echo "ERROR T61: toolchest install must be run from the top level"
-          echo "           folder of the toolchest project"
-          exit 1
-        fi
+    if [ -e "$TOOLCHEST_DIR" ] ; then
+      echo "ERROR T53: $TOOLCHEST_DIR already exists, refusing to overwrite"
+      exit 1
+    fi
+
+    # make sure the installer is being run from the right folder
+    if [ ! -f ./bin/toolchest ] ; then
+      echo "ERROR T61: toolchest install must be run from the top level"
+      echo "           folder of the toolchest project"
+      exit 1
+    fi
 
     # copy folders into place and set up folder structure
     mkdir -p "$TOOLCHEST_DIR"
