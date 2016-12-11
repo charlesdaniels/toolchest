@@ -1,0 +1,4 @@
+A collection of utilities for working with a Linux desktop environment. These
+are mostly intended to replace a heavyweight DE like MATE or xfce4, and are
+useful for cases like using i3wm without an additional DE to handle things
+like the backlight, or DPI.
