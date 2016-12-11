@@ -1,0 +1,7 @@
+A script that knows how to create new projects in a variety of different
+languages. Intended to be beginner friendly, to help newbies get their feet
+wet in programming, so as to avoid having to memorize all the boilerplate that
+goes into a new project.
+
+NOTE: this package is not yet fully ported to the toolchest format and is
+currently broken
