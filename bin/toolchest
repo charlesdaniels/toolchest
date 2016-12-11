@@ -75,6 +75,8 @@
 #    package description [package]  . display [package]'s description
 #    
 #    info . . . . . . . . . . . . . . display toolchest's configuration
+#
+#    version  . . . . . . . . . . . . display the toolchest's version
 #    
 #  PACKAGES
 #  ========
@@ -163,30 +165,26 @@ SYSTEM_INSTALL_DIR="/opt/net.cdaniels.toolchest"
 LOCAL_INSTALL_DIR="$HOME/.net.cdaniels.toolchest"
 TOOLCHEST_VERSION="0.0.1-ALPHA"
 
+command -v realpath > /dev/null
+if [ $? -ne 0 ] ; then
+  echo "ERROR T170: command \"realpath\" is not available"
+  exit 1
+fi
+
 # check if NET_CDANIELS_TOOLCHEST_DIR already exists (from env), and if not
 # try to detect 
 if (: "${NET_CDANIELS_TOOLCHEST_DIR?}") 2>/dev/null; then
   printf ""  # do nothing
 else
-  if [ -e "$SYSTEM_INSTALL_DIR" ] ; then
+  NET_CDANIELS_TOOLCHEST_DIR=$(realpath $0/../..)
+fi
 
-    NET_CDANIELS_TOOLCHEST_DIR="$SYSTEM_INSTALL_DIR"
-  else
-    if [ -e "$LOCAL_INSTALL_DIR" ] ; then
-  
-      NET_CDANIELS_TOOLCHEST_DIR="$LOCAL_INSTALL_DIR"
-    else
-      echo "WARNING T134: unable to detect any existing toolchest installation"
-      # if we aren't performing an install, then we have no toolchest to
-      # manage.
-      if [ ! "$1" == "install" ] ; then 
-        echo "ERROR T149: no toolchest installation present, unable to process"
-        echo "            directive \"$1\""
-        exit 1
-      fi  # if [ ! "$1" == "install" ] ; then 
-    fi  # if [ -e "$LOCAL_INSTALL_DIR" ] ; then
-  fi  # if [ -e "$SYSTEM_INSTALL_DIR" ] ; then
-fi  # if (: "${NET_CDANIELS_TOOLCHEST_DIR?}") 2>/dev/null; then
+if [ "$NET_CDANIELS_TOOLCHEST_DIR" != "$SYSTEM_INSTALL_DIR" ] ; then
+  if [ "$NET_CDANIELS_TOOLCHEST_DIR" != "$LOCAL_INSTALL_DIR" ] ; then
+    printf "WARNING T176: toolchest running from an unsupported location: "
+    echo $NET_CDANIELS_TOOLCHEST_DIR
+  fi
+fi
 
 # make sure that we are somewhere in $PATH (toolchest likes to recursively
 # call itself)
@@ -237,12 +235,9 @@ case "$DIRECTIVE" in
 
     # make sure we have things we need
     printf "INFO: preflight check... "
-    command -v realpath > /dev/null
-    if [ $? -ne 0 ] ; then 
-      echo "FAIL"
-      echo "ERROR T242: realpath is not installed or not in $PATH"
-      exit 1
-    fi
+    # check for realpath was moved to the top of this file, but this might be
+    # a handy spot to put some test in later
+    echo "DONE"
 
     if [ -e "$TOOLCHEST_DIR" ] ; then
       echo "ERROR T53: $TOOLCHEST_DIR already exists, refusing to overwrite"
