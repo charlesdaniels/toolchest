@@ -1,0 +1,2 @@
+Scripts and tools which pertain specifically to programming. Including
+cpplint-filter, for removing extraneous cpplint output.
