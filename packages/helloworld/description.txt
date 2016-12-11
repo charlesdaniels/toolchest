@@ -1,0 +1,4 @@
+This package demonstrates how to correctly package a simple C program so that
+it will be available in $PATH on systems of any platform, once built. It also
+demonstrates how to check for a dependency - notice that the Makefile will
+fail of gcc is not found on the system.

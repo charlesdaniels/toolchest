@@ -363,7 +363,13 @@ case "$DIRECTIVE" in
         toolchest package description $PACKAGE
       ;;
       description)
-        
+        DESCFILE="$NET_CDANIELS_TOOLCHEST_DIR/packages/$PACKAGE/description.txt"
+        if [ -e "$DESCFILE" ] ; then
+          cat $DESCFILE
+        else
+          echo "ERROR T370: no description provided for $PACKAGE"
+          exit 1
+        fi
       ;;
       install)
         # make sure the package exists
