@@ -161,6 +161,7 @@
 
 SYSTEM_INSTALL_DIR="/opt/net.cdaniels.toolchest"
 LOCAL_INSTALL_DIR="$HOME/.net.cdaniels.toolchest"
+TOOLCHEST_VERSION="0.0.1-ALPHA"
 
 # check if NET_CDANIELS_TOOLCHEST_DIR already exists (from env), and if not
 # try to detect 
@@ -452,6 +453,9 @@ case "$DIRECTIVE" in
   ;;
   "")
     toolchest info
+  ;;
+  version)
+    echo "net.cdaniles.toolchest $TOOLCHEST_VERSION"
   ;;
   *)
     echo "ERROR T46: no such directive $DIRECTIVE"
