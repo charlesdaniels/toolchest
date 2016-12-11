@@ -1,0 +1,1 @@
+A simple package template for cross platform shell scripts and such. 
