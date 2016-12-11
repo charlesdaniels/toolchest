@@ -1,0 +1,3 @@
+A set of various macros/extensions intended to be used with todo.txt. Most
+importantly, this provides todo-agenda, which generates a pleasantly formatted
+agenda.
