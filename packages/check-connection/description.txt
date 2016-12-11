@@ -1,0 +1,4 @@
+Provides the check-connection command, which is intended to clarify exactly
+the level of network connectivity available on the system. This meant to be
+paired with something like cron or jenkins, and mostly used to make sure your
+ISP isn't screwing you.
