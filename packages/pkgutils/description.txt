@@ -1,0 +1,6 @@
+This package attempts to fully abstract the system's package manager away from
+the user. This means, for the moast part, one can run pkg-install on any
+supported system and have the desired package be installed. This is not always
+flawless -not all operations are always supported on all systems, but it's
+usually pretty good, and makes it easier to build muscle memory when working
+on many different systems.
