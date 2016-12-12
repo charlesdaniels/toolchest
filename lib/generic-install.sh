@@ -15,6 +15,13 @@
 #  Note that this script depends on the current working directory being the
 #  package root. If it is not, things will definitely break in unpredictable
 #  ways. To this end, you should probably not run this by hand. 
+#  
+#  If the file `preinstall.sh` is present in the top level of the package
+#  directory, generic-install will call it before performing the installation.
+#  This is particularly useful for checking that dependencies are installed.
+#  If the preinstall script exits with a nonzero exit code, generic-install
+#  will also exit with a nonzero exit code, without performing the
+#  installation.
 #    
 ########10########20########30##### LICENSE ####50########60########70########80
 #  Copyright (c) 2016, Charles Daniels
@@ -52,6 +59,15 @@
 if ! (: "${NET_CDANIELS_TOOLCHEST_DIR?}") 2>/dev/null; then
   echo "ERROR 7: NET_CDANIELS_TOOLCHEST_DIR is not defined, installation failed"
   exit 1
+fi
+
+# run preinstall script, if present
+if [ -e ./preinstall.sh ] ; then
+  ./preinstall.sh 
+  if [ $? -ne 0 ] ; then
+    echo "ERROR 61: preinstall script failed"
+    exit 1
+  fi
 fi
 
 # setup some convenient shortcuts
