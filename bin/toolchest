@@ -128,7 +128,36 @@
 #  and it's capabilities, but sadly re-inventing the wheel in this respect is
 #  a design decision I have made to improve portability.
 #    
-#    
+#
+########10########20########30#### CHANGELOG ###50########60########70########80
+#
+# 0.0.2-ALPHA:
+#   2016-11-12 - Charles Daniels:
+#     * Fixed an issue affecting FreeBSD11 (and probably other BSD systems)
+#       where $0/../.. would error because $0 was a file, not a directory.
+#       This expansion is legal in many sh implementations (including macOS
+#       10.12), but failed on FreeBSD 11.
+#       
+#       This was fixed by removing the `toolchest` from the end of `realpath
+#       $0` using sed and working relative to that, as the parent of a file
+#       should always be a directory,
+# 
+# 0.0.3-ALPHA:
+#   2016-11-12 - Charles Daniels:
+#     * Installer now uses tar in a rather novel way to copy directories while
+#       preserving symlinks. This fixes an issue where the installer would
+#       copy links to generic-installer and generic-uninstaller as if they
+#       were files with the actual contents of the relevant libraries.
+#       
+#       This method was chosen instead of cp --preserve=links because BSD-
+#       style systems (tested: macOS 10.12, FreeBSD 11) do not support this
+#       syntax for cp.
+#     
+#     * Added additional progress messages to installer
+#     
+# 
+#     
+#     
 ########10########20########30##### LICENSE ####50########60########70########80
 #  Copyright (c) 2016, Charles Daniels
 #  All rights reserved.
