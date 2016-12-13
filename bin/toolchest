@@ -161,13 +161,13 @@
 #  
 ########10########20########30########40########50########60########70########80
 
-SYSTEM_INSTALL_DIR="/opt/net.cdaniels.toolchest"
-LOCAL_INSTALL_DIR="$HOME/.net.cdaniels.toolchest"
-TOOLCHEST_VERSION="0.0.2-ALPHA"
-
 # this forces home to be resolved to it's actual path, which fixes several
 # breakages when sanity checking installation locations.
 export HOME="$(realpath $HOME)"
+
+SYSTEM_INSTALL_DIR="/opt/net.cdaniels.toolchest"
+LOCAL_INSTALL_DIR="$HOME/.net.cdaniels.toolchest"
+TOOLCHEST_VERSION="0.0.2-ALPHA"
 
 command -v realpath > /dev/null
 if [ $? -ne 0 ] ; then
