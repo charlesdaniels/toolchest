@@ -1,25 +1,18 @@
-#!/bin/sh
 ########10########20########30## DOCUMENTATION #50########60########70########80
 #
 #  OVERVIEW
 #  ========
 #  
-#  Determines the location of the toolchest installation this script is running
-#  from and exports it. 
-#  
+#  Function that checks that a particular command is present on the system
+#  using command -v. Returns 1 if the command does NOT exist, and 0 otherwise.
+#
 #  USAGE
 #  =====
 #  
-#  This script outputs some commands you should run to populate a variety of
-#  useful variable (enumerated below), to do this, run 
-#  $(acquire-toolchest-dirs)
+#  Source this file in sh or compatible shell, then call the function. 
 #  
-#  NET_CDANIELS_TOOLCHEST_DIR  . . . toolchest install dir
-#  NET_CDANIELS_TOOLCHEST_LOCAL  . . `local/` dir inside of toolchest install
-#  NET_CDANIELS_TOOLCHEST_BIN  . . . coreutils bin directory
-#  NET_CDANIELS_TOOLCHEST_LIB  . . . coreutils lib directory
-#  NET_CDANIELS_TOOLCHEST_PACKAGES . packages directory
-#     
+#   $1 . . . name of command to check
+#    
 ########10########20########30##### LICENSE ####50########60########70########80
 #  Copyright (c) 2016, Charles Daniels
 #  All rights reserved.
@@ -52,20 +45,15 @@
 #  
 ########10########20########30########40########50########60########70########80
 
-DIR=$(realpath `echo $0 | sed 's/toolchest$//g'`/../..)
-LOCAL="$DIR/local"
-BIN="$DIR/bin"
-LIB="$DIR/lib"
-PACKAGES="$DIR/packages"
-TOOLCHEST_BINARY="$BIN/toolchest"
-
-if [ ! -e "$TOOLCHEST_BINARY" ] ; then
-  echo "ERROR ATD60: toolchest binary does not exist: $TOOLCHEST_BINARY" > /dev/stderr
-  exit 1
-fi
-
-echo "export NET_CDANIELS_TOOLCHEST_PACKAGES=$PACKAGES"
-echo "export NET_CDANIELS_TOOLCHEST_LIB=$LIB"
-echo "export NET_CDANIELS_TOOLCHEST_BIN=$BIN"
-echo "export NET_CDANIELS_TOOLCHEST_LOCAL=$LOCAL"
-echo "export NET_CDANIELS_TOOLCHEST_DIR=$DIR"
+function check_command_exists () {
+  if [ $# -ne 1 ] ; then
+    echo "ERROR CCE: invalid number of arguments $#"
+    exit 1
+  fi
+  
+  command -v "$1" > /dev/null
+  if [ $? -ne 0 ] ; then
+    return 1
+  fi
+  return 0
+}

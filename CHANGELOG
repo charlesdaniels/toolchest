@@ -22,4 +22,11 @@
     * Added additional progress messages to installer
     
     * Added random-uuid to universal-tools package
-    
+  
+  2016-11-13 - Charles Daniels:
+    * Fixed a bug in acquire-toolchest-dirs which caused it to incorrectly
+      identify NET_CDANIELS_TOOLCHEST_DIR
+
+    * Added check-command-exists library to coreutils libraries
+
+    * universal-tools now has a preinstall script to validate it's dependencies
