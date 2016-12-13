@@ -1,4 +1,5 @@
 check-connection:
+
   * gateway is hardcoded, should be detected from ifconfig (?) 
 
   * depends on speedtest-cli - maybe silently skip speedtest if not installed?
@@ -7,6 +8,7 @@ check-connection:
     updtime graphs over time)
 
 pdfutils:
+
   * need support for additional OCR tools
 
   * need preinstall script (sort-notes depends on python)
@@ -15,10 +17,12 @@ pdfutils:
 
 
 pkgutils:
+
   * pkg-housecleaning could use a code review, it hasen't been reviewed in
     over a year
 
 systemutils:
+
   * DPI_SCRIPT points to a file that no longer exists
 
   * system-statusline depends on procfs
@@ -34,6 +38,7 @@ systemutils:
     * xbacklight
 
 todotxt-extensions
+
   * requires GNU sed or 100% compatible (always an issue on systems with BSD
     sed as the default). Sensible sed should take care of invoking this
 

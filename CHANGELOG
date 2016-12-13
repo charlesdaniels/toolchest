@@ -1,5 +1,7 @@
 0.0.2-ALPHA:
+
   2016-11-12 - Charles Daniels:
+
     * Fixed an issue affecting FreeBSD11 (and probably other BSD systems)
       where $0/../.. would error because $0 was a file, not a directory.
       This expansion is legal in many sh implementations (including macOS
@@ -7,9 +9,12 @@
       
       This was fixed by removing the `toolchest` from the end of `realpath
       $0` using sed and working relative to that, as the parent of a file
-      should always be a directory,
+      should always be a directory.
+
 0.0.3-ALPHA:
+
   2016-11-12 - Charles Daniels:
+
     * Installer now uses tar in a rather novel way to copy directories while
       preserving symlinks. This fixes an issue where the installer would
       copy links to generic-installer and generic-uninstaller as if they
@@ -24,6 +29,7 @@
     * Added random-uuid to universal-tools package
   
   2016-11-13 - Charles Daniels:
+  
     * Fixed a bug in acquire-toolchest-dirs which caused it to incorrectly
       identify NET_CDANIELS_TOOLCHEST_DIR
 
