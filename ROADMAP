@@ -1,0 +1,54 @@
+check-connection:
+  * gateway is hardcoded, should be detected from ifconfig (?) 
+
+  * depends on speedtest-cli - maybe silently skip speedtest if not installed?
+
+  * need a tool to bulk analyze output of script (eg. generate speed and
+    updtime graphs over time)
+
+pdfutils:
+  * need support for additional OCR tools
+
+  * need preinstall script (sort-notes depends on python)
+
+  * should warn on install if supported OCR software is not present
+
+
+pkgutils:
+  * pkg-housecleaning could use a code review, it hasen't been reviewed in
+    over a year
+
+systemutils:
+  * DPI_SCRIPT points to a file that no longer exists
+
+  * system-statusline depends on procfs
+
+  * need preinstall script for dependancies
+
+    * ffmpeg
+
+    * xset
+
+    * i3lock
+
+    * xbacklight
+
+todotxt-extensions
+  * requires GNU sed or 100% compatible (always an issue on systems with BSD
+    sed as the default). Sensible sed should take care of invoking this
+
+  * depends on grep (is this present on all UNIXes out of box?)
+
+toolchest:
+
+  installer:
+
+    * validate that GNU sed is present on the system (sed is already validated)
+
+  packages:
+
+    * Consider the preinstall for universal-tools, maybe make this more
+      generic and put it in coreutils lib? There could be two files, maybe
+      depends.required and depends.optional, which could be iterated over by
+      the generic preinstall script. This could also be used with
+      archiveutils.
