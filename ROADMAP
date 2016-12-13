@@ -55,3 +55,11 @@ toolchest:
       depends.required and depends.optional, which could be iterated over by
       the generic preinstall script. This could also be used with
       archiveutils.
+
+  coreutils:
+
+    * should move tar method of directory mirroring into coreutils as a bin
+      script (http://superuser.com/questions/138587/how-to-copy-symbolic-
+      links/138604#138604)
+
+

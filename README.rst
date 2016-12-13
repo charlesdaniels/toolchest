@@ -2,6 +2,10 @@
 net.cdaniels.toolchest
 **********************
 
+**ATTENTION**: by using this software, you agree to abide by the license
+provided in each software module. If a software module does not have a license
+explicitly provided, it falls under the `project license <LICENSE>`_.
+
 .. contents::
 
 FOR MY FRIENDS
