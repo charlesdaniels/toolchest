@@ -3,4 +3,4 @@
 # generate a random UUID and print it to stdout
 
 import uuid
-print(uuid.uuid1())
+print(uuid.uuid4())
