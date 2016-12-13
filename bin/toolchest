@@ -271,16 +271,24 @@ case "$DIRECTIVE" in
     # original SO post: http://superuser.com/a/138604
 
     # copy folders into place and set up folder structure
+    printf "INFO: creating installation folders... "
     mkdir -p "$TOOLCHEST_DIR"
-    ( cd ./bin ; tar cf - . ) | ( cd "$TOOLCHEST_DIR/bin" ; tar xf - )
-    ( cd ./lib ; tar cf - . ) | ( cd "$TOOLCHEST_DIR/lib" ; tar xf - )
-    ( cd ./packages ; tar cf - . ) | ( cd "$TOOLCHEST_DIR/packages" ; tar xf - )
+    mkdir "$TOOLCHEST_DIR/bin"
+    mkdir "$TOOLCHEST_DIR/lib"
+    mkdir "$TOOLCHEST_DIR/packages"
     mkdir "$TOOLCHEST_DIR/local"
     mkdir "$TOOLCHEST_DIR/local/bin"
     mkdir "$TOOLCHEST_DIR/local/lib"
     mkdir "$TOOLCHEST_DIR/local/log"
     mkdir "$TOOLCHEST_DIR/local/backup"
     mkdir "$TOOLCHEST_DIR/local/config"
+    echo "DONE"
+
+    printf "INFO: copying toolchest installation... "
+    ( cd ./bin ; tar cf - . ) | ( cd "$TOOLCHEST_DIR/bin" ; tar xf - )
+    ( cd ./lib ; tar cf - . ) | ( cd "$TOOLCHEST_DIR/lib" ; tar xf - )
+    ( cd ./packages ; tar cf - . ) | ( cd "$TOOLCHEST_DIR/packages" ; tar xf - )
+    echo "DONE"
 
     # if we are installing from a git clone, carry over .git and
     # .gitignore
