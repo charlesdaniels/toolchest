@@ -167,7 +167,7 @@ export HOME="$(realpath $HOME)"
 
 SYSTEM_INSTALL_DIR="/opt/net.cdaniels.toolchest"
 LOCAL_INSTALL_DIR="$HOME/.net.cdaniels.toolchest"
-TOOLCHEST_VERSION="0.0.2-ALPHA"
+TOOLCHEST_VERSION="0.0.3-ALPHA"
 
 command -v realpath > /dev/null
 if [ $? -ne 0 ] ; then
@@ -265,11 +265,16 @@ case "$DIRECTIVE" in
       exit 1
     fi
 
+    # note: we use tar in a somewhat unusual way here, this is to preserve
+    # symlinks regardless of wheather we are working with GNU or BSD style cp
+    # 
+    # original SO post: http://superuser.com/a/138604
+
     # copy folders into place and set up folder structure
     mkdir -p "$TOOLCHEST_DIR"
-    cp -r ./bin "$TOOLCHEST_DIR"
-    cp -r ./lib "$TOOLCHEST_DIR"
-    cp -r ./packages "$TOOLCHEST_DIR"
+    ( cd ./bin ; tar cf - . ) | ( cd "$TOOLCHEST_DIR" ; tar xf - )
+    ( cd ./lib ; tar cf - . ) | ( cd "$TOOLCHEST_DIR" ; tar xf - )
+    ( cd ./packages ; tar cf - . ) | ( cd "$TOOLCHEST_DIR" ; tar xf - )
     mkdir "$TOOLCHEST_DIR/local"
     mkdir "$TOOLCHEST_DIR/local/bin"
     mkdir "$TOOLCHEST_DIR/local/lib"
