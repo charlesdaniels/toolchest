@@ -177,7 +177,7 @@ fi
 
 command -v sed > /dev/null
 if [ $? -ne 0 ] ; then
-  echo "ERROR T176: command \"sed\" is not available"
+  echo "ERROR T180: command \"sed\" is not available"
   exit 1
 fi
 
