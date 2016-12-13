@@ -90,6 +90,26 @@ enough to warrent a new project, for a number of reasons:
 * the toolchest has very few dependencies, just a POSIX shell and some common
   utilities
 
+PACKAGE LISTING (current as of 0.0.3-ALPHA)
+-------------------------------------------
+
+::
+            240utils - utilities for USC's CSCE240 class
+        archiveutils - utilities for working with archives
+    check-connection - package for testing network connectio
+          code-tools - programming related tools and scripts
+      create-project - [BROKEN - WiP] beginner oriented script for setting up new projects
+             example - a trivial example package
+          helloworld - An example C package which compiles via make
+            lprutils - tools for formatting and printing things
+       mac-shortcuts - macOS specific shortcuts and small tools
+            pdfutils - utilities for working with pdfs
+            pkgutils - simple wrappers for various package managers
+         systemutils - Linux+i3wm oriented utilities
+            template - package template - does not contain any binaries
+  todotxt-extensions - various extensions and tools built around todo.txt
+     universal-tools - catch-all for various non-system-specific tools that don't need their own packages
+
 
 STYLE AND CONVENTIONS
 =====================
