@@ -30,3 +30,5 @@
     * Added check-command-exists library to coreutils libraries
 
     * universal-tools now has a preinstall script to validate it's dependencies
+
+    * archiveutils now has a preinstall script to validate it's dependencies
