@@ -45,6 +45,9 @@ toolchest:
 
     * validate that GNU sed is present on the system (sed is already validated)
 
+    * validate that python is installed for generate-separator or move it to a
+      package
+
   packages:
 
     * Consider the preinstall for universal-tools, maybe make this more
