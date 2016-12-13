@@ -272,9 +272,9 @@ case "$DIRECTIVE" in
 
     # copy folders into place and set up folder structure
     mkdir -p "$TOOLCHEST_DIR"
-    ( cd ./bin ; tar cf - . ) | ( cd "$TOOLCHEST_DIR" ; tar xf - )
-    ( cd ./lib ; tar cf - . ) | ( cd "$TOOLCHEST_DIR" ; tar xf - )
-    ( cd ./packages ; tar cf - . ) | ( cd "$TOOLCHEST_DIR" ; tar xf - )
+    ( cd ./bin ; tar cf - . ) | ( cd "$TOOLCHEST_DIR/bin" ; tar xf - )
+    ( cd ./lib ; tar cf - . ) | ( cd "$TOOLCHEST_DIR/lib" ; tar xf - )
+    ( cd ./packages ; tar cf - . ) | ( cd "$TOOLCHEST_DIR/packages" ; tar xf - )
     mkdir "$TOOLCHEST_DIR/local"
     mkdir "$TOOLCHEST_DIR/local/bin"
     mkdir "$TOOLCHEST_DIR/local/lib"
