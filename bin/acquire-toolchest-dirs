@@ -52,7 +52,7 @@
 #  
 ########10########20########30########40########50########60########70########80
 
-DIR="$(realpath $0/../..)"
+DIR=$(realpath `echo $0 | sed 's/toolchest$//g'`/..)
 LOCAL="$DIR/local"
 BIN="$DIR/bin"
 LIB="$DIR/lib"
