@@ -94,6 +94,7 @@ PACKAGE LISTING (current as of 0.0.3-ALPHA)
 -------------------------------------------
 
 ::
+
   240utils - utilities for USC's CSCE240 class
   archiveutils - utilities for working with archives
   check-connection - package for testing network connectio
