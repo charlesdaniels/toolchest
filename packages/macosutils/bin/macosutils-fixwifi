@@ -1,0 +1,131 @@
+#!/bin/sh
+########10########20########30## DOCUMENTATION #50########60########70########80
+#
+#  OVERVIEW
+#  ========
+#  
+#  A simple script, intended to be invoked via a desktop shortcut for end-
+#  users. Attempts to fix common wifi problems on macOS.
+#  
+#  REFERENCES
+#  ==========
+#  
+#  [1] - OSX Tips – Turn off WiFi from the command line
+#  http://www.dgkapps.com/blog/osx-tips/osx-tips-turn-off-wifi-from-the-command-line/
+#  
+#  [2] - Mac Network Commands Cheat Sheet
+#  http://krypted.com/mac-security/mac-network-commands-cheat-sheet/
+#    
+########10########20########30##### LICENSE ####50########60########70########80
+#  Copyright (c) 2016, Charles Daniels
+#  All rights reserved.
+# 
+#  Redistribution and use in source and binary forms, with or without
+#  modification, are permitted provided that the following conditions are met:
+# 
+#  1. Redistributions of source code must retain the above copyright notice,
+#     this list of conditions and the following disclaimer.
+#  
+#  2. Redistributions in binary form must reproduce the above copyright
+#     notice, this list of conditions and the following disclaimer in the
+#     documentation and/or other materials provided with the distribution.
+# 
+#  3. Neither the name of the copyright holder nor the names of its
+#     contributors may be used to endorse or promote products derived from
+#     this software without specific prior written permission.
+# 
+#  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+#  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+#  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+#  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+#  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+#  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+#  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+#  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+#  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+#  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+#  POSSIBILITY OF SUCH DAMAGE.
+#  
+########10########20########30########40########50########60########70########80
+
+NETWORK_SERVICE="Wi-Fi"
+# some best guess servers
+DNS_SERVERS="8.8.8.8, 8.8.4.4"
+
+
+# get default wifi interface
+printf "INFO: determining interface for service \"$NETWORK_SERVICE\"... "
+# from [1]
+CURRENT_DEVICE=$(networksetup -listallhardwareports | awk '$3=="'$NETWORK_SERVICE'" {getline; print $2}')
+if [ $? -ne 0 ] ; then
+  echo "FAIL"
+  echo "FATAL ERROR 48: unable to determine wifi interface... is this a mac?"
+  exit 1
+fi
+echo "$CURRENT_DEVICE"
+
+# clear dns cache
+printf "INFO: clearing local DNS cache... "
+macosutils-cleardns
+if [ $? -ne 0 ] ; then
+  echo "FATAL ERROR"
+  echo "ERROR 61: failed to terminate mDNSResponder service"
+  exit 1
+fi
+echo "DONE"
+
+# restart the wifi NIC
+printf "INFO: restarting network service $NETWORK_SERVICE... "
+networksetup -setairportpower $NETWORK_SERVICE off > /dev/null
+networksetup -setnetworkserviceenabled $NETWORK_SERVICE off > /dev/null
+sleep 1
+networksetup -setairportpower $NETWORK_SERVICE on > /dev/null
+networksetup -setnetworkserviceenabled $NETWORK_SERVICE on > /dev/null
+RET=$?
+sleep 10
+if [ $RET -ne 0 ] ; then
+  echo "FAIL"
+  echo "FATAL ERROR 63: an unknown error occured while restarting the wifi device"
+  exit 1
+fi
+echo "DONE"
+
+# validate that the NIC is up
+printf "INFO: validating that network service \"$NETWORK_SERVICE\" is on... "
+networksetup -getnetworkserviceenabled $NETWORK_SERVICE | grep Enabled > /dev/null
+if [ $? -ne 0 ] ; then
+  echo "ERROR: $NETWORK_SERVICE is down"
+  printf "INFO: service $NETWORK_SERVICE is inactive, bringing it up... "
+  networksetup -setnetworkserviceenabled $CURRENT_DEVICE on > /dev/null
+  networksetup -setairportpower $CURRENT_DEVICE on > /dev/null
+  sleep 10
+fi
+echo "DONE"
+
+# enable DHCP on the wifi NIC
+printf "INFO: forcing DHCP on $NETWORK_SERVICE ($CURRENT_DEVICE)... "
+networksetup -setdhcp $NETWORK_SERVICE
+if [ $? -ne 0 ] ; then
+  echo "FAIL"
+  echo "FATAL ERROR 84: failed to enable DHCP on $NETWORK_SERVICE"
+  exit 1
+fi
+echo "DONE"
+
+# make sure we have DNS servers on the NIC
+printf "INFO: checking that \"$NETWORK_SERVICE\" has at least one DNS server... "
+networksetup -getdnsservers Wi-Fi | grep "There aren"
+if [ $? -eq 0 ] ; then
+  echo "ERROR 115: no DNS servers found for $NETWORK_SERVICE"
+  printf "INFO: adding DNS servers to $NETWORK_SERVICE... "
+  # the default gateway is probably a working DNS server too
+  DEFAULT_GATEWAY=$(route -n get default | grep gateway  | cut -d: -f 2 | tr -d " ")
+  if [ $? -ne 0 ] ; then
+    DEFAULT_GATEWAY=""
+  fi
+  networksetup -setdnsservers $NETWORK_SERVICE $DNS_SERVERS $DEFAULT_GATEWAY
+fi
+echo "DONE"
+
+echo "INFO: all troubleshooting steps complete, you may now close the terminal."
+

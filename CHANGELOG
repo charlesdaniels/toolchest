@@ -38,3 +38,19 @@
     * universal-tools now has a preinstall script to validate it's dependencies
 
     * archiveutils now has a preinstall script to validate it's dependencies
+
+  2016-11-16 - Charles Daniels
+
+    * renamed the mac-shortcuts package to macosutils to better reflect purpose
+
+    * renamed cleardns to macosutils-cleardns 
+
+    * added an alternate method of DNS cache flushing to macosutils-cleardns
+
+    * macosutils-cleardns no longer kills mDNSResponder as root - this may
+      reduce it's effectiveness when running as non-root users
+
+    * renamed unquarintine to macosutils-unquarantine 
+
+    * added macosutils-fixwifi script to troubleshoot common end-user network
+      problems

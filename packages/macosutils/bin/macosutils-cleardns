@@ -40,5 +40,6 @@
 
 
 if [[ "$OSTYPE" == "darwin"* ]] ; then
-	sudo killall -HUP mDNSResponder
+	killall -HUP mDNSResponder
+  dscacheutil -flushcache
 fi
