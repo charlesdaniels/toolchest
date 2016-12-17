@@ -40,6 +40,6 @@
 
 
 if [[ "$OSTYPE" == "darwin"* ]] ; then
-	killall -HUP mDNSResponder
-  dscacheutil -flushcache
+  killall -HUP mDNSResponder > /dev/null 2>&1
+  dscacheutil -flushcache > /dev/null 2>&1
 fi
