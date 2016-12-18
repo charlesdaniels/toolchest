@@ -1,0 +1,7 @@
+This package installs the m-cli toolset for macOS from git. 
+
+The GitHub page for m-cli can be found here:
+https://github.com/rgcr/m-cli
+
+
+

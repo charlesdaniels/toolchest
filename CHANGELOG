@@ -54,3 +54,7 @@
 
     * added macosutils-fixwifi script to troubleshoot common end-user network
       problems
+
+  2016-11-16 - Charles Daniels 
+
+    * added package to install m-cli
