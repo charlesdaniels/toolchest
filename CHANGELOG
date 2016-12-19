@@ -58,3 +58,9 @@
   2016-11-16 - Charles Daniels 
 
     * added package to install m-cli
+
+0.0.4-ALPHA:
+  
+  2016-11-19 - Charles Daniels:
+
+    * Wrote the carbonite 0.0.1 file format specification

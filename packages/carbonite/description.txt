@@ -1,0 +1,4 @@
+Carbonite is a tool for packing shell scripts split across multiple files into
+a single monolithic binary. It does this by base64 encoding the shell script,
+and all of it's dependencies, and appending them to the end of a .carbonite
+self extracting shell script.
