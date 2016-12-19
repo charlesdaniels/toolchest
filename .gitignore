@@ -1,2 +1,4 @@
 local/*
 *.o
+packages/*/bin/*
+packages/helloworld/helloworld
