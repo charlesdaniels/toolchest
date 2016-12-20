@@ -1,0 +1,93 @@
+#!env python
+########10########20########30## DOCUMENTATION #50########60########70########80
+#
+#  OVERVIEW
+#  ========
+# 
+#  Create a self contained monolithic executable from one or more shell
+#  scripts.
+#  
+########10########20########30##### LICENSE ####50########60########70########80
+#  Copyright (c) 2016, Charles Daniels
+#  All rights reserved.
+# 
+#  Redistribution and use in source and binary forms, with or without
+#  modification, are permitted provided that the following conditions are met:
+# 
+#  1. Redistributions of source code must retain the above copyright notice,
+#     this list of conditions and the following disclaimer.
+#  
+#  2. Redistributions in binary form must reproduce the above copyright
+#     notice, this list of conditions and the following disclaimer in the
+#     documentation and/or other materials provided with the distribution.
+# 
+#  3. Neither the name of the copyright holder nor the names of its
+#     contributors may be used to endorse or promote products derived from
+#     this software without specific prior written permission.
+# 
+#  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+#  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+#  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+#  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+#  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+#  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+#  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+#  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+#  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+#  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+#  POSSIBILITY OF SUCH DAMAGE.
+#  
+########10########20########30########40########50########60########70########80
+# boilerplate to load net.cdaniels.toolchest libraries
+import subprocess
+import os 
+import sys
+
+# acquire toolchest installation location
+toolchest_path = subprocess.check_output(["toolchest", "dir"]).decode()
+toolchest_path = toolchest_path.replace("\n","")
+print(toolchest_path)
+
+# get the path of the net.cdaniels.python libraries
+python_toolchest = "net.cdaniels.python"
+python_toolchest_path = os.path.join(toolchest_path, "local")
+python_toolchest_path = os.path.join(python_toolchest_path, "lib")
+python_toolchest_path = os.path.join(python_toolchest_path, python_toolchest)
+
+if os.path.exists(python_toolchest_path):
+  # we want to be able to import modules from here
+  sys.path.append(python_toolchest_path)
+
+import loggingutils
+
+loggingutils.setup(consoleLevel="DEBUG")
+
+
+########10########20########30########40########50########60########70########80
+
+import logging
+import argparse
+
+logging.info("beginning carbonite execution")
+
+parser = argparse.ArgumentParser(description="create standalone executables from shell scripts")
+parser.add_argument("--include", help="files to include in the archive")
+parser.add_argument("--payload",
+                    help="file to execute when executable is invoked")
+parser.add_argument("--archive-only", 
+                    action="store_true",
+                    help="create payload and manifest, but do not prepend the self extraction script")
+parser.add_argument("--extract", 
+                    help="extract a carbonate archive without invoking the payload")
+parser.add_argument("--checksum-format",
+                    help="checksum format (md5 or shasum)",
+                    default="shasum")
+parser.add_argument("--compression-format",
+                    help="compression to use (none, gz, or xz)", 
+                    default="gz")
+
+logging.info("parsing arguments")
+args = parser.parse_args()
+loggingutils.prettyLog(args, "DEBUG", "arguments: \n")
+
+

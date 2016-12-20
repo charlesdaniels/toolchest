@@ -77,6 +77,9 @@
 #    info . . . . . . . . . . . . . . display toolchest's configuration
 #
 #    version  . . . . . . . . . . . . display the toolchest's version
+#    
+#    dir  . . . . . . . . . . . . . . display NET_CDANIELS_TOOLCHEST_DIR and
+#                                     exit
 #
 #  PACKAGES
 #  ========
@@ -475,6 +478,10 @@ case "$DIRECTIVE" in
   ;;
   "")
     toolchest info
+  ;;
+  dir)
+    echo "$NET_CDANIELS_TOOLCHEST_DIR"
+    exit 0
   ;;
   version)
     echo "net.cdaniles.toolchest $TOOLCHEST_VERSION"

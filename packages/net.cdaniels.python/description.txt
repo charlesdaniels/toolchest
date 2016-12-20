@@ -1,0 +1,7 @@
+A collection of Python utilities used in one or more net.cdaniels.toolchest
+packages.
+
+
+Overview of libraries and tools:
+
+lib/loggingutils - tools for setting up and working with Python's logging library

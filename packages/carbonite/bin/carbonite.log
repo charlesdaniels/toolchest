@@ -1,0 +1,10 @@
+<[ 2016-12-20 17:19:24,117 |        <module>() | INFO       | beginning carbonite execution ]>
+<[ 2016-12-20 17:19:24,118 |        <module>() | INFO       | parsing arguments ]>
+<[ 2016-12-20 17:19:24,118 | logWithExplicit() | DEBUG      | arguments: 
+Namespace(archive_only=False, checksum_format='shasum', compression_format='gz', extract=None, include=None, payload=None) ]>
+<[ 2016-12-20 17:19:47,157 |        <module>() | INFO       | beginning carbonite execution ]>
+<[ 2016-12-20 17:19:47,158 |        <module>() | INFO       | parsing arguments ]>
+<[ 2016-12-20 17:20:07,261 |        <module>() | INFO       | beginning carbonite execution ]>
+<[ 2016-12-20 17:20:07,262 |        <module>() | INFO       | parsing arguments ]>
+<[ 2016-12-20 17:20:07,262 | logWithExplicit() | DEBUG      | arguments: 
+Namespace(archive_only=False, checksum_format='shasum', compression_format='gz', extract=None, include=None, payload=None) ]>

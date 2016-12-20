@@ -1,6 +1,6 @@
 0.0.2-ALPHA:
 
-  2016-11-12 - Charles Daniels:
+  2016-12-12 - Charles Daniels:
 
     * Fixed an issue affecting FreeBSD11 (and probably other BSD systems)
       where $0/../.. would error because $0 was a file, not a directory.
@@ -13,7 +13,7 @@
 
 0.0.3-ALPHA:
 
-  2016-11-12 - Charles Daniels:
+  2016-12-12 - Charles Daniels:
 
     * Installer now uses tar in a rather novel way to copy directories while
       preserving symlinks. This fixes an issue where the installer would
@@ -28,7 +28,7 @@
     
     * Added random-uuid to universal-tools package
   
-  2016-11-13 - Charles Daniels:
+  2016-12-13 - Charles Daniels:
   
     * Fixed a bug in acquire-toolchest-dirs which caused it to incorrectly
       identify NET_CDANIELS_TOOLCHEST_DIR
@@ -39,7 +39,7 @@
 
     * archiveutils now has a preinstall script to validate it's dependencies
 
-  2016-11-16 - Charles Daniels
+  2016-12-16 - Charles Daniels
 
     * renamed the mac-shortcuts package to macosutils to better reflect purpose
 
@@ -55,12 +55,20 @@
     * added macosutils-fixwifi script to troubleshoot common end-user network
       problems
 
-  2016-11-16 - Charles Daniels 
+  2016-12-16 - Charles Daniels 
 
     * added package to install m-cli
 
 0.0.4-ALPHA:
   
-  2016-11-19 - Charles Daniels:
+  2016-12-19 - Charles Daniels:
 
     * Wrote the carbonite 0.0.1 file format specification
+
+  2016-12-20 - Charles Daniels:
+
+    * Started work on the carbonine executable
+
+    * added the net.cdaniels.python package with lib/loggingutils.py package
+
+    * added `dir` directive to `toolchest`
