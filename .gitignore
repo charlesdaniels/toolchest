@@ -1,4 +1,5 @@
 local/*
 *.o
+*.log
 packages/helloworld/helloworld
 packages/m-cli/bin/*
