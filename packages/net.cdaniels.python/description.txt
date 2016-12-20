@@ -4,4 +4,8 @@ packages.
 
 Overview of libraries and tools:
 
-lib/loggingutils - tools for setting up and working with Python's logging library
+lib/loggingutils - tools for setting up and working with Python's logging
+                   library
+
+If you want to use these libraries in a python program, here is the
+boilerplate to do it:

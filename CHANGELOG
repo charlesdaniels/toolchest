@@ -67,7 +67,11 @@
 
   2016-12-20 - Charles Daniels:
 
-    * Started work on the carbonine executable
+    * Started work on the carbonite executable
+
+      - argument parsing
+
+      - logging (via loggingutils)
 
     * added the net.cdaniels.python package with lib/loggingutils.py package
 
