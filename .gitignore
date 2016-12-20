@@ -1,3 +1,4 @@
 local/*
 *.o
 packages/helloworld/helloworld
+packages/m-cli/bin/*
