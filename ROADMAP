@@ -88,3 +88,10 @@ toolchest:
       uninstallers to mis stale symlinks to old binaries that have changed
       names.
 
+net.cdaniels.python:
+
+  * should add a python wrapper for temputils
+  
+  loggingutils:
+
+    * default log path should probably go to /tmp, rather than ./ 

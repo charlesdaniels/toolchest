@@ -76,3 +76,16 @@
     * added the net.cdaniels.python package with lib/loggingutils.py package
 
     * added `dir` directive to `toolchest`
+
+  2016-12-21 - Charles Daniels:
+
+    * carbonite
+
+      - payload and include validation
+
+      - checksum generation
+
+      - archive generation
+
+      - can produce valid output via --archive_only (still need to implement
+        shell script component)
