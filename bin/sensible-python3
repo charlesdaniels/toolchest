@@ -59,6 +59,10 @@ get_python python35
 get_python python3.5
 get_python python34
 get_python python3.4
+get_python python36
+get_python python3.6
+get_python python37
+get_python python3.7
 get_python python
 
 echo "ERROR: failed to locate a sensible python"

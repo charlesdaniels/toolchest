@@ -67,7 +67,7 @@
 
   2016-12-20 - Charles Daniels:
 
-    * Started work on the carbonite executable
+    carbonite:
 
       - argument parsing
 
@@ -79,13 +79,25 @@
 
   2016-12-21 - Charles Daniels:
 
-    * carbonite
+    net.cdaniels.toolchest.coreutils:
 
-      - payload and include validation
+      sensible-python3
 
-      - checksum generation
+        * add support for Python 3.6
 
-      - archive generation
+        * add support for Python 3.7
 
-      - can produce valid output via --archive_only (still need to implement
+    carbonite:
+
+      * payload and include validation
+
+      * checksum generation
+
+      * archive generation
+
+      * can produce valid output via --archive_only (still need to implement
         shell script component)
+
+      * installer (via Makefile) 
+
+      * sh wrapper
