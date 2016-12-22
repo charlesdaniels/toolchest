@@ -89,9 +89,7 @@ tar xf "$TEMP_DIR/contents.tar"
 export PATH="$TEMP_DIR:$PATH"
 cd "$STARTING_DIR"
 "$TEMP_DIR/$PAYLOAD" "$@"
-
-
-
-
-exit 0
+RET="$?"
+rm -rf "$TEMP_DIR"
+exit "$RET"
 
