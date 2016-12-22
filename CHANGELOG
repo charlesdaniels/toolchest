@@ -131,3 +131,12 @@
 
     * "toolchest package mark-[un]installed" now refuses to work on
       nonexistent packages
+
+    pdfutils:
+
+      * add support for PDFPen
+
+      * fixed a bug where paths containing spaces would result in invoke-*-ocr
+        being called on a garbage path.
+
+      * installer now warns if no supported OCR software is detected

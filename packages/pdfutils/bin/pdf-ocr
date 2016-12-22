@@ -70,13 +70,15 @@ if [ ! -f "$TARGET_FILE" ] ; then
   exit 1
 fi
 
-if [ `file $TARGET_FILE | cut -d\  -f 2` != "PDF" ] ; then
+file $TARGET_FILE | grep -i pdf > /dev/null
+if [ $? -ne 0 ] ; then
   echo "ERROR 62: $TARGET_FILE does not seem to be a PDF"
   exit 1
 fi
 
 
 PDFPENPRO_PATH="/Applications/PDFpenPro.app/Contents/MacOS/PDFpenPro"
+PDFPEN_PATH="/Applications/PDFpen.app/Contents/MacOS/PDFpen"
 printf "INFO: detecting OCR software... "
 
 # pdfPenPro
@@ -89,7 +91,7 @@ if [ -f "$PDFPENPRO_PATH" ] ; then
     exit 1
   fi
   printf "INFO: OCRing document... "
-  invoke-pdfpenpro-ocr `realpath $TARGET_FILE`
+  invoke-pdfpenpro-ocr `realpath "$TARGET_FILE"`
   if [ $? -ne 0 ] ; then
     echo "FAIL"
     echo "ERROR 81: OCR failed"
@@ -98,6 +100,27 @@ if [ -f "$PDFPENPRO_PATH" ] ; then
   echo "DONE"
   exit 0
 fi
+
+# pdfPen
+if [ -f "$PDFPEN_PATH" ] ; then
+  echo "DONE"
+  echo "INFO: detected PDFPenPro"
+  command -v invoke-pdfpenpro-ocr > /dev/null
+  if [ $? -ne 0 ] ; then
+    echo "ERROR: invoke-pdfpenpro-ocr is not in PATH"
+    exit 1
+  fi
+  printf "INFO: OCRing document... "
+  invoke-pdfpenpro-ocr `realpath "$TARGET_FILE"`
+  if [ $? -ne 0 ] ; then
+    echo "FAIL"
+    echo "ERROR 81: OCR failed"
+    exit 1
+  fi
+  echo "DONE"
+  exit 0
+fi
+
 
 echo "FAIL"
 echo "ERROR 77: no supported OCR software detected."

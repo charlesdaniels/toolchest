@@ -11,8 +11,6 @@ pdfutils:
 
   * need support for additional OCR tools
 
-  * should warn on install if supported OCR software is not present
-
 pkgutils:
 
   * pkg-housecleaning could use a code review, it hasen't been reviewed in
