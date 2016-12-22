@@ -118,3 +118,7 @@
   2016-12-22 - Charles Daniels:
 
     * add iproute2mac package
+
+    * toolchest managment utility now correctly interacts with installation
+      status. For example, it will refuse to install a package which is
+      already installed.

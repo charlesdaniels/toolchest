@@ -520,6 +520,15 @@ case "$DIRECTIVE" in
           exit 1
         fi
 
+        # make sure the package is not already installed
+        check_package_installed "$PACKAGE"
+        if [ $? -eq 0  ] ; then
+          echo "ERROR T526: package $PACKAGE is already installed. If this is"
+          echo "            not correct, you may mark it as uninstalled using"
+          echo "            \"toolchest package mark-uninstalled $PACKAGE\""
+          exit 1
+        fi
+
         cd "$NET_CDANIELS_TOOLCHEST_DIR/packages/$PACKAGE"
 
         if [ -e "./Makefile" ] ; then
@@ -539,6 +548,9 @@ case "$DIRECTIVE" in
         if [ $RET -ne 0 ] ; then
           echo "ERROR T376: installer failed, attempting to clean up."
           toolchest package uninstall "$PACKAGE"
+        else
+          # mark package installed
+          mark_package_installed "$PACKAGE"
         fi
       ;;
       uninstall)
@@ -548,20 +560,37 @@ case "$DIRECTIVE" in
           exit 1
         fi
 
+        # make sure the package is actually installed
+        check_package_installed "$PACKAGE"
+        if [ $? -ne 0  ] ; then
+          echo "ERROR T566: package $PACKAGE is not installed. If this is"
+          echo "            not correct, you may mark it as installed using"
+          echo "            \"toolchest package mark-installed $PACKAGE\""
+          exit 1
+        fi
+
         cd "$NET_CDANIELS_TOOLCHEST_DIR/packages/$PACKAGE"
 
         if [ -e "./Makefile" ] ; then
           NET_CDANIELS_TOOLCHEST_DIR="$NET_CDANIELS_TOOLCHEST_DIR" make uninstall
-          exit $?
+          RET=$?
         elif [ -e "./makefile" ] ; then
           NET_CDANIELS_TOOLCHEST_DIR="$NET_CDANIELS_TOOLCHEST_DIR" make uninstall
-          exit $?
+          RET=$?
         elif [ -e "./uninstall.sh" ] ; then
           NET_CDANIELS_TOOLCHEST_DIR="$NET_CDANIELS_TOOLCHEST_DIR" ./uninstall.sh "$@"
-          exit $?
+          RET=$?
         else
           echo "ERROR T359: package $PACKAGE has no uninstaller"
           exit 1
+        fi
+        if [ $RET -eq 0 ] ; then
+          # installed succeeded, mark uninstalled
+          mark_package_uninstalled "$PACKAGE"
+          exit 0
+        else
+          echo "ERROR T592: package uninstaller for $PACKAGE failed!"
+          exit $RET
         fi
 
       ;;

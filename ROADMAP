@@ -61,12 +61,6 @@ toolchest:
       the generic preinstall script. This could also be used with
       archiveutils.
 
-    * when running `package install`, the package should be added to a list of
-      installed packages. Running `package uninstall`, it should be removed.
-      The contents of the installed package list should be mutable by the
-      `toolchest package mark installed/uninstalled` directive, which will be
-      used internally by `package install` and `package uninstall`.
-
   coreutils:
 
     * should move tar method of directory mirroring into coreutils as a bin
