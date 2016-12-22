@@ -1,0 +1,16 @@
+Installs iproute2mac from github. Will fail to install on non-macOS systems. 
+
+From the iproute2mac github page:
+
+  CLI wrapper for basic network utilities on Mac OS X inspired with iproute2
+  on Linux systems - ip command.
+  
+  Provided functionality is limited and command output is not fully compatible
+  with iproute2.
+  
+  Goal of this project is to make basic network configuration/debug tasks on
+  Mac OS X easy for admins who already use Linux   systems.
+  
+  For advanced usage use netstat, ifconfig, ndp, arp, route and networksetup
+  directly.
+

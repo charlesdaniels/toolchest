@@ -114,3 +114,7 @@
 
       * still need to make the package install/uninstall directives interface
         with the new functions.
+
+  2016-12-22 - Charles Daniels:
+
+    * add iproute2mac package
