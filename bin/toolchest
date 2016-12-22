@@ -86,6 +86,10 @@
 #    package mark-uninstalled [package] . forcibly mark a package as
 #                                         uninstalled (for experienced users
 #                                         only)
+#                                         
+#    package list-installed . . . . . . . display a list of packages which
+#                                         have been marked as installed to the
+#                                         console.
 #
 #    info . . . . . . . . . . . . . . . . display toolchest's configuration
 #
@@ -516,7 +520,7 @@ case "$DIRECTIVE" in
       install)
         # make sure the package exists
         if [ ! -d "$NET_CDANIELS_TOOLCHEST_DIR/packages/$PACKAGE" ] ; then
-          echo "ERROR T288: no suck package directory $PACKAGE"
+          echo "ERROR T288: no such package directory $PACKAGE"
           exit 1
         fi
 
@@ -556,7 +560,7 @@ case "$DIRECTIVE" in
       uninstall)
         # make sure the package exists
         if [ ! -d "$NET_CDANIELS_TOOLCHEST_DIR/packages/$PACKAGE" ] ; then
-          echo "ERROR T288: no suck package directory $PACKAGE"
+          echo "ERROR T288: no such package directory $PACKAGE"
           exit 1
         fi
 
@@ -609,6 +613,11 @@ case "$DIRECTIVE" in
       ;;
       mark-installed)
         printf "INFO: marking $PACKAGE installed... "
+        if [ ! -d "$NET_CDANIELS_TOOLCHEST_DIR/packages/$PACKAGE" ] ; then
+          echo "FAIL"
+          echo "ERROR T618: no such package $PACKAGE"
+          exit 1
+        fi
         mark_package_installed "$PACKAGE"
         if [ $? -eq 0 ] ; then
           echo "DONE"
@@ -619,6 +628,11 @@ case "$DIRECTIVE" in
       ;;
       mark-uninstalled)
         printf "INFO: marking $PACKAGE uninstalled... "
+        if [ ! -d "$NET_CDANIELS_TOOLCHEST_DIR/packages/$PACKAGE" ] ; then
+          echo "FAIL"
+          echo "ERROR T633: no such package $PACKAGE"
+          exit 1
+        fi
         mark_package_uninstalled "$PACKAGE"
         if [ $? -eq 0 ] ; then
           echo "DONE"
@@ -626,6 +640,9 @@ case "$DIRECTIVE" in
           echo "FAIL"
           echo "ERRPR T598: failed to manual-mark package uninstalled"
         fi
+      ;;
+      list-installed)
+        cat "$PACKAGE_LIST"
       ;;
       *)
         echo "ERROR T282: package verb \"$VERB\" was not recognized"
