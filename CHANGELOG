@@ -140,3 +140,6 @@
         being called on a garbage path.
 
       * installer now warns if no supported OCR software is detected
+
+    * toolchest management utility now has internal functions to perform
+      unconditional package installations and uninstallations.

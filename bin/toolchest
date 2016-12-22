@@ -239,22 +239,22 @@ PACKAGE_LIST="$NET_CDANIELS_TOOLCHEST_DIR/local/config/packages.list"
 ########10########20########30 UTILITY FUNCTIONS 0########60########70########80
 
 
-# check_package_installed
-# =======================
-# 
-# Checks to see if a package has been marked as installed
-# 
-# USAGE
-# =====
-# 
-#   $1 . . . package name to check
-#   
-# RETURNS
-# =======
-# 
-# If the package is installed, the return code is zero. If the package is not
-# installed, the return code is one. If the package list does not exist, the
-# return code is one.
+#  check_package_installed
+#  =======================
+#  
+#  Checks to see if a package has been marked as installed
+#  
+#  USAGE
+#  =====
+#  
+#    $1 . . . package name to check
+#    
+#  RETURNS
+#  =======
+#  
+#  If the package is installed, the return code is zero. If the package is not
+#  installed, the return code is one. If the package list does not exist, the
+#  return code is one.
 # 
 check_package_installed () {
   if [ -f "$PACKAGE_LIST" ] ; then
@@ -269,16 +269,16 @@ check_package_installed () {
   fi
 }
 
-# mark_package_installed
-# ======================
-# 
-# Marks a package as installed unconditionally. 
-# 
-# USAGE
-# =====
-# 
-#   $1 . . . the package to mark installed
-#   
+#  mark_package_installed
+#  ======================
+#  
+#  Marks a package as installed unconditionally. 
+#  
+#  USAGE
+#  =====
+#  
+#    $1 . . . the package to mark installed
+#    
 mark_package_installed () {
   check_package_installed "$1"
   if [ $? -eq 0 ] ; then
@@ -291,10 +291,10 @@ mark_package_installed () {
   dedupe_packages
 }
 
-# dedupe_packages
-# ===============
-# 
-# Ensure that the package list does not contain any duplicate package names
+#  dedupe_packages
+#  ===============
+#  
+#  Ensure that the package list does not contain any duplicate package names
 dedupe_packages () {
   if [ ! -f "$PACKAGE_LIST" ] ; then
     return 1
@@ -303,15 +303,15 @@ dedupe_packages () {
   mv "$PACKAGE_LIST.tmp" "$PACKAGE_LIST"
 }
 
-# mark_package_uninstalled
-# ========================
-# 
-# Mark a package as uninstalled unconditionally. 
-# 
-# USAGE
-# =====
-# 
-#   $1 . . . the package to mark uninstalled
+#  mark_package_uninstalled
+#  ========================
+#  
+#  Mark a package as uninstalled unconditionally. 
+#  
+#  USAGE
+#  =====
+#  
+#    $1 . . . the package to mark uninstalled
 mark_package_uninstalled () {
   if [ ! -f "$PACKAGE_LIST" ] ; then
     return 1
@@ -321,6 +321,95 @@ mark_package_uninstalled () {
   mv "$PACKAGE_LIST.tmp" "$PACKAGE_LIST"
 }
 
+#  install_package
+#  ===============
+#  
+#  Install a package unconditionally, ignoring the package list. 
+#  
+#  USAGE
+#  =====
+#  
+#    $1 . . . the package to be installed
+#    
+#  RETURNS
+#  =======
+#  
+#    If the package does not exist, returns 1 and prints an error. 
+#    
+#    If the package does not have an installer, returns 1 and prints an error.
+#    
+#    In all other cases, the return code of the installer script is returned.
+#  
+install_package () {
+  # make sure the package exists
+  if [ ! -d "$NET_CDANIELS_TOOLCHEST_DIR/packages/$PACKAGE" ] ; then
+    echo "ERROR T288: no such package directory $PACKAGE"
+    return 1
+  fi
+
+  cd "$NET_CDANIELS_TOOLCHEST_DIR/packages/$PACKAGE"
+
+  if [ -e "./Makefile" ] ; then
+    NET_CDANIELS_TOOLCHEST_DIR="$NET_CDANIELS_TOOLCHEST_DIR" make install
+    RET=$?
+  elif [ -e "./makefile" ] ; then
+    NET_CDANIELS_TOOLCHEST_DIR="$NET_CDANIELS_TOOLCHEST_DIR" make install
+    RET=$?
+  elif [ -e "./install.sh" ] ; then
+    NET_CDANIELS_TOOLCHEST_DIR="$NET_CDANIELS_TOOLCHEST_DIR" ./install.sh "$@"
+    RET=$?
+  else
+    echo "ERROR T304: package $PACKAGE has no installer"
+    return 1
+  fi
+
+  return $RET
+
+}
+
+#  uninstall_package
+#  =================
+#  
+#  Uninstall a package unconditionally, ignoring the package list. 
+#  
+#  USAGE
+#  =====
+#  
+#    $1 . . . the package to be uninstalled
+#   
+#  RETURNS
+#  =======
+#  
+#   If the package does not exist, returns 1 and prints an error
+#   
+#   If the package does not have an uninstaller, returns 1 and prints an error
+#   
+#   In all other cases, returns the exit code of the package uninstaller. 
+#   
+uninstall_package () {
+  # make sure the package exists
+  if [ ! -d "$NET_CDANIELS_TOOLCHEST_DIR/packages/$PACKAGE" ] ; then
+    echo "ERROR T288: no such package directory $PACKAGE"
+    return 1
+  fi
+  cd "$NET_CDANIELS_TOOLCHEST_DIR/packages/$PACKAGE"
+
+  if [ -e "./Makefile" ] ; then
+    NET_CDANIELS_TOOLCHEST_DIR="$NET_CDANIELS_TOOLCHEST_DIR" make uninstall
+    RET=$?
+  elif [ -e "./makefile" ] ; then
+    NET_CDANIELS_TOOLCHEST_DIR="$NET_CDANIELS_TOOLCHEST_DIR" make uninstall
+    RET=$?
+  elif [ -e "./uninstall.sh" ] ; then
+    NET_CDANIELS_TOOLCHEST_DIR="$NET_CDANIELS_TOOLCHEST_DIR" ./uninstall.sh "$@"
+    RET=$?
+  else
+    echo "ERROR T359: package $PACKAGE has no uninstaller"
+    return 1
+  fi
+  
+  return $RET
+}
 
 
 ########10########20########30########40########50########60########70########80
@@ -518,11 +607,6 @@ case "$DIRECTIVE" in
         fi
       ;;
       install)
-        # make sure the package exists
-        if [ ! -d "$NET_CDANIELS_TOOLCHEST_DIR/packages/$PACKAGE" ] ; then
-          echo "ERROR T288: no such package directory $PACKAGE"
-          exit 1
-        fi
 
         # make sure the package is not already installed
         check_package_installed "$PACKAGE"
@@ -533,37 +617,19 @@ case "$DIRECTIVE" in
           exit 1
         fi
 
-        cd "$NET_CDANIELS_TOOLCHEST_DIR/packages/$PACKAGE"
+        # perform the package installation
+        install_package "$PACKAGE"
 
-        if [ -e "./Makefile" ] ; then
-          NET_CDANIELS_TOOLCHEST_DIR="$NET_CDANIELS_TOOLCHEST_DIR" make install
-          RET=$?
-        elif [ -e "./makefile" ] ; then
-          NET_CDANIELS_TOOLCHEST_DIR="$NET_CDANIELS_TOOLCHEST_DIR" make install
-          RET=$?
-        elif [ -e "./install.sh" ] ; then
-          NET_CDANIELS_TOOLCHEST_DIR="$NET_CDANIELS_TOOLCHEST_DIR" ./install.sh "$@"
-          RET=$?
-        else
-          echo "ERROR T304: package $PACKAGE has no installer"
-          exit 1
-        fi
-
-        if [ $RET -ne 0 ] ; then
+        # handle installation failure
+        if [ $? -ne 0 ] ; then
           echo "ERROR T376: installer failed, attempting to clean up."
-          toolchest package uninstall "$PACKAGE"
+          uninstall_package "$PACKAGE"
         else
           # mark package installed
           mark_package_installed "$PACKAGE"
         fi
       ;;
       uninstall)
-        # make sure the package exists
-        if [ ! -d "$NET_CDANIELS_TOOLCHEST_DIR/packages/$PACKAGE" ] ; then
-          echo "ERROR T288: no such package directory $PACKAGE"
-          exit 1
-        fi
-
         # make sure the package is actually installed
         check_package_installed "$PACKAGE"
         if [ $? -ne 0  ] ; then
@@ -573,26 +639,15 @@ case "$DIRECTIVE" in
           exit 1
         fi
 
-        cd "$NET_CDANIELS_TOOLCHEST_DIR/packages/$PACKAGE"
-
-        if [ -e "./Makefile" ] ; then
-          NET_CDANIELS_TOOLCHEST_DIR="$NET_CDANIELS_TOOLCHEST_DIR" make uninstall
-          RET=$?
-        elif [ -e "./makefile" ] ; then
-          NET_CDANIELS_TOOLCHEST_DIR="$NET_CDANIELS_TOOLCHEST_DIR" make uninstall
-          RET=$?
-        elif [ -e "./uninstall.sh" ] ; then
-          NET_CDANIELS_TOOLCHEST_DIR="$NET_CDANIELS_TOOLCHEST_DIR" ./uninstall.sh "$@"
-          RET=$?
-        else
-          echo "ERROR T359: package $PACKAGE has no uninstaller"
-          exit 1
-        fi
+        uninstall_package "$PACKAGE"
+        RET=$?
+        
         if [ $RET -eq 0 ] ; then
           # installed succeeded, mark uninstalled
           mark_package_uninstalled "$PACKAGE"
           exit 0
         else
+          # handle case where the package failed to be uninstalled
           echo "ERROR T592: package uninstaller for $PACKAGE failed!"
           exit $RET
         fi
