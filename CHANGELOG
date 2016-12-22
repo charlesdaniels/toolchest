@@ -104,3 +104,13 @@
       * payload extract-execute script
 
       * carbonite standalone executable generation
+
+0.0.5-ALPHA
+  
+  2016-12-21 - Charles Daniels:
+
+    * implemented function to check if packages are installed, and to mark
+      them installed or uninstalled.
+
+      * still need to make the package install/uninstall directives interface
+        with the new functions.

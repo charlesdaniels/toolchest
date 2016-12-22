@@ -48,38 +48,51 @@
 #  USAGE
 #  =====
 #
-#    install  . . . . . . . . . . . . prompts for install type, then performs
-#                                     the install
+#    install  . . . . . . . . . . . . . . prompts for install type, then
+#                                         performs the install
 #
-#    install system . . . . . . . . . perform a system-wide toolchest installation
+#    install system . . . . . . . . . . . perform a system-wide toolchest
+#    installation
 #
-#    install local  . . . . . . . . . install the toolchest in $HOME
+#    install local  . . . . . . . . . . . install the toolchest in $HOME
 #
-#    uninstall  . . . . . . . . . . . uninstall the toolchest. If only a local
-#                                     or only a system install is present, it
-#                                     will be uninstalled. If both are
-#                                     present, the script will error.
+#    uninstall  . . . . . . . . . . . . . uninstall the toolchest. If only a
+#                                         local or only a system install is
+#                                         present, it will be uninstalled. If
+#                                         both are present, the script will
+#                                         error.
 #
-#    uninstall local  . . . . . . . . uninstall the toolchest from $HOME
+#    uninstall local  . . . . . . . . . . uninstall the toolchest from $HOME
 #
-#    uninstall system . . . . . . . . uninstall the system-wide installation
+#    uninstall system . . . . . . . . . . uninstall the system-wide
+#    installation
 #
-#    package list . . . . . . . . . . list available packages
+#    package list . . . . . . . . . . . . list available packages
 #
-#    package install [package]  . . . install [package]
+#    package install [package]  . . . . . install [package]
 #
-#    package uninstall [package]  . . uninstall [package]
+#    package uninstall [package]  . . . . uninstall [package]
 #
-#    package update [package] . . . . uninstall, then install [package]
+#    package update [package] . . . . . . uninstall, then install [package]
 #
-#    package description [package]  . display [package]'s description
-#
-#    info . . . . . . . . . . . . . . display toolchest's configuration
-#
-#    version  . . . . . . . . . . . . display the toolchest's version
+#    package description [package]  . . . display [package]'s description
 #    
-#    dir  . . . . . . . . . . . . . . display NET_CDANIELS_TOOLCHEST_DIR and
-#                                     exit
+#    package status [package] . . . . . . check to see if [package] is
+#                                         installed
+#    
+#    package mark-installed [package] . . forcibly mark a package as installed
+#                                         (for experienced users only)
+#    
+#    package mark-uninstalled [package] . forcibly mark a package as
+#                                         uninstalled (for experienced users
+#                                         only)
+#
+#    info . . . . . . . . . . . . . . . . display toolchest's configuration
+#
+#    version  . . . . . . . . . . . . . . display the toolchest's version
+#    
+#    dir  . . . . . . . . . . . . . . . . display NET_CDANIELS_TOOLCHEST_DIR
+#                                         and exit
 #
 #  PACKAGES
 #  ========
@@ -215,6 +228,100 @@ if [ $? -ne 0 ] ; then
     exit 1
   fi
 fi
+
+PACKAGE_LIST="$NET_CDANIELS_TOOLCHEST_DIR/local/config/packages.list"
+
+
+########10########20########30 UTILITY FUNCTIONS 0########60########70########80
+
+
+# check_package_installed
+# =======================
+# 
+# Checks to see if a package has been marked as installed
+# 
+# USAGE
+# =====
+# 
+#   $1 . . . package name to check
+#   
+# RETURNS
+# =======
+# 
+# If the package is installed, the return code is zero. If the package is not
+# installed, the return code is one. If the package list does not exist, the
+# return code is one.
+# 
+check_package_installed () {
+  if [ -f "$PACKAGE_LIST" ] ; then
+    cat "$PACKAGE_LIST" | grep "$1" > /dev/null
+    if [ $? -eq 0 ]  ; then
+      return 0
+    else 
+      return 1
+    fi
+  else
+    return 1
+  fi
+}
+
+# mark_package_installed
+# ======================
+# 
+# Marks a package as installed unconditionally. 
+# 
+# USAGE
+# =====
+# 
+#   $1 . . . the package to mark installed
+#   
+mark_package_installed () {
+  check_package_installed "$1"
+  if [ $? -eq 0 ] ; then
+    # package is already installed
+    printf "" # do northing
+  else
+    # package is not already installed
+    echo "$1" >> "$PACKAGE_LIST"
+  fi 
+  dedupe_packages
+}
+
+# dedupe_packages
+# ===============
+# 
+# Ensure that the package list does not contain any duplicate package names
+dedupe_packages () {
+  if [ ! -f "$PACKAGE_LIST" ] ; then
+    return 1
+  fi
+  cat "$PACKAGE_LIST" | sort | uniq > "$PACKAGE_LIST.tmp"
+  mv "$PACKAGE_LIST.tmp" "$PACKAGE_LIST"
+}
+
+# mark_package_uninstalled
+# ========================
+# 
+# Mark a package as uninstalled unconditionally. 
+# 
+# USAGE
+# =====
+# 
+#   $1 . . . the package to mark uninstalled
+mark_package_uninstalled () {
+  if [ ! -f "$PACKAGE_LIST" ] ; then
+    return 1
+  fi
+  dedupe_packages
+  cat "$PACKAGE_LIST" | grep -v "$1" > "$PACKAGE_LIST.tmp"
+  mv "$PACKAGE_LIST.tmp" "$PACKAGE_LIST"
+}
+
+
+
+########10########20########30########40########50########60########70########80
+
+
 
 DIRECTIVE="$1"
 shift
@@ -462,6 +569,34 @@ case "$DIRECTIVE" in
         echo "INFO: updating package $PACKAGE"
         toolchest package uninstall "$PACKAGE"
         toolchest package install "$PACKAGE"
+      ;;
+      status)
+        check_package_installed "$PACKAGE"
+        if [ $? -eq 0 ] ; then
+          echo "INFO: package $PACKAGE is INSTALLED"
+        else
+          echo "INFO: package $PACKAGE is NOT installed"
+        fi
+      ;;
+      mark-installed)
+        printf "INFO: marking $PACKAGE installed... "
+        mark_package_installed "$PACKAGE"
+        if [ $? -eq 0 ] ; then
+          echo "DONE"
+        else
+          echo "FAIL"
+          echo "ERRPR T588: failed to manual-mark package installed"
+        fi
+      ;;
+      mark-uninstalled)
+        printf "INFO: marking $PACKAGE uninstalled... "
+        mark_package_uninstalled "$PACKAGE"
+        if [ $? -eq 0 ] ; then
+          echo "DONE"
+        else
+          echo "FAIL"
+          echo "ERRPR T598: failed to manual-mark package uninstalled"
+        fi
       ;;
       *)
         echo "ERROR T282: package verb \"$VERB\" was not recognized"
