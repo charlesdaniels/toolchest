@@ -66,9 +66,12 @@ under the toolchest installation directory).
 
 Packages may be managed using ``toolchest package``. 
 
-Package installations are stateless. Installing a package a second time will
+~~~Package installations are stateless. Installing a package a second time will
 not break anything (usually it will cause the installer to fail, uninstalling
-the package). Uninstalling a package that does not exist will not break.
+the package). Uninstalling a package that does not exist will not break.~~~
+
+Beginning with 0.0.5-ALPHA, dependency resolution among toolchest packages
+will be supported as part of the toolchest management utility.
 
 Packages are not to store any configuration files in local/bin or local/lib.
 However, packages may use local/config for storing configuration if they need
@@ -100,7 +103,7 @@ source files.
 
 We use 80 character line width for all files, although this is not strict.
 Some shell scripts need to exceed this here and there for long conditional
-statements. Ideally < 1% of total liens of code exceed 80 characters.
+statements. Ideally < 1% of total lines of code exceed 80 characters.
 
 Things which are used in 3 or more packages should probably be moved into
 coreutils (lib or bin), unless they have many dependencies or require
