@@ -4,8 +4,13 @@
 #  OVERVIEW
 #  ========
 #
-#  Stub for appending carbonite text components onto. Extracts a valid
-#  carbonite archive from $0 and executes it. $@ is passed on to the payload. 
+#  This file contains the Bourne shell component of a standalone carbonite
+#  executable. The carbonite utility generates the required text components -
+#  namely CARBONITE DATA, CARBONITE INFO, and CARBONITE MANIFEST data
+#  structures, which are appended to this file, which is them marked
+#  executable and used as the carbonite output.
+#  
+#  For carbonite documentation, please consult the "carbonite". 
 #
 ########10########20########30##### LICENSE ####50########60########70########80
 #  Copyright (c) 2016, Charles Daniels

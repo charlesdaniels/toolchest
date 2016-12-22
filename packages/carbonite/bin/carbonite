@@ -4,8 +4,43 @@
 #  OVERVIEW
 #  ========
 # 
-#  Create a self contained monolithic executable from one or more shell
-#  scripts.
+#  Wrapper script for invoking the carbonite tool. For help, pass --help in $@. 
+#  
+#  Carbonite is a tool for packing one or more scripts (or binaries, although
+#  this is discouraged) into a single monolithic executable. This can be
+#  useful in cases where, for example, one has a script with several
+#  dependencies or libraries which it depends on, and one wishes to run this
+#  script say over ssh, on a remote system which does not have the requisite
+#  dependencies. Carbonite can also be useful for cases where one wishes to
+#  redistribute a program and all it's dependancies to a user that will not
+#  need to modify the sources for the program (note that carbonite executables
+#  do not resist being disassembled or inspected - in fact carbonite includes
+#  a switch for doing just this).
+#  
+#  Carbonite works by first creating a tar archive of the payload and any
+#  other files which have been marked for inclusion. This tar archive is then
+#  encoded using base64, and paced into a simple text based format, which is
+#  then appended to the extract-execute.lib stub, which is able to parse the
+#  tar archive back out of itself.
+#  
+#  DEPENDANCIES
+#  ============
+#  
+#  Carbonite standalone executables have a few basic dependencies, besides any
+#  the payload may introduce:
+#  
+#  * sed
+#  * base64
+#  * date
+#  * tar
+#  
+#  Additionally, a few assumptions are made about the system which the
+#  executable will run on:
+#  
+#  * /tmp exists, is writable, and is non-empty
+#  * /bin/sh is POSIX compliant 
+#  * the command referred to by `tar` understands how to extract .tar,
+#    .tar.gz, and .tar.xz when used with the `xf` option.
 #  
 ########10########20########30##### LICENSE ####50########60########70########80
 #  Copyright (c) 2016, Charles Daniels

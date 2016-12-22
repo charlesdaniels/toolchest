@@ -3,8 +3,18 @@
 #  OVERVIEW
 #  ========
 #
-#  Create a self contained monolithic executable from one or more shell
-#  scripts.
+#  For carbonite usage information, please consult the "carbonite" wrapper
+#  script.
+#  
+#  This file contains the implementation of the carbonite application. It is
+#  intended to reside in $NET_CDANIELS_TOOLCHEST_DIR/local/lib/carbonite, and
+#  to be executed by a wrapper script placed in $PATH.
+#  
+#  Documentation for specific functions and whatnot is inlined with the rest
+#  of the source in this file.
+#  
+#  Note that carbonite is not intended to be used outside of a toolchest
+#  installation.
 #
 ########10########20########30##### LICENSE ####50########60########70########80
 #  Copyright (c) 2016, Charles Daniels
