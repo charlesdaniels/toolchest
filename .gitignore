@@ -1,5 +1,6 @@
 local/*
 *.o
 *.log
+*.carbonite
 packages/helloworld/helloworld
 packages/m-cli/bin/*
