@@ -41,6 +41,33 @@
 carbonite_version = "0.0.1"
 
 ########10########20########30########40########50########60########70########80
+# boilerplate to load net.cdaniels.toolchest libraries
+import subprocess
+import os 
+import sys
+
+# acquire toolchest installation location
+toolchest_path = subprocess.check_output(["toolchest", "dir"]).decode()
+toolchest_path = toolchest_path.replace("\n","")
+print(toolchest_path)
+
+# get the path of the net.cdaniels.python libraries
+python_toolchest = "net.cdaniels.python"
+python_toolchest_path = os.path.join(toolchest_path, "local")
+python_toolchest_path = os.path.join(python_toolchest_path, "lib")
+python_toolchest_path = os.path.join(python_toolchest_path, python_toolchest)
+
+if os.path.exists(python_toolchest_path):
+  # we want to be able to import modules from here
+  sys.path.append(python_toolchest_path)
+
+carbonite_lib_dir = os.path.join(toolchest_path, "local")
+carbonite_lib_dir = os.path.join(carbonite_lib_dir, "lib")
+carbonite_lib_dir = os.path.join(carbonite_lib_dir, "carbonite")
+
+
+
+########10########20########30########40########50########60########70########80
 # imports
 import argparse
 import sys
@@ -118,9 +145,11 @@ def exit_normal():
 # ===================
 #
 # Validates that the payload and the files that have been added via --include
-# actually exist. Currently no other validation is done.
+# actually exist. Additionally, due to the current implementation of extract-
+# execute.lib, the payload filename may not contain spaces.
 #
-# If any component does not exist, the program exits via exit_error()
+# If any component does not exist, or any part of the validation process
+# fails, the program exits via exit_error()
 #
 # USAGE
 # =====
@@ -130,6 +159,10 @@ def exit_normal():
 def validate_componants(args):
   # verified that components are present
   print("INFO: validating components: ")
+
+  if ' ' in args.payload:
+    print("ERROR 164: payload filename may not contain spaces")
+    exit_error()
 
   if args.payload not in args.include:
     args.include.append(args.payload)
@@ -317,11 +350,11 @@ def encode_tarball(args):
 def generate_textarchive(args, checksum, tar_manifest, base64_text):
   sys.stdout.write("INFO: generating text archive... ")
   archive_text  = "BEGIN CARBONITE INFO\n"
-  archive_text += "PAYLOAD='{}'\n".format(args.payload)
-  archive_text += "CHECKSUM='{}'\n".format(checksum)
-  archive_text += "COMPRESSION='{}'\n".format(args.compression_format)
-  archive_text += "CHECKSUM_TYPE='{}'\n".format(args.checksum_format)
-  archive_text += "CARBONITE_VERSION='{}'\n".format(carbonite_version)
+  archive_text += "PAYLOAD {}\n".format(args.payload)
+  archive_text += "CHECKSUM {}\n".format(checksum)
+  archive_text += "COMPRESSION {}\n".format(args.compression_format)
+  archive_text += "CHECKSUM_TYPE {}\n".format(args.checksum_format)
+  archive_text += "CARBONITE_VERSION {}\n".format(carbonite_version)
   archive_text += "END CARBONITE INFO\n"
   archive_text += "BEGIN CARBONITE MANIFEST\n"
   archive_text += tar_manifest
@@ -349,16 +382,27 @@ base64_text = encode_tarball(args)
 archive_text = generate_textarchive(args, checksum, tar_manifest, base64_text)
 
 carbonite_output_path = os.path.join(working_directory, args.output)
+final_output_path = os.path.join(starting_directory, args.output)
 
 if args.archive_only:
   sys.stdout.write("INFO: archive_only toggled, producing output...")
   with open (carbonite_output_path, "w") as f:
     f.write(archive_text)
 
-  shutil.copy2(carbonite_output_path, 
-               os.path.join(starting_directory, args.output))
+  shutil.copy2(carbonite_output_path, final_output_path)
   print("DONE")
   exit_normal()
+
+sys.stdout.write("INFO: generating standalone executable... ")
+shutil.copy2(os.path.join(carbonite_lib_dir, "extract-execute.lib"),
+             carbonite_output_path)
+
+with open (carbonite_output_path, "a") as f:
+    f.write(archive_text)
+
+shutil.copy2(carbonite_output_path,final_output_path)
+subprocess.call(["chmod", "+x", final_output_path])
+print("DONE")
 
 exit_normal()
 

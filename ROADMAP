@@ -88,6 +88,12 @@ toolchest:
       uninstallers to mis stale symlinks to old binaries that have changed
       names.
 
+carbonite:
+
+  * remove limitation where payload filename cannot contain spaces
+
+  * extract-execute.lib does not validate checksums at this time
+
 net.cdaniels.python:
 
   * should add a python wrapper for temputils

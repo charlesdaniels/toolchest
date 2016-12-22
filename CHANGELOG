@@ -95,9 +95,12 @@
 
       * archive generation
 
-      * can produce valid output via --archive_only (still need to implement
-        shell script component)
+      * can produce valid output via --archive_only 
 
       * installer (via Makefile) 
 
       * sh wrapper
+
+      * payload extract-execute script
+
+      * carbonite standalone executable generation

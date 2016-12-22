@@ -1,0 +1,97 @@
+#!/bin/sh
+########10########20########30## DOCUMENTATION #50########60########70########80
+#
+#  OVERVIEW
+#  ========
+#
+#  Stub for appending carbonite text components onto. Extracts a valid
+#  carbonite archive from $0 and executes it. $@ is passed on to the payload. 
+#
+########10########20########30##### LICENSE ####50########60########70########80
+#  Copyright (c) 2016, Charles Daniels
+#  All rights reserved.
+#
+#  Redistribution and use in source and binary forms, with or without
+#  modification, are permitted provided that the following conditions are met:
+#
+#  1. Redistributions of source code must retain the above copyright notice,
+#     this list of conditions and the following disclaimer.
+#
+#  2. Redistributions in binary form must reproduce the above copyright
+#     notice, this list of conditions and the following disclaimer in the
+#     documentation and/or other materials provided with the distribution.
+#
+#  3. Neither the name of the copyright holder nor the names of its
+#     contributors may be used to endorse or promote products derived from
+#     this software without specific prior written permission.
+#
+#  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+#  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+#  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+#  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+#  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+#  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+#  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+#  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+#  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+#  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+#  POSSIBILITY OF SUCH DAMAGE.
+#
+########10########20########30## CONFIGURATION #50########60########70########80
+
+########10########20########30########40########50########60########70########80
+
+########10########20########30 UTILITY FUNCTIONS #########60########70########80
+
+check_command_exists () {
+  command -v "$1" > /dev/null
+  if [ $? -ne 0 ] ; then
+    echo "ERROR 49: required command $1 not present!"
+    exit 1
+  fi
+}
+
+########10########20########30## SANITY CHECK ##50########60########70########80
+
+# make sure we have sed available
+
+check_command_exists sed
+check_command_exists base64
+check_command_exists date
+check_command_exists tar
+
+########10########20########30########40########50########60########70########80
+
+# now perform the extract/execute operation
+
+# these sed pipelines extract things between the specified tokens, then remove 
+# the tokens
+CARBONITE_INFO=`cat "$0" | sed -n '/^BEGIN CARBONITE INFO$/,/^END CARBONITE INFO$/p' | grep -v 'BEGIN CARBONITE INFO' | grep -v 'END CARBONITE INFO'`
+CARBONITE_DATA=`cat "$0" | sed -n '/^BEGIN CARBONITE DATA$/,/^END CARBONITE DATA$/p' | grep -v 'BEGIN CARBONITE DATA' | grep -v 'END CARBONITE DATA'`
+
+PAYLOAD=$(echo "$CARBONITE_INFO" | grep PAYLOAD | sed '/PAYLOAD/s/PAYLOAD//' | tr -d ' ')
+CHECKSUM=$(echo "$CARBONITE_INFO" | grep CHECKSUM | sed '/CHECKSUM/s/CHECKSUM//')
+CHECKSUM_TYPE=$(echo "$CARBONITE_INFO" | grep CHECKSUM_TYPE | sed '/CHECKSUM_TYPE/s/CHECKSUM_TYPE//')
+
+APPTAG="carbonite-exec_`date +"%Y-%m-%d_%H-%M-%S"  `"
+TEMP_DIR="/tmp/$APPTAG"
+
+mkdir "$TEMP_DIR"
+# we don't check the compression because xf should figure it out
+echo "$CARBONITE_DATA" | base64 -D > "$TEMP_DIR/contents.tar"
+STARTING_DIR=`pwd`
+cd "$TEMP_DIR"
+echo "$CHECKSUM" > checksum.txt
+
+# TODO: handle checksum validation
+
+tar xf "$TEMP_DIR/contents.tar"
+export PATH="$TEMP_DIR:$PATH"
+cd "$STARTING_DIR"
+"$TEMP_DIR/$PAYLOAD" "$@"
+
+
+
+
+exit 0
+
