@@ -137,6 +137,43 @@
 #  installation. Packages using install.sh should also make available an
 #  uninstall.sh for the same purpose. uninstall.sh and `make uninstall` are
 #  called in the same way as their counterparts.
+#  
+#    INSTALLATION STATE
+#    ------------------
+#    
+#    Package installation state is stored in the file
+#    $NET_CDANIELS_TOOLCHEST_DIR/local/config/packages.list . The path to this
+#    file is stored in $PACKAGE_LIST. The package list is a list of package
+#    names, one per line, which are currently installed. The contents of the
+#    package list are interacted with inside this file by the functions:
+#    
+#      check_package_installed
+#      
+#      mark_package_installed
+#      
+#      mark_package_uninstalled
+#
+#      dedupe_packages
+#      
+#    The package list is not mean to be modified outside of the toolchest, as
+#    the package install and uninstall directives handle the package
+#    installation state themselves.
+#    
+#    Package installer and uninstaller scripts should NOT interact with
+#    package installation state.
+#    
+#    External scripts or expert users that need to modify package installation
+#    state should do so via the internal use commands:
+#    
+#      internal package mark-installed
+#      
+#      internal package mark-uninstalled
+#    
+#    Note that the package install/uninstall directives assume that if the
+#    installer/unstaller script(s) for a package return 0, then the
+#    install/uninstall operation completed successfully, and assume that it
+#    failed on a nonzero exit code. Installer and uninstaller scripts should
+#    set their exit codes appropriately.
 #
 #  ENVIORNMENT VARIABLES
 #  =====================
