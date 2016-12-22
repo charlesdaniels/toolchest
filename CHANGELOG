@@ -143,3 +143,19 @@
 
     * toolchest management utility now has internal functions to perform
       unconditional package installations and uninstallations.
+
+    * toolchest now has an "internal" directive for internal use commands
+
+    * implemented internal use commands:
+
+      * internal package unconditional-install
+
+      * internal package unconditional-uninstall
+
+      * internal package mark-installed
+
+      * internal package mark-uninstalled
+
+    * removed package mark-installed and mark-uninstalled, as these were
+      intended to be internal use only from the getgo (the same functionality
+      is now provided by the internal commands above).

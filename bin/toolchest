@@ -65,7 +65,7 @@
 #    uninstall local  . . . . . . . . . . uninstall the toolchest from $HOME
 #
 #    uninstall system . . . . . . . . . . uninstall the system-wide
-#    installation
+#                                         installation
 #
 #    package list . . . . . . . . . . . . list available packages
 #
@@ -79,13 +79,6 @@
 #    
 #    package status [package] . . . . . . check to see if [package] is
 #                                         installed
-#    
-#    package mark-installed [package] . . forcibly mark a package as installed
-#                                         (for experienced users only)
-#    
-#    package mark-uninstalled [package] . forcibly mark a package as
-#                                         uninstalled (for experienced users
-#                                         only)
 #                                         
 #    package list-installed . . . . . . . display a list of packages which
 #                                         have been marked as installed to the
@@ -97,6 +90,34 @@
 #    
 #    dir  . . . . . . . . . . . . . . . . display NET_CDANIELS_TOOLCHEST_DIR
 #                                         and exit
+#                                         
+#  INTERNAL USE COMMANDS
+#  =====================
+#  
+#  These commands are intended for use by expert users and/or as an API to
+#  internal toolchest utilities. If you don't have a good understanding of how
+#  the toolchest works, you probably should not use these.
+#  
+#    internal package unconditional-install [package] 
+#    
+#      Installs [package] unconditionally - package is NOT marked as installed,
+#      and installation state is not modified.
+#      
+#    internal package unconditional-uninstall [package]
+#    
+#      Uninstalls [package] unconditionally - package is NOT marked as
+#      uninstalled, and installation state is not modified.
+#      
+#    
+#    internal package mark-uninstalled [package]
+#    
+#      Unconditionally marks a package as not installed, regardless of pre
+#      existing installation state.
+#      
+#    internal package mark-installed [package]
+#    
+#      Unconditionally marks a package as installed, reguardless of pre
+#      existing installation state.
 #
 #  PACKAGES
 #  ========
@@ -407,7 +428,7 @@ uninstall_package () {
     echo "ERROR T359: package $PACKAGE has no uninstaller"
     return 1
   fi
-  
+
   return $RET
 }
 
@@ -613,7 +634,7 @@ case "$DIRECTIVE" in
         if [ $? -eq 0  ] ; then
           echo "ERROR T526: package $PACKAGE is already installed. If this is"
           echo "            not correct, you may mark it as uninstalled using"
-          echo "            \"toolchest package mark-uninstalled $PACKAGE\""
+          echo "            \"toolchest internal package mark-uninstalled $PACKAGE\""
           exit 1
         fi
 
@@ -635,7 +656,7 @@ case "$DIRECTIVE" in
         if [ $? -ne 0  ] ; then
           echo "ERROR T566: package $PACKAGE is not installed. If this is"
           echo "            not correct, you may mark it as installed using"
-          echo "            \"toolchest package mark-installed $PACKAGE\""
+          echo "            \"toolchest internal package mark-installed $PACKAGE\""
           exit 1
         fi
 
@@ -666,36 +687,6 @@ case "$DIRECTIVE" in
           echo "INFO: package $PACKAGE is NOT installed"
         fi
       ;;
-      mark-installed)
-        printf "INFO: marking $PACKAGE installed... "
-        if [ ! -d "$NET_CDANIELS_TOOLCHEST_DIR/packages/$PACKAGE" ] ; then
-          echo "FAIL"
-          echo "ERROR T618: no such package $PACKAGE"
-          exit 1
-        fi
-        mark_package_installed "$PACKAGE"
-        if [ $? -eq 0 ] ; then
-          echo "DONE"
-        else
-          echo "FAIL"
-          echo "ERRPR T588: failed to manual-mark package installed"
-        fi
-      ;;
-      mark-uninstalled)
-        printf "INFO: marking $PACKAGE uninstalled... "
-        if [ ! -d "$NET_CDANIELS_TOOLCHEST_DIR/packages/$PACKAGE" ] ; then
-          echo "FAIL"
-          echo "ERROR T633: no such package $PACKAGE"
-          exit 1
-        fi
-        mark_package_uninstalled "$PACKAGE"
-        if [ $? -eq 0 ] ; then
-          echo "DONE"
-        else
-          echo "FAIL"
-          echo "ERRPR T598: failed to manual-mark package uninstalled"
-        fi
-      ;;
       list-installed)
         cat "$PACKAGE_LIST"
       ;;
@@ -704,8 +695,39 @@ case "$DIRECTIVE" in
         exit 1
       ;;
     esac
-
   ;;
+########10########20########30#### INTERNAL ####50########60########70########80
+  internal)
+    INTERNAL_DIRECTIVE="$1"
+    shift
+    case "$INTERNAL_DIRECTIVE" in
+      package)
+        VERB="$1"
+        shift
+        PACKAGE="$1"
+        shift
+
+        case "$VERB" in
+          unconditional-install)
+            install_package "$PACKAGE"
+            exit $?
+          ;;
+          unconditional-uninstall)
+            uninstall_package "$PACKAGE"
+            exit $?
+          ;;
+          mark-installed)
+            mark_package_installed "$PACKAGE"
+            exit $?
+          ;;
+          mark-uninstalled)
+            mark_package_uninstalled "$PACKAGE"
+          ;;
+        esac
+      ;;
+    esac
+  ;;
+########10########20########30###### MISC ######50########60########70########80
   info)
     echo "INFO: toolchest configuration: "
     echo "NET_CDANIELS_TOOLCHEST_DIR . . . $NET_CDANIELS_TOOLCHEST_DIR"
