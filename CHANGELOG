@@ -123,11 +123,11 @@
 
     * add iproute2mac package
 
-    * toolchest managment utility now correctly interacts with installation
+    * toolchest management utility now correctly interacts with installation
       status. For example, it will refuse to install a package which is
       already installed.
 
     * implemented "toolchest package list-installed"
 
     * "toolchest package mark-[un]installed" now refuses to work on
-      nonexistant packages
+      nonexistent packages

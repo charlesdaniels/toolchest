@@ -11,10 +11,7 @@ pdfutils:
 
   * need support for additional OCR tools
 
-  * need preinstall script (sort-notes depends on python)
-
   * should warn on install if supported OCR software is not present
-
 
 pkgutils:
 
