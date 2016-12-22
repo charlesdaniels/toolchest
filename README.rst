@@ -8,7 +8,7 @@ explicitly provided, it falls under the `project license <LICENSE>`_.
 
 .. contents::
 
-FOR MY FRIENDS
+For My Friends
 ==============
 
 If you came here because I told you I had a useful script in this repo, and
@@ -23,7 +23,7 @@ you wanted to install it, here is what to do:
 
 * install the pakage you want (``toolchest package install packagename``)
 
-OVERVIEW
+Overview
 ========
 
 `CHANGELOG <CHANGELOG>`_
@@ -34,7 +34,7 @@ This is a set of tools which I have developed for my personal use and
 convenience. This repository make it easy to install these tools on various
 systems.
 
-GOALS
+Goals
 -----
 
 The key objective of this repository is to ensure that systems specific
@@ -45,7 +45,7 @@ anything compiled (eg. micro) does not play well with that approach, and even
 scripts that have special dependencies could not be guaranteed to work without
 manually validating that their dependencies.
 
-DESIGN
+Design
 ------
 
 In this repository, we keep a set of core utilities (usually referred to as
@@ -75,7 +75,7 @@ However, packages may use local/config for storing configuration if they need
 it.
 
 
-RATIONALE
+Rationale
 ---------
 
 In many ways, this is re-inventing the wheel. There are plenty of excellent
@@ -90,29 +90,9 @@ enough to warrent a new project, for a number of reasons:
 * the toolchest has very few dependencies, just a POSIX shell and some common
   utilities
 
-PACKAGE LISTING (current as of 0.0.3-ALPHA)
--------------------------------------------
-
-::
-
-  240utils - utilities for USC's CSCE240 class
-  archiveutils - utilities for working with archives
-  check-connection - package for testing network connectio
-  code-tools - programming related tools and scripts
-  create-project - [BROKEN - WiP] beginner oriented script for setting up new projects
-  example - a trivial example package
-  helloworld - An example C package which compiles via make
-  lprutils - tools for formatting and printing things
-  mac-shortcuts - macOS specific shortcuts and small tools
-  pdfutils - utilities for working with pdfs
-  pkgutils - simple wrappers for various package managers
-  systemutils - Linux+i3wm oriented utilities
-  template - package template - does not contain any binaries
-  todotxt-extensions - various extensions and tools built around todo.txt
-  universal-tools - catch-all for various non-system-specific tools that don't need their own packages
 
 
-STYLE AND CONVENTIONS
+Style and Conventions
 =====================
 
 Documentation about specific packages and scripts is kept in the relevant
@@ -133,7 +113,7 @@ declarations) should end in ``.lib`` and should not be marked executable.
 Libraries that contain functions should not also executed anything when
 sourced.
 
-GOTCHAS
+Gotchas
 -------
 
 There are a few gotchas that I have identified which can affect cross platform
@@ -149,7 +129,7 @@ compatibility.
   <http://superuser.com/a/138604>`_)
 
 
-LINKS TO MODULE DOCUMENTATION
+Links to Module Documentation
 =============================
 
 * `toolchest management tool <bin/toolchest>`_
