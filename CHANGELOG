@@ -115,6 +115,10 @@
       * still need to make the package install/uninstall directives interface
         with the new functions.
 
+      * implemented "toolchest package mark-installed"
+
+      * implemented "toolchest package mark-uninstalled"
+
   2016-12-22 - Charles Daniels:
 
     * add iproute2mac package
@@ -122,3 +126,8 @@
     * toolchest managment utility now correctly interacts with installation
       status. For example, it will refuse to install a package which is
       already installed.
+
+    * implemented "toolchest package list-installed"
+
+    * "toolchest package mark-[un]installed" now refuses to work on
+      nonexistant packages
