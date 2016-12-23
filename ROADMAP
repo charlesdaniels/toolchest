@@ -62,21 +62,6 @@ toolchest:
       script (http://superuser.com/questions/138587/how-to-copy-symbolic-
       links/138604#138604)
 
-  updater:
-
-    * Add a new command, maybe `toolchest upgrade` or `toolchest refresh`,
-      which would backup the existing toolchest install, re-install a fresh
-      toolchest, then copy `local/config` over to the new install.
-
-      I would be nice if this could also check what packages were installed,
-      and re-install them in the fresh toolchest installation. This would
-      require a way of determining if a package is currently installed or not.
-
-      The use case here is that package names occasionally change, and package
-      binaries also sometimes change names, which can cause package
-      uninstallers to mis stale symlinks to old binaries that have changed
-      names.
-
 carbonite:
 
   * remove limitation where payload filename cannot contain spaces

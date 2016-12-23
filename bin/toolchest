@@ -76,10 +76,10 @@
 #    package update [package] . . . . . . uninstall, then install [package]
 #
 #    package description [package]  . . . display [package]'s description
-#    
+#
 #    package status [package] . . . . . . check to see if [package] is
 #                                         installed
-#                                         
+#
 #    package list-installed . . . . . . . display a list of packages which
 #                                         have been marked as installed to the
 #                                         console.
@@ -87,35 +87,41 @@
 #    info . . . . . . . . . . . . . . . . display toolchest's configuration
 #
 #    version  . . . . . . . . . . . . . . display the toolchest's version
-#    
+#
 #    dir  . . . . . . . . . . . . . . . . display NET_CDANIELS_TOOLCHEST_DIR
 #                                         and exit
-#                                         
+#
+#    refresh  . . . . . . . . . . . . . . refresh the toolchest installation
+#                                         by wiping local/ then re-installing
+#                                         packages marked as installed. The
+#                                         contents of local/config are
+#                                         preserved.
+#
 #  INTERNAL USE COMMANDS
 #  =====================
-#  
+#
 #  These commands are intended for use by expert users and/or as an API to
 #  internal toolchest utilities. If you don't have a good understanding of how
 #  the toolchest works, you probably should not use these.
-#  
-#    internal package unconditional-install [package] 
-#    
+#
+#    internal package unconditional-install [package]
+#
 #      Installs [package] unconditionally - package is NOT marked as installed,
 #      and installation state is not modified.
-#      
+#
 #    internal package unconditional-uninstall [package]
-#    
+#
 #      Uninstalls [package] unconditionally - package is NOT marked as
 #      uninstalled, and installation state is not modified.
-#      
-#    
+#
+#
 #    internal package mark-uninstalled [package]
-#    
+#
 #      Unconditionally marks a package as not installed, regardless of pre
 #      existing installation state.
-#      
+#
 #    internal package mark-installed [package]
-#    
+#
 #      Unconditionally marks a package as installed, reguardless of pre
 #      existing installation state.
 #
@@ -137,38 +143,38 @@
 #  installation. Packages using install.sh should also make available an
 #  uninstall.sh for the same purpose. uninstall.sh and `make uninstall` are
 #  called in the same way as their counterparts.
-#  
+#
 #    INSTALLATION STATE
 #    ------------------
-#    
+#
 #    Package installation state is stored in the file
 #    $NET_CDANIELS_TOOLCHEST_DIR/local/config/packages.list . The path to this
 #    file is stored in $PACKAGE_LIST. The package list is a list of package
 #    names, one per line, which are currently installed. The contents of the
 #    package list are interacted with inside this file by the functions:
-#    
+#
 #      check_package_installed
-#      
+#
 #      mark_package_installed
-#      
+#
 #      mark_package_uninstalled
 #
 #      dedupe_packages
-#      
+#
 #    The package list is not mean to be modified outside of the toolchest, as
 #    the package install and uninstall directives handle the package
 #    installation state themselves.
-#    
+#
 #    Package installer and uninstaller scripts should NOT interact with
 #    package installation state.
-#    
+#
 #    External scripts or expert users that need to modify package installation
 #    state should do so via the internal use commands:
-#    
+#
 #      internal package mark-installed
-#      
+#
 #      internal package mark-uninstalled
-#    
+#
 #    Note that the package install/uninstall directives assume that if the
 #    installer/unstaller script(s) for a package return 0, then the
 #    install/uninstall operation completed successfully, and assume that it
@@ -299,27 +305,27 @@ PACKAGE_LIST="$NET_CDANIELS_TOOLCHEST_DIR/local/config/packages.list"
 
 #  check_package_installed
 #  =======================
-#  
+#
 #  Checks to see if a package has been marked as installed
-#  
+#
 #  USAGE
 #  =====
-#  
+#
 #    $1 . . . package name to check
-#    
+#
 #  RETURNS
 #  =======
-#  
+#
 #  If the package is installed, the return code is zero. If the package is not
 #  installed, the return code is one. If the package list does not exist, the
 #  return code is one.
-# 
+#
 check_package_installed () {
   if [ -f "$PACKAGE_LIST" ] ; then
     cat "$PACKAGE_LIST" | grep "$1" > /dev/null
     if [ $? -eq 0 ]  ; then
       return 0
-    else 
+    else
       return 1
     fi
   else
@@ -329,14 +335,14 @@ check_package_installed () {
 
 #  mark_package_installed
 #  ======================
-#  
-#  Marks a package as installed unconditionally. 
-#  
+#
+#  Marks a package as installed unconditionally.
+#
 #  USAGE
 #  =====
-#  
+#
 #    $1 . . . the package to mark installed
-#    
+#
 mark_package_installed () {
   check_package_installed "$1"
   if [ $? -eq 0 ] ; then
@@ -345,13 +351,13 @@ mark_package_installed () {
   else
     # package is not already installed
     echo "$1" >> "$PACKAGE_LIST"
-  fi 
+  fi
   dedupe_packages
 }
 
 #  dedupe_packages
 #  ===============
-#  
+#
 #  Ensure that the package list does not contain any duplicate package names
 dedupe_packages () {
   if [ ! -f "$PACKAGE_LIST" ] ; then
@@ -363,12 +369,12 @@ dedupe_packages () {
 
 #  mark_package_uninstalled
 #  ========================
-#  
-#  Mark a package as uninstalled unconditionally. 
-#  
+#
+#  Mark a package as uninstalled unconditionally.
+#
 #  USAGE
 #  =====
-#  
+#
 #    $1 . . . the package to mark uninstalled
 mark_package_uninstalled () {
   if [ ! -f "$PACKAGE_LIST" ] ; then
@@ -381,23 +387,23 @@ mark_package_uninstalled () {
 
 #  install_package
 #  ===============
-#  
-#  Install a package unconditionally, ignoring the package list. 
-#  
+#
+#  Install a package unconditionally, ignoring the package list.
+#
 #  USAGE
 #  =====
-#  
+#
 #    $1 . . . the package to be installed
-#    
+#
 #  RETURNS
 #  =======
-#  
-#    If the package does not exist, returns 1 and prints an error. 
-#    
+#
+#    If the package does not exist, returns 1 and prints an error.
+#
 #    If the package does not have an installer, returns 1 and prints an error.
-#    
+#
 #    In all other cases, the return code of the installer script is returned.
-#  
+#
 install_package () {
   # make sure the package exists
   if [ ! -d "$NET_CDANIELS_TOOLCHEST_DIR/packages/$PACKAGE" ] ; then
@@ -427,23 +433,23 @@ install_package () {
 
 #  uninstall_package
 #  =================
-#  
-#  Uninstall a package unconditionally, ignoring the package list. 
-#  
+#
+#  Uninstall a package unconditionally, ignoring the package list.
+#
 #  USAGE
 #  =====
-#  
+#
 #    $1 . . . the package to be uninstalled
-#   
+#
 #  RETURNS
 #  =======
-#  
+#
 #   If the package does not exist, returns 1 and prints an error
-#   
+#
 #   If the package does not have an uninstaller, returns 1 and prints an error
-#   
-#   In all other cases, returns the exit code of the package uninstaller. 
-#   
+#
+#   In all other cases, returns the exit code of the package uninstaller.
+#
 uninstall_package () {
   # make sure the package exists
   if [ ! -d "$NET_CDANIELS_TOOLCHEST_DIR/packages/$PACKAGE" ] ; then
@@ -699,7 +705,7 @@ case "$DIRECTIVE" in
 
         uninstall_package "$PACKAGE"
         RET=$?
-        
+
         if [ $RET -eq 0 ] ; then
           # installed succeeded, mark uninstalled
           mark_package_uninstalled "$PACKAGE"
@@ -725,7 +731,12 @@ case "$DIRECTIVE" in
         fi
       ;;
       list-installed)
-        cat "$PACKAGE_LIST"
+        if [ ! -f "$PACKAGE_LIST" ] ; then
+          echo "INFO: package list not initialized; either no packages are"
+          echo "      installed, or your toolchest installation is broken."
+        else
+          cat "$PACKAGE_LIST"
+        fi
       ;;
       *)
         echo "ERROR T282: package verb \"$VERB\" was not recognized"
@@ -780,6 +791,22 @@ case "$DIRECTIVE" in
   ;;
   version)
     echo "net.cdaniles.toolchest $TOOLCHEST_VERSION"
+  ;;
+  refresh)
+    cd "$NET_CDANIELS_TOOLCHEST_DIR"
+    mv local local.bak
+    mkdir "$NET_CDANIELS_TOOLCHEST_DIR/local"
+    mkdir "$NET_CDANIELS_TOOLCHEST_DIR/local/bin"
+    mkdir "$NET_CDANIELS_TOOLCHEST_DIR/local/lib"
+    mkdir "$NET_CDANIELS_TOOLCHEST_DIR/local/log"
+    mkdir "$NET_CDANIELS_TOOLCHEST_DIR/local/backup"
+    mkdir "$NET_CDANIELS_TOOLCHEST_DIR/local/config"
+    cp -r local.bak/config/* local/config/
+    rm local/config/packages.list
+    for packagename in `cat local.bak/config/packages.list` ; do
+      toolchest package install "$packagename"
+    done
+    rm -rf local.bak
   ;;
   *)
     echo "ERROR T46: no such directive $DIRECTIVE"

@@ -159,3 +159,9 @@
     * removed package mark-installed and mark-uninstalled, as these were
       intended to be internal use only from the getgo (the same functionality
       is now provided by the internal commands above).
+
+    * implemented `toolchest refresh` to refresh toolchest installation,
+      preserving only configuration and installed package listing.
+
+    * toolchest package list-installed now displays an error message when the
+      package list has not yet been initialized.
