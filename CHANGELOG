@@ -165,3 +165,7 @@
 
     * toolchest package list-installed now displays an error message when the
       package list has not yet been initialized.
+
+  2016-12-24 - Charles Daniels:
+
+    * added package for tcc c compiler
