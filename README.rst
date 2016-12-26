@@ -10,6 +10,8 @@ explicitly provided, it falls under the `project license <LICENSE>`_.
 
 For the user's manual, click `here <doc/manual.rst>`_. 
 
+For the packaging guide, click `here <doc/packaging.rst>`_
+
 For My Friends
 ==============
 
@@ -113,6 +115,11 @@ declarations) should end in ``.lib`` and should not be marked executable.
 
 Libraries that contain functions should not also executed anything when
 sourced.
+
+From the point of view of the rest of the toolchest, the coreutils libraries
+and binaries should be considered non-mutable. Outside of toolchest updates,
+they should not change in contents or functionality, and their behavior is
+not configurable.
 
 Gotchas
 -------
