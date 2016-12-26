@@ -52,7 +52,7 @@
 #                                         performs the install
 #
 #    install system . . . . . . . . . . . perform a system-wide toolchest
-#    installation
+#                                         installation
 #
 #    install local  . . . . . . . . . . . install the toolchest in $HOME
 #
