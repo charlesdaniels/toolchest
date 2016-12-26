@@ -8,6 +8,8 @@ explicitly provided, it falls under the `project license <LICENSE>`_.
 
 .. contents::
 
+For the user's manual, click `here <doc/manual.rst>_`. 
+
 For My Friends
 ==============
 
