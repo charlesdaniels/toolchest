@@ -8,7 +8,7 @@ explicitly provided, it falls under the `project license <LICENSE>`_.
 
 .. contents::
 
-For the user's manual, click `here <doc/manual.rst>_`. 
+For the user's manual, click `here <doc/manual.rst>`_. 
 
 For My Friends
 ==============
@@ -67,10 +67,6 @@ are symlinked into local/lib or local/bin as appropriate (local/ is directly
 under the toolchest installation directory). 
 
 Packages may be managed using ``toolchest package``. 
-
-~~~Package installations are stateless. Installing a package a second time will
-not break anything (usually it will cause the installer to fail, uninstalling
-the package). Uninstalling a package that does not exist will not break.~~~
 
 Beginning with 0.0.5-ALPHA, dependency resolution among toolchest packages
 will be supported as part of the toolchest management utility.

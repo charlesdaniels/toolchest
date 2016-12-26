@@ -86,7 +86,7 @@ installation state should review the header of the ``bin/toolchest`` file,
 paying specific attention to the ``internal`` commands documented there.
 
 For the convenience of those viewing this file in a web interface, `here
-<../bin/toolchest>_` is a link to the relevant file directly.
+<../bin/toolchest>`_ is a link to the relevant file directly.
 
 Updating the Toolchest Installation
 ===================================
