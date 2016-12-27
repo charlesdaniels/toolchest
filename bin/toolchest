@@ -251,7 +251,7 @@ export HOME="$(realpath $HOME)"
 
 SYSTEM_INSTALL_DIR="/opt/net.cdaniels.toolchest"
 LOCAL_INSTALL_DIR="$HOME/.net.cdaniels.toolchest"
-TOOLCHEST_VERSION="0.0.3-ALPHA"
+TOOLCHEST_VERSION="0.0.5-git"
 
 command -v realpath > /dev/null
 if [ $? -ne 0 ] ; then

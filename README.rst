@@ -121,6 +121,8 @@ and binaries should be considered non-mutable. Outside of toolchest updates,
 they should not change in contents or functionality, and their behavior is
 not configurable.
 
+For information on the versioning scheme, see `here <doc/version.rst>`_. 
+
 Gotchas
 -------
 
