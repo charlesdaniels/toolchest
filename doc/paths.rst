@@ -21,14 +21,12 @@ Conventions for ``sh`` Scripts
 ==============================
 
 ``sh`` and compatible scripts (eg. ksh, bash, zsh, xonsh (?)) can invoke
-``acquire-toolchest-dirs`` via ``$(acquire-toolchest-dirs)``. See the
+``acquire-toolchest-dir`` via ``$(acquire-toolchest-dirs export)``. See the
 `relevant header <../bin/acquire-toolchest-dirs>`_ for more information.
 
 Conventions for Python Scripts
 ==============================
 
-**TODO**
-
-By 0.0.5-release, Python bindings for acquire-toolchest-dirs need to be
-written. Possibly by having an alternate version or switch for ``acquire-
-toolchest-dirs`` which emits Python code, which can then be ``eval()`` -ed.
+The convention for accessing the toolchest installation in Python is
+demonstrated in the ``python-libtest`` package. See 
+`here <../packages/python-libtest/test-libs.py>`_

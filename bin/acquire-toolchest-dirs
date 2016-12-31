@@ -21,7 +21,7 @@
 #                    that is producing a series of export statements suitable
 #                    for use in sh and similar languages via 
 #                    $(acquire-toolchest-dirs export)
-#  
+#
 #  If no directive is specified, the following behavior is used (for backwards
 #  compatibility with pre-0.0.5 conventions) - this will likely be deprecated
 #  eventually, so this convention should not be used in new scripts.
