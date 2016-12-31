@@ -62,14 +62,15 @@ normalize-path first checks to see if realpath is available on the current
 system - if so, it is called directly and the script exits. Next, if the
 script can detect a valid toolchest installation, it will call into the
 coreutils library for one of three implementations of this functionality I
-have written and found. If BASH or zsh, AND readlink are present, ``normalize-
-path.bash`` is used - this was copied from the GitHub page of Mr. David
-Raistrick and slightly modified to execute as a script, rather than a
-function. Next, if python is available, my own implementation ``normalize-
-path.py`` is used - which is backed by Python's ``os.path.abspath()``. If
-python is not available, a pure ``sh`` implementation from the StackOverflow
-user Sildoreth is used. Last, if a toolchest installation is not present, but
-``readlink`` is, it is used.
+have written and found. If BASH or zsh, AND readlink are present, `normalize-
+path.bash <../lib/normalize-path/normalize-path.bash>`_ is used - this was
+copied from the GitHub page of Mr. David Raistrick and slightly modified to
+execute as a script, rather than a function. Next, if python is available, my
+own implementation `normalize-path.py <../lib/normalize-path/normalize-
+path.py>`_ is used - which is backed by Python's ``os.path.abspath()``. If
+python is not available, a `pure sh implementation <../lib/normalize-path
+/normalize-path.sh>`_ from the StackOverflow user Sildoreth is used. Last, if
+a toolchest installation is not present, but ``readlink`` is, it is used.
 
 Of course, this approach is not perfect - it does mean maintaining multiple
 different implementations of the same functionality in multiple languages.
