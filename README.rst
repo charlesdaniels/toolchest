@@ -136,6 +136,7 @@ compatibility.
 Further Documentation
 =====================
 
+* `acquiring the toolchest installation directory <doc/paths.rst>`_
 * `user manual <doc/manual.rst>`_
 * `packaging guide <doc/packaging.rst>`_
 * `notes on path normalization <doc/realpath.rst>`_

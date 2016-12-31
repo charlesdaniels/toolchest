@@ -189,3 +189,9 @@
     * added normalize-path to net.cdaniels.coreutils as a binary in $PATH, to
       provide cross-platform path normalization - it should be used to replace
       realpath in all scripts from here out.
+
+  2016-12-31 - Charles Daniels:
+
+    * acquire-toolchest-dirs now backed by `toolchest dir`
+
+    * documented conventions for acquiring toolchest install dir
