@@ -13,9 +13,9 @@ libraries or configuration files.
 
 There is one supported method to determine the toolchest installation location
 - via the ``acquire-toolchest-dirs`` coreutils script. Beginning with
-  0.0.5-release, determining the toolchest installation directory via
-  ``toolchest dir`` or environment variables is considered unsupported and is
-  deprecated. 
+0.0.5-release, determining the toolchest installation directory via
+``toolchest dir`` or environment variables is considered unsupported and is
+deprecated. 
 
 Conventions for ``sh`` Scripts
 ==============================
