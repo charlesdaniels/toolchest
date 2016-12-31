@@ -41,6 +41,8 @@ todotxt-extensions
 
 toolchest:
 
+  * should make use of the new normalize-path command 
+
   * some kind of unified help or documentation system would probably be a good
     idea.
 

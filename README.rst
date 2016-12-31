@@ -8,10 +8,6 @@ explicitly provided, it falls under the `project license <LICENSE>`_.
 
 .. contents::
 
-For the user's manual, click `here <doc/manual.rst>`_. 
-
-For the packaging guide, click `here <doc/packaging.rst>`_
-
 For My Friends
 ==============
 
@@ -121,8 +117,6 @@ and binaries should be considered non-mutable. Outside of toolchest updates,
 they should not change in contents or functionality, and their behavior is
 not configurable.
 
-For information on the versioning scheme, see `here <doc/version.rst>`_. 
-
 Gotchas
 -------
 
@@ -139,9 +133,13 @@ compatibility.
   <http://superuser.com/a/138604>`_)
 
 
-Links to Module Documentation
-=============================
+Further Documentation
+=====================
 
+* `user manual <doc/manual.rst>`_
+* `packaging guide <doc/packaging.rst>`_
+* `notes on path normalization <doc/realpath.rst>`_
+* `versioning scheme <doc/version.rst>`_
 * `toolchest management tool <bin/toolchest>`_
 * `reference package installer <lib/generic-install.sh>`_
 * `reference package uninstaller <lib/generic-uninstall.sh>`_
