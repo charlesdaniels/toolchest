@@ -10,9 +10,29 @@
 #  USAGE
 #  =====
 #  
-#  This script outputs some commands you should run to populate a variety of
-#  useful variable (enumerated below), to do this, run 
-#  $(acquire-toolchest-dirs)
+#  $1 . . . (optional) directive
+#  
+#  If a directive is specified, the following are recognized:
+#  
+#    dironly . . . . display the value of NET_CDANIELS_TOOLCHEST_DIR on stdout
+#                    then exit
+#                    
+#    export  . . . . produces the legacy behavior of acquire-toolchest-dirs,
+#                    that is producing a series of export statements suitable
+#                    for use in sh and similar languages via 
+#                    $(acquire-toolchest-dirs export)
+#  
+#  If no directive is specified, the following behavior is used (for backwards
+#  compatibility with pre-0.0.5 conventions) - this will likely be deprecated
+#  eventually, so this convention should not be used in new scripts.
+# 
+#    This script outputs some commands you should run to populate a variety of
+#    useful variable (enumerated below), to do this, run 
+#    $(acquire-toolchest-dirs)
+#  
+#  
+#  The following variables are defined in directives like "export" which emit
+#  executable code, except as otherwise noted:
 #  
 #  NET_CDANIELS_TOOLCHEST_DIR  . . . toolchest install dir
 #  NET_CDANIELS_TOOLCHEST_LOCAL  . . `local/` dir inside of toolchest install
@@ -70,8 +90,26 @@ if [ ! -e "$TOOLCHEST_BINARY" ] ; then
   exit 1
 fi
 
-echo "export NET_CDANIELS_TOOLCHEST_PACKAGES=$PACKAGES"
-echo "export NET_CDANIELS_TOOLCHEST_LIB=$LIB"
-echo "export NET_CDANIELS_TOOLCHEST_BIN=$BIN"
-echo "export NET_CDANIELS_TOOLCHEST_LOCAL=$LOCAL"
-echo "export NET_CDANIELS_TOOLCHEST_DIR=$DIR"
+if [ $# -gt 0 ] ; then
+  DIRECTIVE="$1"
+  case $DIRECTIVE in 
+    dironly)
+      echo "$DIR"
+      exit 0
+    ;;
+    export)
+      echo "export NET_CDANIELS_TOOLCHEST_PACKAGES=$PACKAGES"
+      echo "export NET_CDANIELS_TOOLCHEST_LIB=$LIB"
+      echo "export NET_CDANIELS_TOOLCHEST_BIN=$BIN"
+      echo "export NET_CDANIELS_TOOLCHEST_LOCAL=$LOCAL"
+      echo "export NET_CDANIELS_TOOLCHEST_DIR=$DIR"
+      exit 0
+    ;;
+    *)
+      echo "ERROR ATD87: no such directive \"$DIRECTIVE\""
+      exit 1
+    ;;
+  esac
+else
+  $0 export
+fi

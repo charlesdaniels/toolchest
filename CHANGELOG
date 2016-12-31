@@ -195,3 +195,10 @@
     * acquire-toolchest-dirs now backed by `toolchest dir`
 
     * documented conventions for acquiring toolchest install dir
+
+    * added directives to ``acquire-toolchest-dirs``, implemented...
+
+      * export - produces legacy functionality
+
+      * dironly - identical behaviour to ``toolchest dir``, intended as a
+        stable API to provide this functionality for scripts
