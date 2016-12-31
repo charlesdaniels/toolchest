@@ -46,9 +46,9 @@ These two points violate several core goals of the toolchest, namely that the
 management utility and coreutils should run on a minimal POSIX system without
 root access (eg. we may not call into the package manager to install realpath). 
 
-Further, ``realpath`` is not part of the POSIX specification, and may not even
-be available on all systems (the availability of realpath on say, Solaris or
-AIX is questionable).
+Further, ``realpath`` and ``readlink`` are not part of the POSIX specification
+(to my knowledge), and may not even be available on all systems (the
+availability of realpath on say, Solaris or AIX is questionable).
 
 The Solution
 ============
@@ -59,7 +59,7 @@ absolute/normalized version of the same path. This is roughly equivalent to
 the normal behavior of ``realpath`` with no options.
 
 normalize-path first checks to see if realpath is available on the current
-system - if so, it is called directly and the script exists. Next, if the
+system - if so, it is called directly and the script exits. Next, if the
 script can detect a valid toolchest installation, it will call into the
 coreutils library for one of three implementations of this functionality I
 have written and found. If BASH or zsh, AND readlink are present, ``normalize-
