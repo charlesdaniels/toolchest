@@ -23,6 +23,8 @@
 #
 #  Note that you may safely symlink this file to "realpath" in $PATH without
 #  it calling itself. Note that no readlink switches or options are supported.
+#  
+#  The need for this is discussed in detail in doc/
 #
 #  USAGE
 #  =====
