@@ -1,0 +1,151 @@
+#!/bin/sh
+########10########20########30## DOCUMENTATION #50########60########70########80
+#
+#  OVERVIEW
+#  ========
+#
+#  System independent method to call something that acts like realpath. i.e.
+#  this script will normalize/canonicalize a path in a system independent way.
+#
+#  Note that exact output format may slightly vary, but you are guaranteed to
+#  get either an error or a valid POSIX absolute path to $1.
+#
+#  First it attempts to invoke the system's realpath. If the system does not
+#  have realpath, then one of lib/normalize-path will be used, in the
+#  following order:
+#
+#  normalize-path.bash - if and only if (BASH or zsh) and readlink are
+#                        available
+#
+#  normalize-path.py - if python is present on the system
+#
+#  normalize-path.sh - if neither of the above can be used
+#
+#  Note that you may safely symlink this file to "realpath" in $PATH without
+#  it calling itself. Note that no readlink switches or options are supported.
+#
+#  USAGE
+#  =====
+#
+#  $1 . . . path to normalize
+#
+#  RETURNS
+#  =======
+#
+#  Outputs the normalized path to stdout.
+#
+########10########20########30##### LICENSE ####50########60########70########80
+#  Copyright (c) 2016, Charles Daniels
+#  All rights reserved.
+#
+#  Redistribution and use in source and binary forms, with or without
+#  modification, are permitted provided that the following conditions are met:
+#
+#  1. Redistributions of source code must retain the above copyright notice,
+#     this list of conditions and the following disclaimer.
+#
+#  2. Redistributions in binary form must reproduce the above copyright
+#     notice, this list of conditions and the following disclaimer in the
+#     documentation and/or other materials provided with the distribution.
+#
+#  3. Neither the name of the copyright holder nor the names of its
+#     contributors may be used to endorse or promote products derived from
+#     this software without specific prior written permission.
+#
+#  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+#  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+#  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+#  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+#  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+#  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+#  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+#  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+#  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+#  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+#  POSSIBILITY OF SUCH DAMAGE.
+#
+########10########20########30## CONFIGURATION #50########60########70########80
+
+if ! (: "${NET_CDANIELS_TOOLCHEST_DIR?}") 2>/dev/null; then
+  command -v acquire-toolchest-dirs > /dev/null
+  if [ $? -eq 0 ] ; then
+    $(acquire-toolchest-dirs)
+  elif [ -e ./lib/normalize-path/normalize-path.bash ] ; then
+    NET_CDANIELS_TOOLCHEST_DIR=./
+  fi
+fi
+
+
+if [ $# -eq 0 ] ; then
+  echo "ERROR 71: no path specified"
+  exit 1
+fi
+
+if [ ! -e "$1" ] ; then
+  echo "ERROR 76: no such path \"$1\""
+  exit 1
+fi
+
+TARGET="$1"
+shift
+REALPATH="ERROR"
+
+if [ -e /bin/realpath ] ; then
+  REALPATH="/bin/realpath"
+elif [ -e /usr/bin/realpath ] ; then
+  REALPATH="/usr/bin/realpath"
+elif [ -e /opt/local/bin/realpath ] ; then
+  REALPATH="/opt/local/bin/realpath"
+fi
+
+# we can only use the net.cdaniels.coreutils implementations if we know where
+# the toolchest is
+if (: "${NET_CDANIELS_TOOLCHEST_DIR?}") 2>/dev/null; then
+  command -v readlink > /dev/null
+  READLINK_EXISTS=$?
+  command -v python > /dev/null
+  PYTHON_EXISTS=$?
+
+  if [ "$REALPATH" != "ERROR" ] ; then
+    # we already have a system copy
+    printf "" # do nothing
+  elif [ $READLINK_EXISTS -eq 0 ] ; then
+    # we have readlink, so if we have BASH or zsh, we can use the BASH
+    # implementation
+    command -v bash > /dev/null
+    BASH_EXISTS=$?
+    command -v zsh > /dev/null
+    ZSH_EXISTS=$?
+    if [ $BASH_EXISTS -eq 0 ] ; then
+      REALPATH="bash $NET_CDANIELS_TOOLCHEST_DIR/lib/normalize-path/normalize-path.bash"
+    elif [ $ZSH_EXISTS -eq 0 ] ; then
+      REALPATH="bash $NET_CDANIELS_TOOLCHEST_DIR/lib/normalize-path/normalize-path.bash"
+    fi
+  fi
+
+  if [ $PYTHON_EXISTS -eq 0 ] && [ "$REALPATH" == "ERROR" ]; then
+    # we have python, so we can use that, and realpath is not set yet
+    REALPATH="python $NET_CDANIELS_TOOLCHEST_DIR/lib/normalize-path/normalize-path.py"
+  fi
+
+  if [ "$REALPATH" == "ERROR" ] ; then
+    # give up and use the sh implementation
+    REALPATH="sh $NET_CDANIELS_TOOLCHEST_DIR/lib/normalize-path/normalize-path.sh"
+  fi
+fi
+
+if [ "$REALPATH" == "ERROR" ] ; then
+  # as a last ditch effort, try to use readlink if it exists
+  command -v readlink > /dev/null
+  if [ $? -eq 0 ] ; then
+    REALPATH="readlink -f"
+  fi
+fi
+
+if [ "$REALPATH" == "ERROR" ] ; then
+  echo "ERROR 137: unable to find any valid realpath equivalent"
+  exit 1
+fi
+
+$REALPATH $TARGET
+exit $?

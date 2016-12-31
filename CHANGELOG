@@ -175,3 +175,17 @@
     * added user's manual
 
     * added packaging guide
+
+  2016-12-30 - Charles Daniels:
+
+    * added normalize-path implementation in...
+
+      * Python
+
+      * pure SH
+
+      * BASH + readlink
+
+    * added normalize-path to net.cdaniels.coreutils as a binary in $PATH, to
+      provide cross-platform path normalization - it should be used to replace
+      realpath in all scripts from here out.
