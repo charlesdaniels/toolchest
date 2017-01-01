@@ -245,25 +245,39 @@
 #
 ########10########20########30########40########50########60########70########80
 
-# this forces home to be resolved to it's actual path, which fixes several
-# breakages when sanity checking installation locations.
-export HOME="$(realpath $HOME)"
-
 SYSTEM_INSTALL_DIR="/opt/net.cdaniels.toolchest"
 LOCAL_INSTALL_DIR="$HOME/.net.cdaniels.toolchest"
 TOOLCHEST_VERSION="0.0.5-git"
+PATH_NORMALIZE_CMD=""
+
+export NET_CDANIELS_TOOLCHEST_DIR="$NET_CDANIELS_TOOLCHEST_DIR"
 
 command -v realpath > /dev/null
-if [ $? -ne 0 ] ; then
-  echo "ERROR T170: command \"realpath\" is not available"
-  exit 1
+if [ $? -eq 0 ] ; then
+  command -v normalize-path > /dev/null
+  if [ $? -ne 0 ] ; then
+    if [ -e ./bin/normalize-path ] ; then
+      PATH_NORMALIZE_CMD="./bin/normalize-path"
+    else
+      echo "ERROR 265: no path normalization command available"
+      exit 1
+    fi
+  else
+    PATH_NORMALIZE_CMD="normalize-path"
+  fi
+else
+  PATH_NORMALIZE_CMD="realpath"
 fi
+
+echo "normalize command: $PATH_NORMALIZE_CMD"
 
 command -v sed > /dev/null
 if [ $? -ne 0 ] ; then
   echo "ERROR T180: command \"sed\" is not available"
   exit 1
 fi
+
+export NET_CDANIELS_TOOLCHEST_DIR=`echo $0 | sed 's/toolchest$//g'`/..
 
 # check if NET_CDANIELS_TOOLCHEST_DIR already exists (from env), and if not
 # try to detect
@@ -274,7 +288,7 @@ else
   # shells. The sed command matches "toolchest", followed by a line ending,
   # and replaces it with nothing. Although this is uglier, it will work on
   # more systems.
-  NET_CDANIELS_TOOLCHEST_DIR=$(realpath `echo $0 | sed 's/toolchest$//g'`/..)
+  export NET_CDANIELS_TOOLCHEST_DIR=$($PATH_NORMALIZE_CMD `echo $0 | sed 's/toolchest$//g'`/..)
 fi
 
 if [ "$NET_CDANIELS_TOOLCHEST_DIR" != "$SYSTEM_INSTALL_DIR" ] ; then
@@ -283,6 +297,8 @@ if [ "$NET_CDANIELS_TOOLCHEST_DIR" != "$SYSTEM_INSTALL_DIR" ] ; then
     echo $NET_CDANIELS_TOOLCHEST_DIR
   fi
 fi
+
+
 
 # make sure that we are somewhere in $PATH (toolchest likes to recursively
 # call itself)
