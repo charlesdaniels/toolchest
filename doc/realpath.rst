@@ -2,6 +2,10 @@
 The Joy of Cross-Platform Path Normalization
 ********************************************
 
+
+NOTE: this file is left here to avoid dead links, but as of 2016-12-31, the
+toolchest uses Michael Kropat's sh implementation of realpath.
+
 .. contents::
 
 What is Path Normalization

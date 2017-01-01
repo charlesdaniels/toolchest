@@ -139,7 +139,6 @@ Further Documentation
 * `acquiring the toolchest installation directory <doc/paths.rst>`_
 * `user manual <doc/manual.rst>`_
 * `packaging guide <doc/packaging.rst>`_
-* `notes on path normalization <doc/realpath.rst>`_
 * `versioning scheme <doc/version.rst>`_
 * `toolchest management tool <bin/toolchest>`_
 * `reference package installer <lib/generic-install.sh>`_

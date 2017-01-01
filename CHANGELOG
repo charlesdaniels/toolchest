@@ -203,15 +203,6 @@
       * dironly - identical behaviour to ``toolchest dir``, intended as a
         stable API to provide this functionality for scripts
 
-    * toolchest management utility now uses normalize-path if realpath is not
-      present on the system
-
-      * caveat: toolchest seems to prioritize normalize-path over realpath,
-        even if realpath is present
-
-      * caveat: when failing over to the sh (?) implementation, the toolchest
-        may think its running from the wrong location.
-
-      * the fix to these issues will most likely involve replicating a lot of
-        the code from normalize-path in the management utility, so as to avoid
-        a circular dependency between toolchest and normalize-path
+    * replaced normalize-path with Michael Kropat's sh implementation from
+      GitHub. normalize-path is still left as a coreutils binary for
+      convienience, but it simply wraps the new lib/realpath.lib
