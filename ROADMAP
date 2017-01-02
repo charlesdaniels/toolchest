@@ -53,6 +53,13 @@ toolchest:
     * validate that python is installed for generate-separator or move it to a
       package
 
+  * the toolchest managment utility (i.ew. the ``toolchest`` command) has
+    become a bit unwieldy in terms of size (> 1k LOC). It should probably be
+    split apart into libraries. 
+
+  * support should be added for running outside of the standard system and
+    local install directories.
+
 carbonite:
 
   * remove limitation where payload filename cannot contain spaces
@@ -85,3 +92,24 @@ musicutil:
 
   * script to email out the result of the previous point to enrolled students.
 
+pv:
+
+  * would be nice to add a ``pv`` port, to add progress bars to toolchest
+    packages without introducing an external dependency. pv seems to be a good
+    candidate for this, as it seems to compile with just C, and supports
+    prefix installation.
+
+runtime:
+
+  * it should be possible to package the toolchest coreutils and (maybe)
+    installed packages into a runtime via carbonite, which can be used by
+    standalone scripts that are not toolchest packages, but wish to depend on
+    the toolchest or packages.
+
+    This will probably involve having a launcher script that adds the runtime
+    prefix to $PATH. The difficult part will be handling packages... maybe if
+    support was added for running the toolchest from locations other than
+    $HOME/.net.cdaniels.toolchest and /opt/.net.cdaniels.toolchest, then the
+    user could specify the desired packages and payload, the whole thing could
+    be built as a fresh install in /tmp, then the launcher script and payload
+    copied in and bundled via carbonite.
