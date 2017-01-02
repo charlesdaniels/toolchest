@@ -106,8 +106,9 @@
 #
 #    internal package unconditional-install [package]
 #
-#      Installs [package] unconditionally - package is NOT marked as installed,
-#      and installation state is not modified.
+#      Installs [package] unconditionally - package is NOT marked as
+#      installed, and installation state is not modified. Does not install or
+#      check package dependencies.
 #
 #    internal package unconditional-uninstall [package]
 #
@@ -180,6 +181,23 @@
 #    install/uninstall operation completed successfully, and assume that it
 #    failed on a nonzero exit code. Installer and uninstaller scripts should
 #    set their exit codes appropriately.
+#    
+#    DEPENDANCY HANDLING
+#    -------------------
+#    
+#    Packages may optionally include a directory named ``dep``, which may
+#    contain any, all, or none of the following files:
+#    
+#    system . . . . . a list of commands, one per line, which if they are not
+#                     present in $PATH, will cause the installer to fail.
+#                     
+#    toolchest  . . . a list of toolchest package, which if they are not
+#                     installed, will be installed. Should any dependency
+#                     installation fail, the installer will fail.
+#                     
+#    Note that both of these files need to end in a blank line to be parsed
+#    correctly.
+#    
 #
 #  ENVIORNMENT VARIABLES
 #  =====================
@@ -637,6 +655,8 @@ case "$DIRECTIVE" in
     PACKAGE="$1"
     shift
 
+    PKG_DIR="$NET_CDANIELS_TOOLCHEST_DIR/packages/$PACKAGE"
+
     case "$VERB" in
       list)
         cd "$NET_CDANIELS_TOOLCHEST_DIR/packages"
@@ -654,7 +674,7 @@ case "$DIRECTIVE" in
         toolchest package description $PACKAGE
       ;;
       description)
-        DESCFILE="$NET_CDANIELS_TOOLCHEST_DIR/packages/$PACKAGE/description.txt"
+        DESCFILE="$PKG_DIR/description.txt"
         if [ -e "$DESCFILE" ] ; then
           cat $DESCFILE
         else
@@ -673,6 +693,46 @@ case "$DIRECTIVE" in
           exit 1
         fi
 
+        if [ -e "$PKG_DIR/dep" ] ; then
+
+          if [ -f "$PKG_DIR/dep/system" ] ; then
+            # validate system dependencies
+            while read -r line ; do
+              printf "INFO: verifying $line is present... "
+              command -v $line > /dev/null
+              if [ $? -ne 0 ] ; then
+                echo "FAIL"
+                echo "ERROR T699: dependancy $line is not present on the system"
+                exit 1
+              fi
+              echo "OK"
+            done < "$PKG_DIR/dep/system"
+          fi  # if [ -f "$PKG_DIR/dep/system" ] ; then
+
+          if [ -f "$PKG_DIR/dep/toolchest" ] ; then
+            # attempt to install toolchest dependencies
+            while read -r line ; do
+              printf "INFO: verifying package $line is installed... "
+              toolchest package list-installed | grep $line > /dev/null
+              # grep will return nonzero if the string is not found
+              if [ $? -eq 0 ] ; then
+                # package is already marked installed
+                echo "OK"
+              else
+                # package not installed, try installing it
+                echo "NOT PRESENT"
+                echo "INFO: will attempt to install package $line"
+                # perform the install
+                toolchest package install $line
+                if [ $? -ne 0 ] ; then
+                  echo "ERROR T717: failed to install dependency $line"
+                  exit 1
+                fi
+              fi
+            done < "$PKG_DIR/dep/toolchest"
+          fi  # if [ -f "$PKG_DIR/dep/toolchest" ] ; then
+        fi  # if [ -e "$PKG_DIR/dep" ] ; then
+
         # perform the package installation
         install_package "$PACKAGE"
 
@@ -680,6 +740,7 @@ case "$DIRECTIVE" in
         if [ $? -ne 0 ] ; then
           echo "ERROR T376: installer failed, attempting to clean up."
           uninstall_package "$PACKAGE"
+          exit 1
         else
           # mark package installed
           mark_package_installed "$PACKAGE"

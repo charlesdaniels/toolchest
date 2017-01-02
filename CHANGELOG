@@ -210,3 +210,7 @@
   2017-01-01 - Charles Daniels: 
 
     * added mirror-directory command to coreutils
+
+    * added dependency resolution - see toolchest header for docs
+
+    * T376 now causes ``toolchest`` to exit directly with an exit code of 1

@@ -53,14 +53,6 @@ toolchest:
     * validate that python is installed for generate-separator or move it to a
       package
 
-  packages:
-
-    * Consider the preinstall for universal-tools, maybe make this more
-      generic and put it in coreutils lib? There could be two files, maybe
-      depends.required and depends.optional, which could be iterated over by
-      the generic preinstall script. This could also be used with
-      archiveutils.
-
 carbonite:
 
   * remove limitation where payload filename cannot contain spaces
