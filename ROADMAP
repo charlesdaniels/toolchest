@@ -41,10 +41,10 @@ todotxt-extensions
 
 toolchest:
 
-  * should make use of the new normalize-path command 
-
   * some kind of unified help or documentation system would probably be a good
     idea.
+
+    * maybe something that can parse out the documentation header from scripts?
 
   installer:
 
@@ -60,12 +60,6 @@ toolchest:
       depends.required and depends.optional, which could be iterated over by
       the generic preinstall script. This could also be used with
       archiveutils.
-
-  coreutils:
-
-    * should move tar method of directory mirroring into coreutils as a bin
-      script (http://superuser.com/questions/138587/how-to-copy-symbolic-
-      links/138604#138604)
 
 carbonite:
 

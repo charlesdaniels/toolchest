@@ -206,3 +206,7 @@
     * replaced normalize-path with Michael Kropat's sh implementation from
       GitHub. normalize-path is still left as a coreutils binary for
       convienience, but it simply wraps the new lib/realpath.lib
+
+  2017-01-01 - Charles Daniels: 
+
+    * added mirror-directory command to coreutils
