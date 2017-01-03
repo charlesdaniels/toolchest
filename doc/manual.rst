@@ -27,31 +27,31 @@ itself to an appropriate location shortly.
 Installing the Toolchest
 ------------------------
 
-Now, ``cd ./toolchest``, or otherwise change your working directory to the
-directory you just extracted to. Next run ``bin/toolchest install``. Follow
-the resulting prompts. Note that if you try to perform a system installation
-without being root, unexpected results may occur.
+As of 0.0.5, there is no special installation procedure for the toolchest.
+Simply ``git clone`` the repo, or download a release tarball and extract it
+anywhere. It is suggested, but not required, that you name the resulting
+directory ``.net.cdaniels.toolchest``, and place it either in ``$HOME`` or
+``/opt/``
 
-Once the installation is complete, you will see a message with some
-directories you will need to add to your ``$PATH``. You should do so in a
-manner appropriate for your shell.
+**NOTE**: the toolchest contains a number of symbolic links - make sure you
+preserve them while copying or extracting it, or you may get unexpected
+results. A tool is available for this purpose in ``bin/mirror-directory`` - it
+can be used standalone before the toolchest is set up.
 
-System vs Local Installations
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Call the top-level directory of the toolchest ``NET_CDANIELS_TOOLCHEST_DIR``,
+such that it contains the folders ``bin``, ``doc``, ``lib``, and ``packages``
 
-System installations of the toolchest are intended to be used by system
-administrators and the like in cases where all users on the relevant system
-need to have access to the toolchest. Note that non-root users will not be
-able to install packages.
+Now add the following directories to ``$PATH``
 
-Local installations place the toolchest installation in the user's home
-folder, and are intended for cases where a single user, possibly without root
-access, wishes to have toolchest access on a particular system.
+* ``$NET_CDANIELS_TOOLCHEST_DIR/bin``
+* ``$NET_CDANIELS_TOOLCHEST_DIR/local/bin``
 
-Cases where local and system installations of the toolchest exist on the same
-system are not well tested. If you wish to have both, you should make sure
-that user(s) with local installations do not also have the system installation
-in their ``$PATH``, or unexpected results may occur. 
+Uninstalling the Toolchest
+--------------------------
+
+Simply delete ``$NET_CDANIELS_TOOLCHEST_DIR``. By design, no package should
+write outside of this directory, so simply removing it and taking the relevant
+directories out of ``$PATH`` will fully remove the toolchest from your system.
 
 Managing Packages
 =================

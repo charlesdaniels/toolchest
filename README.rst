@@ -8,20 +8,6 @@ explicitly provided, it falls under the `project license <LICENSE>`_.
 
 .. contents::
 
-For My Friends
-==============
-
-If you came here because I told you I had a useful script in this repo, and
-you wanted to install it, here is what to do:
-
-* clone the repo (``git clone https://bitbucket.org/charlesdaniels/toolchest``)
-
-* install the toolchest (``cd toolchest && ./bin/toolchest install local``)
-
-* the installer will give you some directories to add to your ``$PATH``, you
-  should make sure to do this
-
-* install the pakage you want (``toolchest package install packagename``)
 
 Overview
 ========
@@ -83,11 +69,10 @@ enough to warrent a new project, for a number of reasons:
 
 * the toolchest (should) run on any POSIX system 
 * the toolchest does not need to be run as root
-
-  - system wide or ``$HOME`` installations are fully supported
-
 * the toolchest has very few dependencies, just a POSIX shell and some common
   utilities
+* the toolchest (as of 0.0.5) supports running from any location - this makes
+  it suitable for using as a runtime.
 
 
 

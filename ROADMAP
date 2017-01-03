@@ -57,9 +57,6 @@ toolchest:
     become a bit unwieldy in terms of size (> 1k LOC). It should probably be
     split apart into libraries. 
 
-  * support should be added for running outside of the standard system and
-    local install directories.
-
 carbonite:
 
   * remove limitation where payload filename cannot contain spaces

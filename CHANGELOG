@@ -214,3 +214,14 @@
     * added dependency resolution - see toolchest header for docs
 
     * T376 now causes ``toolchest`` to exit directly with an exit code of 1
+
+  2016-01-02 - Charles Daniels:
+
+    * toolchest now supports running from anywhere on the system
+
+    * ``toolchest install`` and ``toolchest uninstall`` have been removed -
+      see updated user manual for documentation on the new install procedure.
+
+    * removed warning ``T176`` and related checks
+
+    * added ``toolchest setup`` to set up ``local``

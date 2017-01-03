@@ -32,40 +32,8 @@
 #  This may make both installations difficult to manage. Multiple separate
 #  users having local installations should not cause any problems however.
 #
-#
-#  INSTALLATION TYPES
-#  ==================
-#
-#  There are exactly two supported toolchest installation types: system and
-#  local. System installations live in /opt/net.cdaniels.toolchest, while
-#  local installations live in $HOME/.net.cdaniels.toolchest . Call the
-#  install folder TOOLCHEST_DIR
-#
-#  There are two bin folders, $TOOLCHEST_DIR/bin, and $TOOLCHEST_DIR/local/bin .
-#  Both should be added to $PATH in order to use the toolchest coreutils and
-#  any installed packages.
-#
 #  USAGE
 #  =====
-#
-#    install  . . . . . . . . . . . . . . prompts for install type, then
-#                                         performs the install
-#
-#    install system . . . . . . . . . . . perform a system-wide toolchest
-#                                         installation
-#
-#    install local  . . . . . . . . . . . install the toolchest in $HOME
-#
-#    uninstall  . . . . . . . . . . . . . uninstall the toolchest. If only a
-#                                         local or only a system install is
-#                                         present, it will be uninstalled. If
-#                                         both are present, the script will
-#                                         error.
-#
-#    uninstall local  . . . . . . . . . . uninstall the toolchest from $HOME
-#
-#    uninstall system . . . . . . . . . . uninstall the system-wide
-#                                         installation
 #
 #    package list . . . . . . . . . . . . list available packages
 #
@@ -96,6 +64,19 @@
 #                                         packages marked as installed. The
 #                                         contents of local/config are
 #                                         preserved.
+#    
+#    setup  . . . . . . . . . . . . . . . verifies that all needed folders in
+#                                         the local/ directory tree exist -
+#                                         any that do not are created. On
+#                                         successful setup completion, the
+#                                         empty file
+#                                         
+#                                         $NET_CDANIELS_TOOLCHEST_DIR/local/config/setup-done 
+#                                         
+#                                         is created. When the toolchest first
+#                                         launches, if this file does not
+#                                         exist, then the setup directive is
+#                                         executed automatically.
 #
 #  INTERNAL USE COMMANDS
 #  =====================
@@ -263,8 +244,6 @@
 #
 ########10########20########30########40########50########60########70########80
 
-SYSTEM_INSTALL_DIR="/opt/net.cdaniels.toolchest"
-LOCAL_INSTALL_DIR="$HOME/.net.cdaniels.toolchest"
 TOOLCHEST_VERSION="0.0.5-git"
 
 command -v sed > /dev/null
@@ -285,33 +264,23 @@ else
   NET_CDANIELS_TOOLCHEST_DIR=$(realpath `echo $0 | sed 's/toolchest$//g'`/..)
 fi
 
-if [ "$NET_CDANIELS_TOOLCHEST_DIR" != "$SYSTEM_INSTALL_DIR" ] ; then
-  if [ "$NET_CDANIELS_TOOLCHEST_DIR" != "$LOCAL_INSTALL_DIR" ] ; then
-    printf "WARNING T176: toolchest running from an unsupported location: "
-    echo $NET_CDANIELS_TOOLCHEST_DIR
-  fi
+if [ ! -f "$NET_CDANIELS_TOOLCHEST_DIR/local/config/setup-done" ] && \
+   [ "$1" != "setup" ]; then
+  echo "INFO: performing first time setup."
+  $0 setup
+  exit $?
 fi
-
-
 
 # make sure that we are somewhere in $PATH (toolchest likes to recursively
 # call itself)
 command -v toolchest > /dev/null
 if [ $? -ne 0 ] ; then
-  if [ "$1" == "install" ] ; then
-    # the installer is not guaranteed to run from $PATH
-    printf ""  # do nothing
-  else
-    echo "ERROR T196: toolchest executable not in \$PATH"
-    exit 1
-  fi
+  echo "ERROR T196: toolchest executable not in \$PATH"
 fi
 
 PACKAGE_LIST="$NET_CDANIELS_TOOLCHEST_DIR/local/config/packages.list"
 
-
 ########10########20########30 UTILITY FUNCTIONS 0########60########70########80
-
 
 #  check_package_installed
 #  =======================
@@ -494,160 +463,6 @@ DIRECTIVE="$1"
 shift
 
 case "$DIRECTIVE" in
-########10########20########30##### INSTALL ####50########60########70########80
-  install)
-    INSTALL_TYPE="$1"
-    shift
-    case "$INSTALL_TYPE" in
-      local)
-        echo "INFO: selected install type local"
-
-        # make sure we don't have an existing installation
-        TOOLCHEST_DIR="$LOCAL_INSTALL_DIR"
-
-      ;;
-      system)
-        echo "INFO: selected install type system"
-
-        # make sure we are root
-        if [ `whoami` != "root" ] ; then
-          echo "ERROR T88: must be root to perform system install"
-          exit 1
-        fi
-        TOOLCHEST_DIR="$SYSTEM_INSTALL_DIR"
-      ;;
-      *)
-        printf "QUERY: install type (system, local) > "
-        read INSTALL_TYPE
-        ./"$0" install $INSTALL_TYPE
-        exit $?
-      ;;
-    esac
-
-    # make sure we have things we need
-    printf "INFO: preflight check... "
-    # check for realpath was moved to the top of this file, but this might be
-    # a handy spot to put some test in later
-    echo "DONE"
-
-    if [ -e "$TOOLCHEST_DIR" ] ; then
-      echo "ERROR T53: $TOOLCHEST_DIR already exists, refusing to overwrite"
-      exit 1
-    fi
-
-    # make sure the installer is being run from the right folder
-    if [ ! -f ./bin/toolchest ] ; then
-      echo "ERROR T61: toolchest install must be run from the top level"
-      echo "           folder of the toolchest project"
-      exit 1
-    fi
-
-    # note: we use tar in a somewhat unusual way here, this is to preserve
-    # symlinks regardless of wheather we are working with GNU or BSD style cp
-    #
-    # original SO post: http://superuser.com/a/138604
-
-    # copy folders into place and set up folder structure
-    printf "INFO: creating installation folders... "
-    mkdir -p "$TOOLCHEST_DIR"
-    mkdir "$TOOLCHEST_DIR/bin"
-    mkdir "$TOOLCHEST_DIR/lib"
-    mkdir "$TOOLCHEST_DIR/packages"
-    mkdir "$TOOLCHEST_DIR/local"
-    mkdir "$TOOLCHEST_DIR/local/bin"
-    mkdir "$TOOLCHEST_DIR/local/lib"
-    mkdir "$TOOLCHEST_DIR/local/log"
-    mkdir "$TOOLCHEST_DIR/local/backup"
-    mkdir "$TOOLCHEST_DIR/local/config"
-    echo "DONE"
-
-    printf "INFO: copying toolchest installation... "
-    ( cd ./bin ; tar cf - . ) | ( cd "$TOOLCHEST_DIR/bin" ; tar xf - )
-    ( cd ./lib ; tar cf - . ) | ( cd "$TOOLCHEST_DIR/lib" ; tar xf - )
-    ( cd ./packages ; tar cf - . ) | ( cd "$TOOLCHEST_DIR/packages" ; tar xf - )
-    echo "DONE"
-
-    # if we are installing from a git clone, carry over .git and
-    # .gitignore
-    if [ -e ./.git ] ; then
-      echo "INFO: it looks like you are installing from a git clone"
-      printf "QUERY: carry over .git and .gitignore to installation? (y/n) > "
-      read RESPONSE
-
-      if [ "$RESPONSE" == "y" ] ; then
-        cp -r ./.git "$TOOLCHEST_DIR/"
-        cp ./.gitignore "$TOOLCHEST_DIR/"
-        cp ./README.rst "$TOOLCHEST_DIR"
-      elif [ "$RESPONSE" == "n" ] ; then
-        printf ""  # do nothing
-      else
-        echo "ERROR T259: invalid response (choices are: y, n)"
-        echo "INFO: installation incomplete, cleaning up..."
-        ./"$0" uninstall $INSTALL_TYPE
-        exit 1
-      fi
-    fi  # if [ -e ./.git ] ; then
-
-    # finish up
-    echo "INFO: installation complete."
-    echo "INFO: please add $TOOLCHEST_DIR/bin to \$PATH"
-    echo "INFO: please add $TOOLCHEST_DIR/local/bin to \$PATH"
-    exit 0
-  ;;
-########10########20########30#### UNINSTALL ###50########60########70########80
-  uninstall)
-    UNINSTALL_TYPE="$1"
-    shift
-
-    case "$UNINSTALL_TYPE" in
-      local)
-        echo "INFO: removing local toolchest installation"
-        TOOLCHEST_DIR="$LOCAL_INSTALL_DIR"
-      ;;
-      system)
-        echo "INFO: removing system toolchest installation"
-        TOOLCHEST_DIR="$SYSTEM_INSTALL_DIR"
-      ;;
-      *)
-        # check to see if there is only one install on the system, if so
-        # we will uninstall that
-        if [ -e "$SYSTEM_INSTALL_DIR" ] ; then
-         if [ -e "$LOCAL_INSTALL_DIR" ] ; then
-            echo "ERROR T117: both $SYSTEM_INSTALL_DIR and $LOCAL_INSTALL_DIR"
-            echo "            exit. Please specify uninstall type explicitly"
-            exit 1
-          fi
-          toolchest uninstall system
-          exit $?
-        fi
-        if [ -e "$LOCAL_INSTALL_DIR" ] ; then
-          toolchest uninstall local
-          exit $?
-        fi
-      ;;
-    esac
-
-    # this shouldent happen, but sanity checking is good
-    echo "INFO: uninstalling toolchest from $TOOLCHEST_DIR"
-    if [ ! -e "$TOOLCHEST_DIR" ] ; then
-      echo "ERROR T136: no toolchest installation found at $TOOLCHEST_DIR"
-      exit 1
-    fi
-
-    # give the uesr time to cancel
-    printf "INFO: sleeping 5 seconds..."
-    sleep 5
-    echo "DONE"
-
-    # actually do the uninstall
-    printf "INFO: performing uninstall... "
-    rm -rf "$TOOLCHEST_DIR"
-    echo "DONE"
-    RET="$?"
-    echo "INFO: uninstall complete."
-    exit "$RET"
-
-  ;;
 ########10########20########30##### PACKAGE ####50########60########70########80
   package)
     VERB="$1"
@@ -832,8 +647,6 @@ case "$DIRECTIVE" in
   info)
     echo "INFO: toolchest configuration: "
     echo "NET_CDANIELS_TOOLCHEST_DIR . . . $NET_CDANIELS_TOOLCHEST_DIR"
-    echo "LOCAL_INSTALL_DIR  . . . . . . . $LOCAL_INSTALL_DIR"
-    echo "SYSTEM_INSTALL_DIR . . . . . . . $SYSTEM_INSTALL_DIR"
   ;;
   "")
     toolchest info
@@ -860,6 +673,24 @@ case "$DIRECTIVE" in
       toolchest package install "$packagename"
     done
     rm -rf local.bak
+  ;;
+  setup)
+    for dir in local local/bin local/lib local/log local/backup local/config ; do
+      FULLDIR="$NET_CDANIELS_TOOLCHEST_DIR/$dir"
+      if [ ! -e "$FULLDIR" ] ; then
+        printf "INFO: \"$FULLDIR\" does not exist, creating it... "
+        mkdir -p "$FULLDIR"
+        if [ $? -ne 0 ] ; then
+          echo "FAIL"
+          echo "ERROR: failed to create \"$FULLDIR\""
+          exit 1
+        else
+          echo "OK"
+        fi
+      fi
+    done
+    touch "$NET_CDANIELS_TOOLCHEST_DIR/local/config/setup-done"
+    echo "INFO: setup finished successfully"
   ;;
   *)
     echo "ERROR T46: no such directive $DIRECTIVE"
