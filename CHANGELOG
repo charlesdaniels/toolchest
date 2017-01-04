@@ -215,7 +215,7 @@
 
     * T376 now causes ``toolchest`` to exit directly with an exit code of 1
 
-  2016-01-02 - Charles Daniels:
+  2017-01-03 - Charles Daniels:
 
     * toolchest now supports running from anywhere on the system
 
@@ -225,3 +225,9 @@
     * removed warning ``T176`` and related checks
 
     * added ``toolchest setup`` to set up ``local``
+
+    * check_command_exists from check-command-exists.lib no longer declared
+      with the function keyword for compatibility with BSD  
+
+    * preinstall script for universal-tools now ises . instead of soirce for
+      BSD compatibility

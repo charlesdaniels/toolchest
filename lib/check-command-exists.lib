@@ -45,7 +45,7 @@
 #  
 ########10########20########30########40########50########60########70########80
 
-function check_command_exists () {
+check_command_exists () {
   if [ $# -ne 1 ] ; then
     echo "ERROR CCE: invalid number of arguments $#"
     exit 1
