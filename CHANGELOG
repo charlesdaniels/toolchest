@@ -231,3 +231,14 @@
 
     * preinstall script for universal-tools now ises . instead of soirce for
       BSD compatibility
+  
+  2017-01-07 - Charles Daniels:
+    
+    * fixed bug affecting systems with sh being BASH 3.X (and probably others)
+      ``realpath`` re-implementation in the management utility was not
+      detected correctly, resulting in bogus values for 
+      $NET_CDANIELS_TOOLCHEST_DIR - while ugly, the selected solution was to 
+      simply move it to the top of the file. 
+
+      This issue was found to affect Mac OSX 10.5.8, and may have affected
+      other systems with old versions of BASH. 
