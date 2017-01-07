@@ -836,6 +836,14 @@ case "$DIRECTIVE" in
         fi
       fi
     done
+	printf "INFO: validating realpath in PATH... "
+	command -v realpath > /dev/null
+	if [ $? -ne 0 ] ; then
+	  echo "FAIL"
+	  printf "INFO: symlinking normalize-path to realpath..."
+	  ln -s $NET_CDANIELS_TOOLCHEST_DIR/bin/normalize-path $NET_CDANIELS_TOOLCHEST_DIR/bin/realpath
+	fi
+	echo "DONE"
     touch "$NET_CDANIELS_TOOLCHEST_DIR/local/config/setup-done"
     echo "INFO: setup finished successfully"
   ;;
@@ -844,6 +852,4 @@ case "$DIRECTIVE" in
   ;;
 esac
 
-
-########10########20########30########40########50########60########70########80
 

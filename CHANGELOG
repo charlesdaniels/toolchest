@@ -242,3 +242,9 @@
 
       This issue was found to affect Mac OSX 10.5.8, and may have affected
       other systems with old versions of BASH. 
+
+    * added logic to ``toolchest setup`` to symlink normalize-path to 
+      realpath is realpath is not found on the system
+
+      NOTE: this check does not seem reliable on OSX 10.5.8... further
+      investigation is needed. 
