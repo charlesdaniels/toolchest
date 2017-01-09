@@ -248,3 +248,7 @@
 
       NOTE: this check does not seem reliable on OSX 10.5.8... further
       investigation is needed. 
+
+  2017-01-08 - Charles Daniels:
+    
+    * added youtube-dl package
