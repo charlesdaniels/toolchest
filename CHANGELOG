@@ -253,6 +253,11 @@
     
     * added youtube-dl package
   
-  2017-01-09 - Charles Daiels:
+  2017-01-09 - Charles Daniels:
   
     * added generate-monatomic-strseq to archiveutils
+    
+  2017-01-10 - Charles Daniels:
+    
+    * fixed a bug affecting Ubuntu Linux where `toolchest package` sould
+      sometimes attempt to shift an argument that did not exist. 

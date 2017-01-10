@@ -615,8 +615,10 @@ case "$DIRECTIVE" in
     VERB="$1"
     shift
     PACKAGE="$1"
-    shift
-
+    if [ $# -gt 1 ] ; then
+      shift
+    fi
+        
     PKG_DIR="$NET_CDANIELS_TOOLCHEST_DIR/packages/$PACKAGE"
 
     case "$VERB" in
