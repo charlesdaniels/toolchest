@@ -261,3 +261,5 @@
     
     * fixed a bug affecting Ubuntu Linux where `toolchest package` sould
       sometimes attempt to shift an argument that did not exist. 
+    
+    * removed a redundant source command from pkg-search 
