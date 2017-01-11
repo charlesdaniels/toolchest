@@ -262,4 +262,13 @@
     * fixed a bug affecting Ubuntu Linux where `toolchest package` sould
       sometimes attempt to shift an argument that did not exist. 
     
-    * removed a redundant source command from pkg-search 
+    * removed a redundant source command from pkg-search
+
+  2017-01-11 - Charles Daniels:
+    
+    * removed some dead code from pkg-install
+    
+    * fixed system-statusline so it fails more gracefully whe nsome of the
+      commands it depends on are not present
+    
+    * system-statusline now supports amixer for detecting volume level
