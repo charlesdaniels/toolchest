@@ -57,6 +57,6 @@ else
   exit 1
 fi
 
-source "$NET_CDANIELS_TOOLCHEST_DIR/lib/realpath.lib"
+. "$NET_CDANIELS_TOOLCHEST_DIR/lib/realpath.lib"
 
 realpath "$@"
