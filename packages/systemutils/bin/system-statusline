@@ -3,6 +3,10 @@
 # system statusline for i3 or whatsuch
 INTERVAL=2.5
 
+# sometimes, when started via i3wm, $PATH is not setup correctly and we can't
+# find invoke-sensible-date
+. $HOME/.profile 
+
 while true ; do
   DATE=$(invoke-sensible-date +"%Y-%m-%d %H:%M:%S")
   LOAD=$(uptime | cut -d\  -f 12-14 | tr -d ',')
@@ -35,7 +39,7 @@ while true ; do
     if [ $? -ne 0 ] ; then
       VOLUME="VOL?"
     else
-      VOLUME=$(amixer sget Master | grep dB | cut -d\  -f 6 | tr -d "[]")
+      VOLUME=$(amixer sget Master | grep \% | head -n 1 | cut -d\  -f 7 | tr -d "[]")
     fi
   else
     VOLUME=$(pamixer --get-volume)

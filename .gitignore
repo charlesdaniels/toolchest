@@ -8,3 +8,4 @@ packages/iproute2mac/bin/*
 packages/tcc/bin/*
 bin/realpath
 packages/youtube-dl/bin/*
+packages/pamixer/bin/*
