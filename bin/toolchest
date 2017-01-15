@@ -175,6 +175,10 @@
 #    toolchest  . . . a list of toolchest package, which if they are not
 #                     installed, will be installed. Should any dependency
 #                     installation fail, the installer will fail.
+#
+#    uname  . . . . . a list of OS unames, one per line. If at least one does
+#                     match `uname` on the current system, the installer will
+#                     fail.
 #                     
 #    Note that both of these files need to end in a blank line to be parsed
 #    correctly.
@@ -695,6 +699,17 @@ case "$DIRECTIVE" in
               fi
             done < "$PKG_DIR/dep/toolchest"
           fi  # if [ -f "$PKG_DIR/dep/toolchest" ] ; then
+          
+          if [ -f "$PKG_DIR/dep/uname" ] ; then
+            printf "INFO: validating OS requirements... "
+            grep `uname` < "$PKG_DIR/dep/uname" > /dev/null
+            if [ $? -eq 0 ] ; then
+              echo "OK"
+            else
+              echo "ERROR: OS `uname` is not supported by this package!"
+              exit 1
+            fi
+          fi  # if [ -f "$PKG_DIR/dep/uname" ] ; then
         fi  # if [ -e "$PKG_DIR/dep" ] ; then
 
         # perform the package installation

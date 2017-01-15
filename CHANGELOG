@@ -275,4 +275,9 @@
   
   2017-01-14 - Charles Daniels:
     
-    * added package for pamixer (debian does not package pamixer) 
+    * added package for pamixer (debian does not package pamixer)
+
+    * added package for Linux version of sublime text 3 (Debian does not
+      package it either)
+  
+    * added support for checking OS uname as a package dependency
