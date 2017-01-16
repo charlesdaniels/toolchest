@@ -281,3 +281,13 @@
       package it either)
   
     * added support for checking OS uname as a package dependency
+
+  2017-01-15 - Charles Daniels:
+
+    * considerable improvements to burn in universal-utils
+
+      * remove dependency on "wc"
+
+      * remove dependency on "pv", although it is still used if present
+
+      * can now run itself as root by passing "asroot" on $3

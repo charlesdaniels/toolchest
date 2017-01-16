@@ -10,6 +10,8 @@
 #   $1 . . . the source file/device
 #   
 #   $2 . . . the destination file/device
+#   
+#   $3 . . . (optional) if "asroot", sudo is used to burn the disk
 #
 ########10########20########30#### LISCENSE ####50########60########70########80
 # Copyright (c) 2016, Charles Daniels
@@ -42,15 +44,23 @@
 # POSSIBILITY OF SUCH DAMAGE.
 ########10########20########30########40########50########60########70########80
 
+if [ $# -eq 2 ] || [ $# -eq 3 ] ; then
+  printf "" # do nothing
+else
+  echo "ERROR 50: wrong number of arguments"
+  echo "INFO: usage: $0 [source] [destination]"
+  exit 1
+fi
 SOURCE="$1"
-DESTINATION="$2"
+shift
+DESTINATION="$1"
+shift
+
 DD_COMMAND="$(sensible-dd)"
-SOURCE_SIZE=$(wc -c $SOURCE | cut -d\  -f2)
 
 echo "INFO: Source is \"$SOURCE\""
 echo "INFO: Destination is \"$DESTINATION\""
 echo "INFO: dd command is \"$DD_COMMAND\""
-echo "INFO: source size is: $SOURCE_SIZE bytes"
 
 test -e "$SOURCE"
 if [ $? -ne 0 ] ; then  # using -e here consistently produces bogus results
@@ -65,13 +75,30 @@ if [ $? -ne 0 ] ; then
   exit 1
 fi
 
+which pv | grep pv > /dev/null
+if [ $? -ne 0 ] ; then 
+  echo "WARNING: \"pv\" not found, progress will not be shown"
+  CMD="$DD_COMMAND if=\"$SOURCE\" | $DD_COMMAND of=\"$DESTINATION\""
+else
+  CMD="pv < \"$SOURCE\" > \"$DESTINATION\""
+fi
+
+echo "INFO: burn command is \"$CMD\""
+
 echo "INFO: beginning burn in 5 seconds... "
 sleep 5
 echo "INFO: beginning burn"
 
-$DD_COMMAND if="$SOURCE" | pv --size $SOURCE_SIZE | $DD_COMMAND of="$DESTINATION"
+if [ "$1" = "asroot" ] ; then
+  echo "INFO: executing as root... will authenticate via sudo... "
+  sudo sh -c "$CMD"
+  RET="$?"
+else
+  "$CMD"
+  RET="$?"
+fi
 
-if [ $? -ne 0 ] ; then 
+if [ "$RET" -ne 0 ] ; then 
   echo "ERROR 69: burn failed"
   exit 1
 fi
