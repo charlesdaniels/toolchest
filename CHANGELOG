@@ -291,3 +291,18 @@
       * remove dependency on "pv", although it is still used if present
 
       * can now run itself as root by passing "asroot" on $3
+
+  2017-01-16 - Charles Daniels:
+
+    * improved makefile for pamixer - library dependencies are now checked via 
+      ldconfig
+
+      * possible regression: it is not yet clear whether this approach will be
+        portable to *BSD, which can also use pulseaudio in some circumstances. 
+        This should be tested. 
+
+    * systemutils.system-statusline - fixed a bug where MUTE state was not
+      detected correctly due to `==` rater than `=` in an if statement. 
+
+      * MEMO: it has come to my attention that the correct operator for string
+        comparison in POSIX sh is `=`, not `==`.

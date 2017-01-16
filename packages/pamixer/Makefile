@@ -24,8 +24,17 @@ install: preflight
 
 preflight:
 	@echo "INFO: performing preflight checks for $(PACKAGE_NAME):"
-	@printf "\tgit... "
-	@command -v > /dev/null ; if [ "$$?" -eq 0 ] ; then true ; else false ; fi
+	@printf "\t(command) git... "
+	@command -v git > /dev/null ; if [ "$$?" -eq 0 ] ; then true ; else false ; fi
+	@echo "OK"
+	@printf "\t(command) ldconfig... "
+	@command -v ldconfig > /dev/null ; if [ "$$?" -eq 0 ] ; then true ; else false ; fi
+	@echo "OK"
+	@printf "\t(library) libpulse... "
+	@ldconfig -p | grep libpulse > /dev/null ; if [ "$$?" -eq 0 ] ; then true ; else false ; fi
+	@echo "OK"
+	@printf "\t(library) program_options... "
+	@ldconfig -p | grep program_options > /dev/null ; if [ "$$?" -eq 0 ] ; then true ; else false ; fi
 	@echo "OK"
 	@echo "INFO: preflight check complete"
 	@printf "INFO: preparing environment... "

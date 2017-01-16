@@ -43,7 +43,7 @@ while true ; do
     fi
   else
     VOLUME=$(pamixer --get-volume)
-    if [ $(pamixer --get-mute) == "true" ] ; then
+    if [ $(pamixer --get-mute) = "true" ] ; then
       VOLUME="$VOLUME (MUTE)"
     fi
   fi
