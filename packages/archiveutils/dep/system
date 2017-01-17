@@ -1,0 +1,4 @@
+wget
+parallel
+md5
+shasum

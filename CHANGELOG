@@ -311,3 +311,9 @@
 
     * fixed issue where preinstall script for archiveutils used `source`
       instead of `.`
+
+    * remove preinstall script from archiveutils in favor of using toolchest's
+      built in dependency resolution.
+
+    * `toolchest setup` now symlinks md5sum to md5 if the former is present in
+      $PATH but the latter is not.

@@ -853,14 +853,26 @@ case "$DIRECTIVE" in
         fi
       fi
     done
-  printf "INFO: validating realpath in PATH... "
-  command -v realpath > /dev/null
-  if [ $? -ne 0 ] ; then
-    echo "FAIL"
-    printf "INFO: symlinking normalize-path to realpath..."
-    ln -s $NET_CDANIELS_TOOLCHEST_DIR/bin/normalize-path $NET_CDANIELS_TOOLCHEST_DIR/bin/realpath
-  fi
-  echo "DONE"
+
+    printf "INFO: validating realpath in PATH... "
+    which realpath | grep realpath > /dev/null
+    if [ $? -ne 0 ] ; then
+      echo "FAIL"
+      printf "INFO: symlinking normalize-path to realpath..."
+      ln -s $NET_CDANIELS_TOOLCHEST_DIR/bin/normalize-path $NET_CDANIELS_TOOLCHEST_DIR/bin/realpath
+    fi
+    echo "DONE"
+
+    which md5sum | grep md5sum > /dev/null
+    if [ $? -eq 0 ] ; then
+      which md5 | grep md5 > /dev/null
+      if [ $? -ne 0 ] ; then
+        printf "INFO: symlinking md5sum to md5... "
+        ln -s `which md5sum` $NET_CDANIELS_TOOLCHEST_DIR/bin/md5
+        echo "DONE"
+      fi
+    fi
+
     touch "$NET_CDANIELS_TOOLCHEST_DIR/local/config/setup-done"
     echo "INFO: setup finished successfully"
   ;;

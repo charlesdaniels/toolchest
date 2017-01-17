@@ -10,3 +10,4 @@ bin/realpath
 packages/youtube-dl/bin/*
 packages/pamixer/bin/*
 packages/sublime-text-3-linux/bin/*
+bin/md5
