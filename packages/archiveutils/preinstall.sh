@@ -4,7 +4,7 @@
 
 $(acquire-toolchest-dirs)
 
-source "$NET_CDANIELS_TOOLCHEST_LIB/check-command-exists.lib"
+. "$NET_CDANIELS_TOOLCHEST_LIB/check-command-exists.lib"
 
 DEPENDS="wget parallel md5 shasum"
 OPTIONAL=""

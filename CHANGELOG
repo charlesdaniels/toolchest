@@ -306,3 +306,8 @@
 
       * MEMO: it has come to my attention that the correct operator for string
         comparison in POSIX sh is `=`, not `==`.
+
+  2017-01-17 - Charles Daniels:
+
+    * fixed issue where preinstall script for archiveutils used `source`
+      instead of `.`
