@@ -1,0 +1,9 @@
+zsh-users/zsh-autosuggestions downloaded from git
+
+https://github.com/zsh-users/zsh-autosuggestions
+
+From upstream:
+
+Fish-like fast/unobtrusive autosuggestions for zsh.
+
+It suggests commands as you type, based on command history.
