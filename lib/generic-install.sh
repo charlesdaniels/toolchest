@@ -10,7 +10,10 @@
 #  the destination install.sh).
 #   
 #  This script assumes that all the things you want to be in $PATH are in bin/
-#  under the package root, with the names you want them to have. 
+#  under the package root, with the names you want them to have.
+#  
+#  This script will also check to see if lib/ exists under the package root,
+#  and if so, will symlink everything in it into local/lib/$PACKAGNAME
 #  
 #  Note that this script depends on the current working directory being the
 #  package root. If it is not, things will definitely break in unpredictable
@@ -92,7 +95,7 @@ cd ./bin/
 for f in * ; do
   SRC_FILE="$SRC_DIR/$f"
   DEST_FILE="$DEST_DIR/$f"
-  printf "INFO: linking $f... "
+  printf "INFO: (bin) linking $f... "
 
   # make sure the destination does not already exist
   if [ -e "$DEST_FILE" ] ; then
@@ -113,3 +116,37 @@ for f in * ; do
   echo "DONE"
 done
 
+# install any libraries if they exists
+cd ..
+if [ -d lib ] ; then
+  # for convenience, we go relative to the already calculated directories
+  LIB_DIR="$DEST_DIR/../lib/$PACKAGE_NAME"
+  if [ -d "$LIB_DIR" ] ; then
+    # lib dir can't already exist
+    echo "ERROR 123: lib dir \"$LIB_DIR\" already exists!"
+    exit 1
+  fi
+  mkdir "$LIB_DIR"
+  cd lib 
+  for f in * ; do
+    printf "INFO: (lib) linking $f... "
+
+    if [ -e "$LIB_DIR/$f" ] ; then
+      # library in question can't already exist
+      echo "FAIL"
+      echo "ERROR 132: destination file "$LIB_DIR/$f" already exists!"
+      exit 1
+    fi
+
+    # do the link operation
+    ln -s "$SRC_DIR/../lib/$f" "$LIB_DIR/$f"
+
+    if [ $? -ne 0 ] ; then
+      # make sure it worked
+      echo "FAIL"
+      echo "ERROR 138: failed to create link from \"$SRC_DIR/../lib/$f\" to \"$LIB_DIR/$f\""
+      exit 1
+    fi
+    echo "DONE"
+  done
+fi

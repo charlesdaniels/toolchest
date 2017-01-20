@@ -70,7 +70,7 @@ cd ./bin/
 for f in * ; do
   SRC_FILE="$SRC_DIR/$f"
   DEST_FILE="$DEST_DIR/$f"
-  printf "INFO: unlinking $f... "
+  printf "INFO: (bin) unlinking $f... "
 
   # make sure the thing we are trying to uninstall exists and is a link
   if [ -L "$DEST_FILE" ] ; then
@@ -89,3 +89,21 @@ for f in * ; do
   echo "DONE"
 done
 
+cd ..
+if [ -d lib ] ; then
+  # for convenience, we go relative to the already calculated directories
+  LIB_DIR="$DEST_DIR/../lib/$PACKAGE_NAME"
+
+  cd lib 
+  for f in * ; do
+    printf "INFO: (lib) unlinking $f... "
+
+    if [ -L "$LIB_DIR/$f" ] ; then
+      rm "$LIB_DIR/$f"
+    elif [ -e "$LIB_DIR/$f" ] ; then
+      echo "WARN"
+      echo "WARNING 104: $LIB_DIR/$f exists but is not a symlink!"
+    fi
+    echo "DONE"
+  done
+fi

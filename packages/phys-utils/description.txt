@@ -1,3 +1,0 @@
-A set of tools and scripts for helping with PHYS classes at University of
-South Carolina. These mostly have to do with lab reports, in particular figure
-generation and data processing.
