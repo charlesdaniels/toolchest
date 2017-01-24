@@ -12,3 +12,4 @@ packages/pamixer/bin/*
 packages/sublime-text-3-linux/bin/*
 bin/md5
 packages/zsh-*/lib/*
+packages/todotxt/bin/*

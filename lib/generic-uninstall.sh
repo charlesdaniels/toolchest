@@ -106,4 +106,8 @@ if [ -d lib ] ; then
     fi
     echo "DONE"
   done
+  cd ..
+  printf "INFO: removing library... "
+  rmdir lib
+  echo "DONE"
 fi

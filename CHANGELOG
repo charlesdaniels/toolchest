@@ -318,12 +318,16 @@
     * `toolchest setup` now symlinks md5sum to md5 if the former is present in
       $PATH but the latter is not.
 
-  2017-01-19 - Charles Daniels
+  2017-01-19 - Charles Daniels:
 
     * generic-install now also links files in lib/ 
 
     * added zsh-autosuggestions port
 
-  2017-01-20 - Charles Daniels
+  2017-01-20 - Charles Daniels:
 
     * added port for zsh-syntax-highlighting
+
+  2017-01-24 - Charles Daniels:
+
+    * added port for todo.txt-cli
