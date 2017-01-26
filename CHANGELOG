@@ -6,7 +6,7 @@
       where $0/../.. would error because $0 was a file, not a directory.
       This expansion is legal in many sh implementations (including macOS
       10.12), but failed on FreeBSD 11.
-      
+
       This was fixed by removing the `toolchest` from the end of `realpath
       $0` using sed and working relative to that, as the parent of a file
       should always be a directory.
@@ -19,17 +19,17 @@
       preserving symlinks. This fixes an issue where the installer would
       copy links to generic-installer and generic-uninstaller as if they
       were files with the actual contents of the relevant libraries.
-      
+
       This method was chosen instead of cp --preserve=links because BSD-
       style systems (tested: macOS 10.12, FreeBSD 11) do not support this
       syntax for cp.
-    
+
     * Added additional progress messages to installer
-    
+
     * Added random-uuid to universal-tools package
-  
+
   2016-12-13 - Charles Daniels:
-  
+
     * Fixed a bug in acquire-toolchest-dirs which caused it to incorrectly
       identify NET_CDANIELS_TOOLCHEST_DIR
 
@@ -43,24 +43,24 @@
 
     * renamed the mac-shortcuts package to macosutils to better reflect purpose
 
-    * renamed cleardns to macosutils-cleardns 
+    * renamed cleardns to macosutils-cleardns
 
     * added an alternate method of DNS cache flushing to macosutils-cleardns
 
     * macosutils-cleardns no longer kills mDNSResponder as root - this may
       reduce it's effectiveness when running as non-root users
 
-    * renamed unquarintine to macosutils-unquarantine 
+    * renamed unquarintine to macosutils-unquarantine
 
     * added macosutils-fixwifi script to troubleshoot common end-user network
       problems
 
-  2016-12-16 - Charles Daniels 
+  2016-12-16 - Charles Daniels
 
     * added package to install m-cli
 
 0.0.4-ALPHA:
-  
+
   2016-12-19 - Charles Daniels:
 
     * Wrote the carbonite 0.0.1 file format specification
@@ -95,9 +95,9 @@
 
       * archive generation
 
-      * can produce valid output via --archive_only 
+      * can produce valid output via --archive_only
 
-      * installer (via Makefile) 
+      * installer (via Makefile)
 
       * sh wrapper
 
@@ -106,7 +106,7 @@
       * carbonite standalone executable generation
 
 0.0.5-ALPHA
-  
+
   2016-12-21 - Charles Daniels:
 
     * implemented function to check if packages are installed, and to mark
@@ -207,7 +207,7 @@
       GitHub. normalize-path is still left as a coreutils binary for
       convienience, but it simply wraps the new lib/realpath.lib
 
-  2017-01-01 - Charles Daniels: 
+  2017-01-01 - Charles Daniels:
 
     * added mirror-directory command to coreutils
 
@@ -227,59 +227,59 @@
     * added ``toolchest setup`` to set up ``local``
 
     * check_command_exists from check-command-exists.lib no longer declared
-      with the function keyword for compatibility with BSD  
+      with the function keyword for compatibility with BSD
 
     * preinstall script for universal-tools now ises . instead of soirce for
       BSD compatibility
-  
+
   2017-01-07 - Charles Daniels:
-    
+
     * fixed bug affecting systems with sh being BASH 3.X (and probably others)
       ``realpath`` re-implementation in the management utility was not
-      detected correctly, resulting in bogus values for 
-      $NET_CDANIELS_TOOLCHEST_DIR - while ugly, the selected solution was to 
-      simply move it to the top of the file. 
+      detected correctly, resulting in bogus values for
+      $NET_CDANIELS_TOOLCHEST_DIR - while ugly, the selected solution was to
+      simply move it to the top of the file.
 
       This issue was found to affect Mac OSX 10.5.8, and may have affected
-      other systems with old versions of BASH. 
+      other systems with old versions of BASH.
 
-    * added logic to ``toolchest setup`` to symlink normalize-path to 
+    * added logic to ``toolchest setup`` to symlink normalize-path to
       realpath is realpath is not found on the system
 
       NOTE: this check does not seem reliable on OSX 10.5.8... further
-      investigation is needed. 
+      investigation is needed.
 
   2017-01-08 - Charles Daniels:
-    
+
     * added youtube-dl package
-  
+
   2017-01-09 - Charles Daniels:
-  
+
     * added generate-monatomic-strseq to archiveutils
-    
+
   2017-01-10 - Charles Daniels:
-    
+
     * fixed a bug affecting Ubuntu Linux where `toolchest package` sould
-      sometimes attempt to shift an argument that did not exist. 
-    
+      sometimes attempt to shift an argument that did not exist.
+
     * removed a redundant source command from pkg-search
 
   2017-01-11 - Charles Daniels:
-    
+
     * removed some dead code from pkg-install
-    
+
     * fixed system-statusline so it fails more gracefully whe nsome of the
       commands it depends on are not present
-    
+
     * system-statusline now supports amixer for detecting volume level
-  
+
   2017-01-14 - Charles Daniels:
-    
+
     * added package for pamixer (debian does not package pamixer)
 
     * added package for Linux version of sublime text 3 (Debian does not
       package it either)
-  
+
     * added support for checking OS uname as a package dependency
 
   2017-01-15 - Charles Daniels:
@@ -294,15 +294,15 @@
 
   2017-01-16 - Charles Daniels:
 
-    * improved makefile for pamixer - library dependencies are now checked via 
+    * improved makefile for pamixer - library dependencies are now checked via
       ldconfig
 
       * possible regression: it is not yet clear whether this approach will be
-        portable to *BSD, which can also use pulseaudio in some circumstances. 
-        This should be tested. 
+        portable to *BSD, which can also use pulseaudio in some circumstances.
+        This should be tested.
 
     * systemutils.system-statusline - fixed a bug where MUTE state was not
-      detected correctly due to `==` rater than `=` in an if statement. 
+      detected correctly due to `==` rater than `=` in an if statement.
 
       * MEMO: it has come to my attention that the correct operator for string
         comparison in POSIX sh is `=`, not `==`.
@@ -320,7 +320,7 @@
 
   2017-01-19 - Charles Daniels:
 
-    * generic-install now also links files in lib/ 
+    * generic-install now also links files in lib/
 
     * added zsh-autosuggestions port
 
@@ -336,6 +336,11 @@
 
     * added port for MARS MIPS emulator
 
+  2016-01-26 - Charles Daniels:
+
+    * added port of posixcube
+
+
   2017-01-28 - Charles Daniels:
 
     * Updated sort-notes for Spring 2017
@@ -343,3 +348,4 @@
   2017-01-29 - Charles Daniels:
 
     * added the texutil package
+
