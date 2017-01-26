@@ -17,6 +17,7 @@ install: preflight
 	@echo "DONE"
 	@printf "INFO: linking package files... "
 	@ln -s $(INSTALL_DIR)/$(PACKAGE_NAME)/posixcube.sh $(BIN_DIR)/posixcube
+	@ln -s $(INSTALL_DIR)/$(PACKAGE_NAME)/posixcube.sh $(BIN_DIR)/posixcube.sh
 	@echo "DONE"
 
 preflight:
@@ -32,6 +33,7 @@ preflight:
 uninstall:
 	@printf "INFO: unlinking $(PACKAGE_NAME) files... "
 	@-rm $(BIN_DIR)/posixcube >> $(LOG_FILE) 2>&1 ||:
+	@-rm $(BIN_DIR)/posixcube.sh >> $(LOG_FILE) 2>&1 ||:
 	@echo "DONE"
 	@printf "INFO: cleaning install directory... "
 	@-rm -rf $(INSTALL_DIR) ||:
