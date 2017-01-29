@@ -83,7 +83,7 @@ import sys
 import random
 import string
 
-if len(sys.argv) != 2: 
+if len(sys.argv) != 3: 
   print("usage: pcre-checl [m] [n]")
 
 n = int(sys.argv[1])

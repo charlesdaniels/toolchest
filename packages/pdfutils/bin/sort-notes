@@ -84,12 +84,12 @@ CWD = os.getcwd()
 # file extensions which are considered valid candidates for notes
 file_extensions = ['pdf', 'rst']
 # directory where school-related documents are stored
-school_dir = os.path.join(HOME, "Documents/School/Fall 2016")
+school_dir = os.path.join(HOME, "Documents/School/Spring 2017")
 # substrings which indicate lecture notes
 lecture_notes = ['lecture notes', 'lecture']
 # substrings which indicate projects
 projects = ['project', 'assignment', 'report', 'quiz', 'test', 'exam',
-            'graded', 'homework']
+            'graded', 'homework', 'classwork', 'prelim']
 other_notes = ['practice']
 
 ########10########20########30########40########50########60########70########80
@@ -152,13 +152,13 @@ stdout("INFO: evaluating note types... ")
 for v in validated:
   course = v[0]
   path = v[1]
-  ntype = "Other Notes"
+  ntype = "Work"
   if any(note_type in path.lower() for note_type in other_notes):
-    ntype = "Other Notes"
+    ntype = "Notes"
   elif any(note_type in path.lower() for note_type in lecture_notes):
-    ntype = "Lecture Notes"
+    ntype = "Notes"
   elif any(note_type in path.lower() for note_type in projects):
-    ntype = "Projects"
+    ntype = "Work"
   targets.append([path, course, ntype])
 
 stdout("DONE\n")

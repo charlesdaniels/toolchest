@@ -115,3 +115,7 @@ mirror-directory:
 
   * add argv switch to show progress - maybe use pv, since it already uses
     a pipe. 
+
+sort-notes:
+  
+  * should be configurable via local/config

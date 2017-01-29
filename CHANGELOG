@@ -332,6 +332,14 @@
 
     * added port for todo.txt-cli
 
-  2016-01-25 - Charles Daniels:
+  2017-01-25 - Charles Daniels:
 
     * added port for MARS MIPS emulator
+
+  2017-01-28 - Charles Daniels:
+
+    * Updated sort-notes for Spring 2017
+
+  2017-01-29 - Charles Daniels:
+
+    * added the texutil package
