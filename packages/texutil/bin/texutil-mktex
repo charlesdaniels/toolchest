@@ -1,0 +1,104 @@
+#!/bin/sh
+########10########20########30## DOCUMENTATION #50########60########70########80
+#
+#  OVERVIEW
+#  ========
+# 
+#  This script will attempt to compile a given .tex file using pdflatex. 
+#  
+#  Multiple .tex file may be specified for compilation. 
+#  
+#  If $1 is '-r', then texutil-mktex will instead recurse into directories,
+#  including ./, and attempt to compile *.tex there.
+#  
+#  This script will always run pdflatex such that it will not pause on errors.
+#  Further, this script will always exit with an exit code of 0, even if one
+#  or more compilations failed.
+#  
+#  CONFIGURATION
+#  =============
+#  
+#  This script may be configured via the file
+#  $NET_CDANIELS_TOOLCHEST_LOCAL/config/texutil-mktex.cfg
+#  
+#  The following keys are recognized: 
+#  
+#    PDFLATEX_COMMAND . . . command which invokes `pdflatex`; defaults to
+#                           `pdflatex` if not specified
+#                           
+#    PDFLATEX_OPTS  . . . . options to pass to pdflatex; defaults to
+#                           `-interaction=nonstopmode` if not specified
+#  
+########10########20########30##### LICENSE ####50########60########70########80
+#  Copyright (c) 2017, Charles Daniels
+#  All rights reserved.
+# 
+#  Redistribution and use in source and binary forms, with or without
+#  modification, are permitted provided that the following conditions are met:
+# 
+#  1. Redistributions of source code must retain the above copyright notice,
+#     this list of conditions and the following disclaimer.
+#  
+#  2. Redistributions in binary form must reproduce the above copyright
+#     notice, this list of conditions and the following disclaimer in the
+#     documentation and/or other materials provided with the distribution.
+# 
+#  3. Neither the name of the copyright holder nor the names of its
+#     contributors may be used to endorse or promote products derived from
+#     this software without specific prior written permission.
+# 
+#  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+#  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+#  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+#  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+#  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+#  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+#  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+#  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+#  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+#  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+#  POSSIBILITY OF SUCH DAMAGE.
+#  
+########10########20########30########40########50########60########70########80
+
+$(acquire-toolchest-dirs)
+
+# read configuration file if it is present
+CONFIG_PATH="$NET_CDANIELS_TOOLCHEST_LOCAL/config/texutil-mktex.cfg"
+PDFLATEX_COMMAND="pdflatex"
+PDFLATEX_OPTS="-interaction=nonstopmode"
+
+if [ -f "$CONFIG_PATH" ] ; then
+  . "$CONFIG_PATH"
+fi
+
+TARGET_FILES="$@"
+RECURSE="NO"
+
+if [ "$1" = "-r" ] ; then
+  RECURSE="YES"
+  TARGET_FILES="*.tex"
+  shift
+fi
+
+for file in $TARGET_FILES; do
+  outfile=`basename "$file" .tex`.pdf
+  if [ -f "$file" ] ; then
+    echo "file: $file, output: $outfile"
+    # do multiple passes so bibtex and friends can do their thing
+    $PDFLATEX_COMMAND $PDFLATEX_OPTS "$file" -o "$outfile"
+    $PDFLATEX_COMMAND $PDFLATEX_OPTS "$file" -o "$outfile"
+    $PDFLATEX_COMMAND $PDFLATEX_OPTS "$file" -o "$outfile"
+  fi
+done
+
+if [ $RECURSE = "YES" ] ; then
+  for dir in */ ; do
+    if [ -e "$dir" ] ; then 
+      cd "$dir" && $0 -r
+      cd ..
+    fi
+  done 
+fi
+
+
