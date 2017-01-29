@@ -16,3 +16,5 @@ packages/todo.txt/bin/*
 packages/mars4/lib/*
 packages/mars4/*.jar
 packages/texutil/bin/*
+packages/posixcube/bin/*
+

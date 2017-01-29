@@ -1,0 +1,5 @@
+Download and install posixcube.sh from GitHub. It is linked into $PATH as
+`posixcube`
+
+Upstream description:
+A POSIX compliant, shell script-based server automation framework.
