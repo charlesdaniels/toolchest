@@ -7,8 +7,7 @@ net.cdaniels.toolchest Versions & Versioning Information
 Versioning Scheme
 =================
 
-Beginning with the (at time of writing) upcoming 0.0.5 release, the following
-version scheme is used:
+Beginning with the 0.0.5 release, the following version scheme is used:
 
 X.Y.Z 
 
@@ -74,5 +73,5 @@ Releases to Date (current 2017-01-30)
 +-------------+-----------+----------------+
 | 0.0.5       | alpha     | released       |
 +-------------+-----------+----------------+
-| 0.0.6       | beta      | in-development |
+| 1.0.0       | beta      | in-development |
 +-------------+-----------+----------------+

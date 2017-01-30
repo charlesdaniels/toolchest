@@ -21,6 +21,19 @@ Toolchest packages are simply directories which contain the following files:
   Makefile is used, it should respond correctly to ``make install`` and ``make
   uninstall``.
 
+* ``dep`` (optional) - a directory containing zero or more of the following
+  files:
+
+  - ``system`` - newline delimited list of commands which must appear in $PATH
+    for the package to install
+
+  - ``toolchest`` - newline delimited list of toolchest packages which must be
+    installed to install this package. Will cause said packages to be
+    installed if they are not already.
+
+  - ``uname`` - newline delimited list of OS ``uname``s - the host OS must
+    match one or more of them in order for the package to install.
+
 The rest of the package folder may be structured in whatever way best suits
 the package.
 
@@ -48,7 +61,7 @@ Packages may store any configuration files in any structure within
 ``local/config``. Configuration files need not be symbolic links.
 
 Packages may store backups of any variety, in any structure or format in
-``local/backup``. Such files needd not be symlinks.
+``local/backup``. Such files need not be symlinks.
 
 Packages should not under any circumstances (during installation or
 uninstallation) write to any location outside the toolchest installation. It
@@ -67,6 +80,11 @@ As of 0.0.5-ALPHA, these include:
 
 * `generic-install.sh <../lib/generic-install.sh>`_
 * `generic-uninstall.sh <../lib/generic-uninstall.sh>`_
+  
+Repositories
+============
+
+Repositories are an upcoming feature of the 1.X.X series. 
 
 Examples
 ========
