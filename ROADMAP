@@ -27,11 +27,6 @@ todotxt-extensions
 
 toolchest:
 
-  * some kind of unified help or documentation system would probably be a good
-    idea.
-
-    * maybe something that can parse out the documentation header from scripts?
-
   installer:
 
     * validate that GNU sed is present on the system (sed is already validated)

@@ -366,3 +366,6 @@
 
     * mirror-directory will now show progress using ``pv``, if ``pv`` is
       present on the system, and if ``$3`` is ``progress``.
+
+    * added a new script, toolchest-doc, which extracts the documentation
+      headers from toolchest files.
