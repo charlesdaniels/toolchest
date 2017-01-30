@@ -20,24 +20,10 @@ systemutils:
 
   * DPI_SCRIPT points to a file that no longer exists
 
-  * system-statusline depends on procfs
-
-  * need preinstall script for dependancies
-
-    * ffmpeg
-
-    * xset
-
-    * i3lock
-
-    * xbacklight
-
 todotxt-extensions
 
   * requires GNU sed or 100% compatible (always an issue on systems with BSD
     sed as the default). Sensible sed should take care of invoking this
-
-  * depends on grep (is this present on all UNIXes out of box?)
 
 toolchest:
 
@@ -111,10 +97,6 @@ runtime:
     be built as a fresh install in /tmp, then the launcher script and payload
     copied in and bundled via carbonite.
 
-mirror-directory:
-
-  * add argv switch to show progress - maybe use pv, since it already uses
-    a pipe. 
 
 sort-notes:
   
