@@ -20,6 +20,8 @@
 #  
 #  $2 . . . . destination directory
 #  
+#  $3 . . . . (optional) if equal to "progress", show progress (requires pv)
+#  
 ########10########20########30##### LICENSE ####50########60########70########80
 # Copyright (c) 2017, Charles Daniels
 # All rights reserved.
@@ -71,5 +73,14 @@ if [ ! -e "$DEST_DIR" ] ; then
   mkdir -p "$DEST_DIR"
 fi
 
-( cd "$SOURCE_DIR" ; tar cf - . ) | ( cd "$DEST_DIR" ; tar xf - )
+which pv | grep pv > /dev/null
+if [ $? -eq 0 ] ; then
+  if [ "$3" = "progress" ] ; then
+    ( cd "$SOURCE_DIR" ; tar cf - . ) | pv | ( cd "$DEST_DIR" ; tar xf - )
+  else
+    ( cd "$SOURCE_DIR" ; tar cf - . ) | ( cd "$DEST_DIR" ; tar xf - )
+  fi
+else
+  ( cd "$SOURCE_DIR" ; tar cf - . ) | ( cd "$DEST_DIR" ; tar xf - )
+fi
 exit $?

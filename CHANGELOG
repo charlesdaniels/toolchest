@@ -349,3 +349,20 @@
 
     * added the texutil package
 
+  2017-01-30 - Charles Daniels:
+
+    * Added dependencies to sytsemutils as planned in the ROADMAP. 
+
+    * Added dependencies to todotxt-extensions, as planned in the ROADMAP. 
+
+      * I am not aware of a good way to validate that the system's ``sed`` is 
+        GNU sed. 
+
+    * system-statusline now gracefully degrades when running on kernels
+      without procfs, or systems without ``sensors``, etc.
+
+      * Possible new bug: IP address is not detected correctly on Darwin
+        systems (using the ``ip`` router from ``iproute2mac``).
+
+    * mirror-directory will now show progress using ``pv``, if ``pv`` is
+      present on the system, and if ``$3`` is ``progress``.
