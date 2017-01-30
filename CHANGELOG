@@ -369,3 +369,6 @@
 
     * added a new script, toolchest-doc, which extracts the documentation
       headers from toolchest files.
+
+0.0.6:
+  

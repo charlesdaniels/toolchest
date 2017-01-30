@@ -62,7 +62,7 @@ Consequentially:
   compatibility of any kind, and may make breaking changes to any part of the
   toolchest
 
-Releases to Date (current 2016-12-27)
+Releases to Date (current 2017-01-30)
 =====================================
 
 +-------------+-----------+----------------+
@@ -72,5 +72,7 @@ Releases to Date (current 2016-12-27)
 +-------------+-----------+----------------+
 | 0.0.4-ALPHA | alpha     | released       |
 +-------------+-----------+----------------+
-| 0.0.5       | alpha     | in-development |
+| 0.0.5       | alpha     | released       |
++-------------+-----------+----------------+
+| 0.0.6       | beta      | in-development |
 +-------------+-----------+----------------+
