@@ -378,3 +378,5 @@
       the toolchest
   
     * Updated generic-*install.sh to handle repos correctly. 
+
+    * toolchest package list is now compatible with repos

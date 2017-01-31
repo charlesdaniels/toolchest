@@ -688,19 +688,21 @@ case "$DIRECTIVE" in
     if [ $# -gt 1 ] ; then
       shift
     fi
-        
-    PKG_DIR="$NET_CDANIELS_TOOLCHEST_DIR/packages/$PACKAGE"
+  
+    PKG_DIR="$NET_CDANIELS_TOOLCHEST_DIR/packages/`get_package_repo $PACKAGE`/$PACKAGE"
 
     case "$VERB" in
       list)
         cd "$NET_CDANIELS_TOOLCHEST_DIR/packages"
-        for dir in * ; do
-          if [ -e $dir/brief.txt ] ; then
-            # if a brief is provided, show it
-            printf "%20s - %s\n" "$dir" "`cat $dir/brief.txt`"
+        for dir in `find . -type d -d 2` ; do
+          PACKAGE_NAME="`basename $dir`"
+          REPO_NAME="`get_package_repo $PACKAGE_NAME`"
+          PACKAGE_PATH="$NET_CDANIELS_TOOLCHEST_DIR/packages/$REPO_NAME/$PACKAGE_NAME"
+          printf "%30s/%-30s" "$REPO_NAME" "$PACKAGE_NAME"
+          if [ -f "$PACKAGE_PATH/brief.txt" ] ; then
+            echo " - `cat $PACKAGE_PATH/brief.txt`"
           else
-            # otherwise just show the package name
-            printf "%20s\n" "$dir"
+            echo ""
           fi
         done
       ;;
