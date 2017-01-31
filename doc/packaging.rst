@@ -107,6 +107,12 @@ directory tree in the packages/ directory, and you may uninstall a repository
 by moving it out of the packages/ directory. A standalone tool to do this will
 likely be added at some point during the 1.X.X release series.
 
+Caveats
+-------
+
+* repository names should not be substrings of other repository names
+* package names must be unique across all repositories
+* package names should not be substrings of other package names
 
 Examples
 ========

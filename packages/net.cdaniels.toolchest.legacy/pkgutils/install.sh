@@ -1,1 +1,1 @@
-../../lib/generic-install.sh
+../../../lib/generic-install.sh

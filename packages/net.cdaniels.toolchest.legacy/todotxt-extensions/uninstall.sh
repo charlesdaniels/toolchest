@@ -1,1 +1,1 @@
-../../lib/generic-uninstall.sh
+../../../lib/generic-uninstall.sh
