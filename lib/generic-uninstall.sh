@@ -48,10 +48,19 @@ if ! (: "${NET_CDANIELS_TOOLCHEST_DIR?}") 2>/dev/null; then
   exit 1
 fi
 
+if ! (: "${PACKAGE_NAME?}") 2>/dev/null; then
+  echo "ERROR 68: PACKAGE_NAME is not defined, installation failed"
+  exit 1
+fi
+
+if ! (: "${PACKAGE_PATH?}") 2>/dev/null; then
+  echo "ERROR 7: PACKAGE_PATH is not defined, installation failed"
+  exit 1
+fi
+
 # setup some convenient shortcuts
-PACKAGE_NAME=$(basename `realpath .`)  # ugly hack to get package name
 DEST_DIR="$NET_CDANIELS_TOOLCHEST_DIR/local/bin"
-SRC_DIR="$NET_CDANIELS_TOOLCHEST_DIR/packages/$PACKAGE_NAME/bin"
+SRC_DIR="$PACKAGE_PATH/bin"
 
 # sanity check - make sure we are installing from the toolchest the caller
 # thinks we are installing from
@@ -59,6 +68,7 @@ if [ `realpath ./bin` != "$SRC_DIR" ] ; then
   echo "ERROR 19: package source directory mismatch. This is really bad. You"
   echo "          seem to have NET_CDANIELS_TOOLCHEST_DIR pointing somewhere"
   echo "          other than your toolchest installation"
+  echo "DEBUG: `realpath ./bin` does not match $SRC_DIR"
   exit 1
 fi
 

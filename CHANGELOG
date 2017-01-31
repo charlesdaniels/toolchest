@@ -377,3 +377,4 @@
     * Implemented toolchest internal package get-repo, and backing function in
       the toolchest
   
+    * Updated generic-*install.sh to handle repos correctly. 
