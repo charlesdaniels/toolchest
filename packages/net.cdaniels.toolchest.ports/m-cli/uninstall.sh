@@ -7,7 +7,23 @@ PACKAGE_NAME="m-cli"
 
 $(acquire-toolchest-dirs)
 
-PACKAGE_DIR="$NET_CDANIELS_TOOLCHEST_PACKAGES/$PACKAGE_NAME"
+
+if ! (: "${NET_CDANIELS_TOOLCHEST_DIR?}") 2>/dev/null; then
+  echo "ERROR 7: NET_CDANIELS_TOOLCHEST_DIR is not defined, installation failed"
+  exit 1
+fi
+
+if ! (: "${PACKAGE_NAME?}") 2>/dev/null; then
+  echo "ERROR 68: PACKAGE_NAME is not defined, installation failed"
+  exit 1
+fi
+
+if ! (: "${PACKAGE_PATH?}") 2>/dev/null; then
+  echo "ERROR 7: PACKAGE_PATH is not defined, installation failed"
+  exit 1
+fi
+
+PACKAGE_DIR="$PACKAGE_PATH"
 
 if [ -z "$PACKAGE_DIR" ] ; then
   echo "ERROR 13: unable to acquire package directory"

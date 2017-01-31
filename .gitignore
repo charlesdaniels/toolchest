@@ -3,7 +3,7 @@ local/*
 *.log
 *.carbonite
 packages/helloworld/helloworld
-packages/m-cli/bin/*
+packages/net.cdaniels.toolchest.ports/m-cli/bin/*
 packages/iproute2mac/bin/*
 packages/tcc/bin/*
 bin/realpath

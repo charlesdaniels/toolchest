@@ -101,6 +101,7 @@ At time of writing, the following repositories come with the toolchest:
 * net.cdaniels.toolchest.testing - packages which test the toolchest,
   including example and demo packages
 * net.cdaniels.toolchest.tools - assorted tools and utilities 
+* net.cdaniels.toolchest.ports - programs which were written by other people
   
 You may install additional repositories by placing an appropriately structured
 directory tree in the packages/ directory, and you may uninstall a repository
