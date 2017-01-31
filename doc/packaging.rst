@@ -84,24 +84,29 @@ As of 0.0.5-ALPHA, these include:
 Repositories
 ============
 
-I have determined that it would not be productive to implement repositories as
-part of the toolchest management utility itself. A semi-successful prototype
-was made, then discarded in an attempt to do this; it would have added a
-hierarchy to the packages/ directory, where packages/* would be repository
-names, which would contain packages. This *almost* worked, except that it made
-it very difficult for package installers to resolve their absolute paths.
-While this is ostensibly a surmountable problem, it would have involved
-rewriting almost all of the package installers.
+The term "repository" refers to a directory which contains zero or more
+folders formatted as toolchest packages as described above.
 
-As a result, I have decided that a new tool will be added to the coreutils
-which will handle repository management. Repositories will be managed by
-copying package files to or from the packages/ higherarchy whenever a
-particular repository is activated or deactivated. The list of repositories,
-and their respective copies of their own package trees will be kept somewhere
-in local/ (probably lib).
+The packages/ directory, starting with the 1.X.X release series, contains only
+repositories - all packages are placed inside these repositories.
 
-This will be part of the 1.0.0 release, although I no longer expect it to
-introduce breaking changes.
+At time of writing, the following repositories come with the toolchest:
+
+* net.cdaniels.toolchest.indev - packages which are in development
+* net.cdaniels.toolchest.legacy - packages which are out of date and either
+  don't install, or install but don't work.
+* net.cdaniels.toolchest.pycoreutil - packages which would be part of the
+  coreutils if they did not depend on python.
+* net.cdaniels.toolchest.python - python libraries 
+* net.cdaniels.toolchest.testing - packages which test the toolchest,
+  including example and demo packages
+* net.cdaniels.toolchest.tools - assorted tools and utilities 
+  
+You may install additional repositories by placing an appropriately structured
+directory tree in the packages/ directory, and you may uninstall a repository
+by moving it out of the packages/ directory. A standalone tool to do this will
+likely be added at some point during the 1.X.X release series.
+
 
 Examples
 ========
