@@ -96,3 +96,11 @@ runtime:
 sort-notes:
   
   * should be configurable via local/config
+
+invoke-pdfpenpro-ocr:
+  
+  * confirmed on 2017-01-30 that invoke-pdfpenpro-ocr breaks with this error:
+
+  "/Users/cad/.net.cdaniels.toolchest/local/bin/invoke-pdfpenpro-
+  ocr:3089:3095: script error: Expected end of line, etc. but found
+  identifier. (-2741)"

@@ -84,7 +84,24 @@ As of 0.0.5-ALPHA, these include:
 Repositories
 ============
 
-Repositories are an upcoming feature of the 1.X.X series. 
+I have determined that it would not be productive to implement repositories as
+part of the toolchest management utility itself. A semi-successful prototype
+was made, then discarded in an attempt to do this; it would have added a
+hierarchy to the packages/ directory, where packages/* would be repository
+names, which would contain packages. This *almost* worked, except that it made
+it very difficult for package installers to resolve their absolute paths.
+While this is ostensibly a surmountable problem, it would have involved
+rewriting almost all of the package installers.
+
+As a result, I have decided that a new tool will be added to the coreutils
+which will handle repository management. Repositories will be managed by
+copying package files to or from the packages/ higherarchy whenever a
+particular repository is activated or deactivated. The list of repositories,
+and their respective copies of their own package trees will be kept somewhere
+in local/ (probably lib).
+
+This will be part of the 1.0.0 release, although I no longer expect it to
+introduce breaking changes.
 
 Examples
 ========
