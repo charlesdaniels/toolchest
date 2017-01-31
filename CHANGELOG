@@ -370,5 +370,10 @@
     * added a new script, toolchest-doc, which extracts the documentation
       headers from toolchest files.
 
-0.0.6:
+1.0.0:
+
+  2017-01-30 - Charles Daniels:
+
+    * Implemented toolchest internal package get-repo, and backing function in
+      the toolchest
   
