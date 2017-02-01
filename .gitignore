@@ -12,7 +12,7 @@ packages/pamixer/bin/*
 packages/sublime-text-3-linux/bin/*
 bin/md5
 packages/zsh-*/lib/*
-packages/todo.txt/bin/*
+packages/net.cdaniels.toolchest.ports/todo.txt/bin/*
 packages/net.cdaniels.toolchest.ports/mars4/lib/*
 packages/net.cdaniels.toolchest.ports/mars4/*.jar
 packages/posixcube/bin/*
