@@ -891,7 +891,7 @@ case "$DIRECTIVE" in
     exit 0
   ;;
   version)
-    echo "net.cdaniles.toolchest $TOOLCHEST_VERSION"
+    echo "net.cdaniels.toolchest $TOOLCHEST_VERSION"
   ;;
   refresh)
     cd "$NET_CDANIELS_TOOLCHEST_DIR"
