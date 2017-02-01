@@ -6,30 +6,32 @@
 #  This script takes in a single URL on $1 and downloads it using on
 #  appropriate downloader script. Currently, it will attempt to use either
 #  wget or CuRL.
-#  
+#
 #  USAGE
 #  =====
-#  
+#
 #   $1 . . . URL to download
-#  
+#
+#   $2 . . . (optional) output file name
+#
 ########10########20########30#### LISCENSE ####50########60########70########80
 #  Copyright (c) 2016, Charles Daniels
 #  All rights reserved.
-# 
+#
 #  Redistribution and use in source and binary forms, with or without
 #  modification, are permitted provided that the following conditions are met:
-# 
+#
 #  1. Redistributions of source code must retain the above copyright notice,
 #     this list of conditions and the following disclaimer.
-#  
+#
 #  2. Redistributions in binary form must reproduce the above copyright
 #     notice, this list of conditions and the following disclaimer in the
 #     documentation and/or other materials provided with the distribution.
-# 
+#
 #  3. Neither the name of the copyright holder nor the names of its
 #     contributors may be used to endorse or promote products derived from
 #     this software without specific prior written permission.
-# 
+#
 #  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
 #  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 #  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -41,31 +43,41 @@
 #  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 #  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 #  POSSIBILITY OF SUCH DAMAGE.
-#  
+#
 ########10########20########30########40########50########60########70########80
 
 command -v curl > /dev/null
 if [ $? -eq 0 ] ; then
-  echo "INFO: detected download manager: CuRL"
-  curl -L -O "$1"
-  if [ $? -ne 0 ] ; then
+  if [ $# -lt 2 ] ; then
+    curl -L -O "$1"
+    RET="$?"
+  else
+    curl -L "$1" -o "$2"
+    RET="$?"
+  fi
+
+  if [ $RET -ne 0 ] ; then
     echo "ERROR 52: curl reported non zero exit code; download FAILED"
     exit 1
   else
-    echo "INFO: download completed successfully; SUCCESS"
     exit 0
   fi
-fi 
+fi
 
 command -v wget
 if [ $? -eq 0 ] ; then
-  echo "INFO: detected download manager: wget"
-  wget "$1"
-  if [ $? -ne 0 ] ; then
+  if [ $# -lt 2 ] ; then
+    wget "$1"
+    RET="$?"
+  else
+    wget "$1" -O "$2"
+    RET="$?"
+  fi
+
+  if [ $RET -ne 0 ] ; then
     echo "ERROR 59: wget reported non zero exit code; download FAILED"
     exit 1
   else
-    echo "INFO: download completed successfully; SUCCESS"
     exit 0
   fi
 fi

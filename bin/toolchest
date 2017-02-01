@@ -189,6 +189,16 @@
 #                     match `uname` on the current system, the installer will
 #                     fail.
 #
+#    remote . . . . . a list of remote files which need to be downloaded for the
+#                     package to install. Each line contains the output file name
+#                     and the URL of the file, separated by a single space.
+#                     Either CuRL or Wget will be used to download the file,
+#                     depending on which is available. The output file will be
+#                     placed in a folder named "remote" under the package
+#                     directory. Failure to download the dependancy will NOT
+#                     cause toolchest to abort the installation - you need
+#                     to check for the presencce of your dependancies. 
+#
 #    Note that both of these files need to end in a blank line to be parsed
 #    correctly.
 #
@@ -729,6 +739,7 @@ case "$DIRECTIVE" in
           exit 1
         fi
 
+        # handle dependancy checking
         if [ -e "$PKG_DIR/dep" ] ; then
 
           if [ -f "$PKG_DIR/dep/system" ] ; then
@@ -768,6 +779,7 @@ case "$DIRECTIVE" in
             done < "$PKG_DIR/dep/toolchest"
           fi  # if [ -f "$PKG_DIR/dep/toolchest" ] ; then
 
+          # handle OS validation
           if [ -f "$PKG_DIR/dep/uname" ] ; then
             printf "INFO: validating OS requirements... "
             grep `uname` < "$PKG_DIR/dep/uname" > /dev/null
@@ -778,6 +790,28 @@ case "$DIRECTIVE" in
               exit 1
             fi
           fi  # if [ -f "$PKG_DIR/dep/uname" ] ; then
+
+          # attempt to download any artifacts required
+          if [ -f "$PKG_DIR/dep/remote" ] ; then
+            mkdir "$PKG_DIR/remote"
+            DOWNLOAD_CMD="$NET_CDANIELS_TOOLCHEST_DIR/bin/download"
+            if [ ! -f "$DOWNLOAD_CMD" ] ; then
+              echo "ERROR T789: unable to locate download command"
+            else
+              while read -r line ; do
+                ARTIFACT_NAME=`echo $line | cut -d\  -f 1`
+                ARTIFACT_URL=`echo $line | cut -d\  -f 2`
+                echo "INFO: preparing to download dependancy: $ARTIFACT_NAME"
+                "$DOWNLOAD_CMD" "$ARTIFACT_URL" "$PKG_DIR/remote/$ARTIFACT_NAME"
+                if [ $? -eq 0 ] ; then
+                  echo "INFO: successfully downloaded dependancy $ARTIFACT_NAME."
+                else
+                  echo "ERROR: FAILED to download dependancy $ARTIFACT_NAME"
+                fi
+              done < "$PKG_DIR/dep/remote"
+            fi  # if [ ! -f "$DOWNLOAD_CMD" ] ; then
+          fi  # if [ -f "$PKG_DIR/dep/remote" ] ; then
+
         fi  # if [ -e "$PKG_DIR/dep" ] ; then
 
         # perform the package installation

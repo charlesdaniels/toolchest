@@ -34,7 +34,7 @@ toolchest:
     * validate that python is installed for generate-separator or move it to a
       package
 
-  * the toolchest managment utility (i.ew. the ``toolchest`` command) has
+  * the toolchest management utility (i.ew. the ``toolchest`` command) has
     become a bit unwieldy in terms of size (> 1k LOC). It should probably be
     split apart into libraries.
 

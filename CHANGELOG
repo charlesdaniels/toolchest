@@ -410,3 +410,9 @@
 
     * generate-separator moved from coreutils to
       net.cdaniels.toolchest.pycoreutils, as it depends on Python.
+
+    * download moved from universal-tools to coreutils
+
+    * download can now accept output file name on $2
+
+    * added ability to fetch "remote" dependancies to ``package install``. 
