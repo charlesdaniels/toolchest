@@ -351,12 +351,12 @@
 
   2017-01-30 - Charles Daniels:
 
-    * Added dependencies to sytsemutils as planned in the ROADMAP. 
+    * Added dependencies to sytsemutils as planned in the ROADMAP.
 
-    * Added dependencies to todotxt-extensions, as planned in the ROADMAP. 
+    * Added dependencies to todotxt-extensions, as planned in the ROADMAP.
 
-      * I am not aware of a good way to validate that the system's ``sed`` is 
-        GNU sed. 
+      * I am not aware of a good way to validate that the system's ``sed`` is
+        GNU sed.
 
     * system-statusline now gracefully degrades when running on kernels
       without procfs, or systems without ``sensors``, etc.
@@ -372,11 +372,21 @@
 
 1.0.0:
 
-  2017-01-30 - Charles Daniels:
+  2017-01-31 - Charles Daniels:
 
     * Implemented toolchest internal package get-repo, and backing function in
       the toolchest
-  
-    * Updated generic-*install.sh to handle repos correctly. 
+
+    * Updated generic-*install.sh to handle repos correctly.
 
     * toolchest package list is now compatible with repos
+
+    * Updated the following packages to work with repos:
+
+      * pkgutils
+
+      * universal-tools
+
+      * m-cli
+
+      * mars4
