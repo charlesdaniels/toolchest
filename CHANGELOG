@@ -410,3 +410,10 @@
 
     * generate-separator moved from coreutils to
       net.cdaniels.toolchest.pycoreutils, as it depends on Python.
+
+    * FIXED: issue #1 - toolchest package list now works on Linux systems
+
+      * the fix involves using find -mindepth and -maxdepth, however it is not
+        clear to me if these options can safely be assumed to exist on all
+        POSIX systems. It would seem that OSX, Linux, and *BSD generally support
+        these options however. 
