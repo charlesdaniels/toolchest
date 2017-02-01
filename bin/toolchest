@@ -685,7 +685,7 @@ case "$DIRECTIVE" in
     VERB="$1"
     shift
     PACKAGE="$1"
-    if [ $# -gt 1 ] ; then
+    if [ $# -ge 1 ] ; then
       shift
     fi
 
@@ -722,11 +722,17 @@ case "$DIRECTIVE" in
 
         # make sure the package is not already installed
         check_package_installed "$PACKAGE"
-        if [ $? -eq 0  ] ; then
+        if [ $? -eq 0 ] ; then
           echo "ERROR T526: package $PACKAGE is already installed. If this is"
           echo "            not correct, you may mark it as uninstalled using"
           echo "            \"toolchest internal package mark-uninstalled $PACKAGE\""
-          exit 1
+          
+          if [ $# -ge 1 ] ; then
+            $0 package install "$@"
+            exit $?
+          else
+            exit 1
+          fi
         fi
 
         if [ -e "$PKG_DIR/dep" ] ; then
@@ -792,15 +798,25 @@ case "$DIRECTIVE" in
           # mark package installed
           mark_package_installed "$PACKAGE"
         fi
+
+        if [ $# -ge 1 ] ; then
+          $0 package install "$@"
+        fi
       ;;
       uninstall)
         # make sure the package is actually installed
         check_package_installed "$PACKAGE"
-        if [ $? -ne 0  ] ; then
+        if [ $? -ne 0 ] ; then
           echo "ERROR T566: package $PACKAGE is not installed. If this is"
           echo "            not correct, you may mark it as installed using"
           echo "            \"toolchest internal package mark-installed $PACKAGE\""
-          exit 1
+
+          if [ $# -ge 1 ] ; then
+            $0 package uninstall "$@"
+            exit $?
+          else
+            exit 1
+          fi
         fi
 
         uninstall_package "$PACKAGE"
@@ -814,6 +830,10 @@ case "$DIRECTIVE" in
           # handle case where the package failed to be uninstalled
           echo "ERROR T592: package uninstaller for $PACKAGE failed!"
           exit $RET
+        fi
+
+        if [ $# -ge 1 ] ; then
+          $0 package uninstall "$@"
         fi
 
       ;;

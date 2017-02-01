@@ -419,3 +419,6 @@
         these options however. 
 
     * migrate sublime-text-3-linux to repos package style
+
+    * toolchest package install and uninstall now supports arbitrary number of
+      targets (i.e. ``toolchest package install foo bar baz`` is now legal)
