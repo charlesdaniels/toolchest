@@ -403,3 +403,10 @@
       * todotxt-extensions
       * zsh-autosuggestions
       * zsh-syntax-highlighting
+
+1.0.1:
+
+  2017-02-01 - Charles Daniels:
+
+    * generate-separator moved from coreutils to
+      net.cdaniels.toolchest.pycoreutils, as it depends on Python.

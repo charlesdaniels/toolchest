@@ -1,0 +1,2 @@
+A package which generates separators as comments for code. Useful for delimiting
+logical blocks within source code. 
