@@ -1,6 +1,6 @@
 NET_CDANIELS_TOOLCHEST_DIR=$(shell echo $$NET_CDANIELS_TOOLCHEST_DIR)
-PACKAGE_NAME=youtube-dl
-PACKAGE_DIR=$(NET_CDANIELS_TOOLCHEST_DIR)/packages/$(PACKAGE_NAME)
+PACKAGE_NAME=$(shell echo $$PACKAGE_NAME)
+PACKAGE_DIR=$(shell echo $$PACKAGE_PATH)
 BIN_DIR=$(NET_CDANIELS_TOOLCHEST_DIR)/local/bin
 LIB_DIR=$(NET_CDANIELS_TOOLCHEST_DIR)/local/lib/$(PACKAGE_NAME)
 INSTALL_DIR=$(PACKAGE_DIR)/bin
@@ -19,7 +19,7 @@ install: preflight
 	@printf "INFO: linking package files... "
 	@ln -s $(INSTALL_DIR)/youtube-dl $(BIN_DIR)/youtube-dl
 	@echo "DONE"
-  
+
 uninstall:
 	@printf "INFO: unlinking package files... "
 	@rm $(BIN_DIR)/youtube-dl > /dev/null  2>&1 ||:
@@ -30,7 +30,7 @@ uninstall:
 	@printf "INFO: removing installation files... "
 	@rm -rf $(INSTALL_DIR) > /dev/null  2>&1 ||:
 	@echo "DONE"
-  
+
 preflight:
 	@# make sure that youtube-dl is not already installed
 	@printf "INFO: checking if youtube-dl is already installed... "
@@ -41,4 +41,3 @@ preflight:
 	@mkdir $(INSTALL_DIR) ||:
 	@mkdir $(LIB_DIR) ||:
 	@echo "DONE"
-  
