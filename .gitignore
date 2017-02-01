@@ -9,7 +9,7 @@ packages/net.cdaniels.toolchest.ports/tcc/bin/*
 bin/realpath
 packages/youtube-dl/l/bin/*
 packages/pamixer/bin/*
-packages/sublime-text-3-linux/bin/*
+packages/net.cdaniels.toolchest.ports/sublime-text-3-linux/bin/*
 bin/md5
 packages/zsh-*/lib/*
 packages/net.cdaniels.toolchest.ports/todo.txt/bin/*
