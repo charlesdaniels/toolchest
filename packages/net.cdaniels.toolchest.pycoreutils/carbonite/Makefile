@@ -1,6 +1,6 @@
 NET_CDANIELS_TOOLCHEST_DIR=$(shell echo $$NET_CDANIELS_TOOLCHEST_DIR)
-PACKAGE_NAME=carbonite
-PACKAGE_DIR=$(NET_CDANIELS_TOOLCHEST_DIR)/packages/$(PACKAGE_NAME)
+PACKAGE_NAME=$(shell echo $$PACKAGE_NAME)
+PACKAGE_DIR=$(shell echo $$PACKAGE_PATH)
 BIN_DIR=$(NET_CDANIELS_TOOLCHEST_DIR)/local/bin
 LIB_DIR=$(NET_CDANIELS_TOOLCHEST_DIR)/local/lib/$(PACKAGE_NAME)
 
@@ -12,7 +12,7 @@ install: preflight
 	@ln -s $(PACKAGE_DIR)/bin/carbonite $(BIN_DIR)/carbonite
 	@echo "DONE"
 
-preflight: 
+preflight:
 
 uninstall:
 	@printf "INFO: uninstalling carbonite... "
