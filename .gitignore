@@ -7,7 +7,7 @@ packages/net.cdaniels.toolchest.ports/m-cli/bin/*
 packages/iproute2mac/bin/*
 packages/tcc/bin/*
 bin/realpath
-packages/youtube-dl/bin/*
+packages/youtube-dl/l/bin/*
 packages/pamixer/bin/*
 packages/sublime-text-3-linux/bin/*
 bin/md5
