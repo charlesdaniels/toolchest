@@ -1,6 +1,6 @@
 NET_CDANIELS_TOOLCHEST_DIR=$(shell echo $$NET_CDANIELS_TOOLCHEST_DIR)
-PACKAGE_NAME=helloworld
-PACKAGE_DIR=$(NET_CDANIELS_TOOLCHEST_DIR)/packages/$(PACKAGE_NAME)
+PACKAGE_NAME=$(shell echo $$PACKAGE_NAME)
+PACKAGE_DIR=$(shell echo $$PACKAGE_PATH)
 INSTALL_DIR=$(NET_CDANIELS_TOOLCHEST_DIR)/local/bin
 
 install: preflight helloworld
@@ -17,8 +17,8 @@ helloworld: helloworld.o
 	gcc -o $(PACKAGE_NAME) helloworld.o
 
 helloworld.o: helloworld.c helloworld.h
-	gcc -c helloworld.c 
+	gcc -c helloworld.c
 
-preflight: 
+preflight:
 	# check that gcc is present on the system
 	command -v gcc > /dev/null

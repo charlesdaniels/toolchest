@@ -384,11 +384,9 @@
     * Updated the following packages to work with repos:
 
       * pkgutils
-
       * universal-tools
-
       * m-cli
-
       * mars4
-
       * pdfutils
+      * example
+      * helloworld
