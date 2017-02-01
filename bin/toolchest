@@ -694,7 +694,7 @@ case "$DIRECTIVE" in
     case "$VERB" in
       list)
         cd "$NET_CDANIELS_TOOLCHEST_DIR/packages"
-        for dir in `find . -type d -d 2` ; do
+        for dir in `find . -mindepth 2 -maxdepth 2 -type d` ; do
           PACKAGE_NAME="`basename $dir`"
           REPO_NAME="`get_package_repo $PACKAGE_NAME`"
           PACKAGE_PATH="$NET_CDANIELS_TOOLCHEST_DIR/packages/$REPO_NAME/$PACKAGE_NAME"
