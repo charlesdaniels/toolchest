@@ -1,6 +1,6 @@
 NET_CDANIELS_TOOLCHEST_DIR=$(shell echo $$NET_CDANIELS_TOOLCHEST_DIR)
-PACKAGE_NAME=tcc
-PACKAGE_DIR=$(NET_CDANIELS_TOOLCHEST_DIR)/packages/$(PACKAGE_NAME)
+PACKAGE_NAME=$(shell echo $$PACKAGE_NAME)
+PACKAGE_DIR=$(shell echo $$PACKAGE_PATH)
 BIN_DIR=$(NET_CDANIELS_TOOLCHEST_DIR)/local/bin
 LIB_DIR=$(NET_CDANIELS_TOOLCHEST_DIR)/local/lib/$(PACKAGE_NAME)
 INSTALL_DIR=$(PACKAGE_DIR)/bin
@@ -23,10 +23,10 @@ install: preflight
 	@printf "INFO: linking package files... "
 	@ln -s $(INSTALL_DIR)/tcc-install/bin/tcc           $(BIN_DIR)/tcc
 	@ln -s $(INSTALL_DIR)/tcc-install/bin/tiny_libmaker $(BIN_DIR)/tiny_libmaker
-	@ln -s $(INSTALL_DIR)/tcc-install/lib               $(LIB_DIR)/lib 
+	@ln -s $(INSTALL_DIR)/tcc-install/lib               $(LIB_DIR)/lib
 	@ln -s $(INSTALL_DIR)/tcc-install/lib64             $(LIB_DIR)/lib64
-	@ln -s $(INSTALL_DIR)/tcc-install/include           $(LIB_DIR)/include 
-	@ln -s $(INSTALL_DIR)/tcc-install/share             $(LIB_DIR)/share 
+	@ln -s $(INSTALL_DIR)/tcc-install/include           $(LIB_DIR)/include
+	@ln -s $(INSTALL_DIR)/tcc-install/share             $(LIB_DIR)/share
 	@echo "DONE"
 
 preflight:
