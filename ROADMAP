@@ -1,11 +1,11 @@
 check-connection:
 
-  * gateway is hardcoded, should be detected from ifconfig (?) 
+  * gateway is hardcoded, should be detected from ifconfig (?)
 
   * depends on speedtest-cli - maybe silently skip speedtest if not installed?
 
   * need a tool to bulk analyze output of script (eg. generate speed and
-    updtime graphs over time)
+    uptime graphs over time)
 
 pdfutils:
 
@@ -13,7 +13,7 @@ pdfutils:
 
 pkgutils:
 
-  * pkg-housecleaning could use a code review, it hasen't been reviewed in
+  * pkg-housecleaning could use a code review, it hasn't been reviewed in
     over a year
 
 systemutils:
@@ -36,7 +36,7 @@ toolchest:
 
   * the toolchest managment utility (i.ew. the ``toolchest`` command) has
     become a bit unwieldy in terms of size (> 1k LOC). It should probably be
-    split apart into libraries. 
+    split apart into libraries.
 
 carbonite:
 
@@ -47,20 +47,20 @@ carbonite:
 net.cdaniels.python:
 
   * should add a python wrapper for temputils
-  
+
   loggingutils:
 
-    * default log path should probably go to /tmp, rather than ./ 
+    * default log path should probably go to /tmp, rather than ./
 
 musicutil:
 
   * tool for exporting music library with various encodings; should be able to
     take a given music library with a particular folder structure, and produce
     a media library with the same folder structure, but re-encoded using the
-    desired settings. The tool should use ffmpeg for encoding. 
+    desired settings. The tool should use ffmpeg for encoding.
 
 215util:
-  
+
   * package for CSCE215-TA related utilities
 
   * script to setup tmux session with whiteboard, script session, and so on
@@ -94,11 +94,11 @@ runtime:
 
 
 sort-notes:
-  
+
   * should be configurable via local/config
 
 invoke-pdfpenpro-ocr:
-  
+
   * confirmed on 2017-01-30 that invoke-pdfpenpro-ocr breaks with this error:
 
   "/Users/cad/.net.cdaniels.toolchest/local/bin/invoke-pdfpenpro-
