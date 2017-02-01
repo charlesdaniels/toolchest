@@ -64,15 +64,15 @@
 #                                         packages marked as installed. The
 #                                         contents of local/config are
 #                                         preserved.
-#    
+#
 #    setup  . . . . . . . . . . . . . . . verifies that all needed folders in
 #                                         the local/ directory tree exist -
 #                                         any that do not are created. On
 #                                         successful setup completion, the
 #                                         empty file
-#                                         
-#                                         $NET_CDANIELS_TOOLCHEST_DIR/local/config/setup-done 
-#                                         
+#
+#                                         $NET_CDANIELS_TOOLCHEST_DIR/local/config/setup-done
+#
 #                                         is created. When the toolchest first
 #                                         launches, if this file does not
 #                                         exist, then the setup directive is
@@ -106,10 +106,10 @@
 #
 #      Unconditionally marks a package as installed, reguardless of pre
 #      existing installation state.
-#      
+#
 #    internal package get-repo [package]
-#      
-#      Display the repository to which a package belongs to stdout. 
+#
+#      Display the repository to which a package belongs to stdout.
 #
 #  PACKAGES
 #  ========
@@ -123,12 +123,12 @@
 #
 #  If install.sh is used, it will be passed "$@" which will include argv[3]
 #  and on. Further, the following environment variables are guarnteed:
-#  
-#    NET_CDANIELS_TOOLCHEST_DIR . . . root of toolchest installation 
+#
+#    NET_CDANIELS_TOOLCHEST_DIR . . . root of toolchest installation
 #    PACKAGE_NAME . . . . . . . . . . the name of the package being installed
 #    PACKAGE_PATH . . . . . . . . . . full path to the package's folder
-#    
-#  The same environment variables are provided when a package is uninstalled. 
+#
+#  The same environment variables are provided when a package is uninstalled.
 #
 #  If using makefiles, packages should also implement `make uninstall` for de-
 #  installation. Packages using install.sh should also make available an
@@ -171,16 +171,16 @@
 #    install/uninstall operation completed successfully, and assume that it
 #    failed on a nonzero exit code. Installer and uninstaller scripts should
 #    set their exit codes appropriately.
-#    
+#
 #    DEPENDANCY HANDLING
 #    -------------------
-#    
+#
 #    Packages may optionally include a directory named ``dep``, which may
 #    contain any, all, or none of the following files:
-#    
+#
 #    system . . . . . a list of commands, one per line, which if they are not
 #                     present in $PATH, will cause the installer to fail.
-#                     
+#
 #    toolchest  . . . a list of toolchest package, which if they are not
 #                     installed, will be installed. Should any dependency
 #                     installation fail, the installer will fail.
@@ -188,10 +188,10 @@
 #    uname  . . . . . a list of OS unames, one per line. If at least one does
 #                     match `uname` on the current system, the installer will
 #                     fail.
-#                     
+#
 #    Note that both of these files need to end in a blank line to be parsed
 #    correctly.
-#    
+#
 #
 #  ENVIORNMENT VARIABLES
 #  =====================
@@ -260,21 +260,21 @@
 # realpath re-implementation
 
 ########10########20########30##### LICENSE ####50########60########70########80
-#  
+#
 #  The MIT License (MIT)
-#  
+#
 #  Copyright (c) 2014 Michael Kropat
-#  
+#
 #  Permission is hereby granted, free of charge, to any person obtaining a
 #  copy of this software and associated documentation files (the "Software"),
 #  to deal in the Software without restriction, including without limitation
 #  the rights to use, copy, modify, merge, publish, distribute, sublicense,
 #  and/or sell copies of the Software, and to permit persons to whom the
 #  Software is furnished to do so, subject to the following conditions:
-#  
+#
 #  The above copyright notice and this permission notice shall be included in
 #  all copies or substantial portions of the Software.
-#  
+#
 #  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 #  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 #  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -282,10 +282,10 @@
 #  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 #  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 #  DEALINGS IN THE SOFTWARE.
-#  
-#  
+#
+#
 #  ---------
-#  
+#
 #  This software used and modified from it's origonal version on 2016-12-31 by
 #  Charles Daniels.
 #
@@ -404,7 +404,7 @@ _bsd_stat_readlink() {
 ########10########20########30########40########50########60########70########80
 
 
-TOOLCHEST_VERSION="1.0.0-git"
+TOOLCHEST_VERSION="1.0.0-release"
 
 command -v sed > /dev/null
 if [ $? -ne 0 ] ; then
@@ -641,19 +641,19 @@ uninstall_package () {
 
 #  get_package_repo
 #  ================
-#  
-#  Find a package's repo, and output the found repo on stdout. 
-#  
+#
+#  Find a package's repo, and output the found repo on stdout.
+#
 #  USAGE
 #  =====
-#    
+#
 #    $1 . . . the package to find the repo of
-#    
+#
 #  RETURNS
 #  =======
-#  
+#
 #    Returns 0 on success
-#    
+#
 #    Returns 1 if the package is not found, or if another error is encountered
 get_package_repo () {
   local STARTING_DIR=`pwd`
@@ -688,7 +688,7 @@ case "$DIRECTIVE" in
     if [ $# -gt 1 ] ; then
       shift
     fi
-  
+
     PKG_DIR="$NET_CDANIELS_TOOLCHEST_DIR/packages/`get_package_repo $PACKAGE`/$PACKAGE"
 
     case "$VERB" in
@@ -767,7 +767,7 @@ case "$DIRECTIVE" in
               fi
             done < "$PKG_DIR/dep/toolchest"
           fi  # if [ -f "$PKG_DIR/dep/toolchest" ] ; then
-          
+
           if [ -f "$PKG_DIR/dep/uname" ] ; then
             printf "INFO: validating OS requirements... "
             grep `uname` < "$PKG_DIR/dep/uname" > /dev/null
@@ -951,5 +951,3 @@ case "$DIRECTIVE" in
     echo "ERROR T46: no such directive $DIRECTIVE"
   ;;
 esac
-
-
