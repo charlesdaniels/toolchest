@@ -7,10 +7,10 @@ net.cdaniels.toolchest Packaging Guide
 net.cdaniels.toochest Package Format
 ====================================
 
-Toolchest packages are simply directories which contain the following files: 
+Toolchest packages are simply directories which contain the following files:
 
 * ``brief.txt`` (optional) - a short (~ 100 characters or less) description of
-  the package, shown during ``package list`` 
+  the package, shown during ``package list``
 
 * ``description.txt`` (optional) - a description of the package, shown during
   ``package description``. May be any length. 80 character line length is
@@ -80,7 +80,7 @@ As of 0.0.5-ALPHA, these include:
 
 * `generic-install.sh <../lib/generic-install.sh>`_
 * `generic-uninstall.sh <../lib/generic-uninstall.sh>`_
-  
+
 Repositories
 ============
 
@@ -94,15 +94,17 @@ At time of writing, the following repositories come with the toolchest:
 
 * net.cdaniels.toolchest.indev - packages which are in development
 * net.cdaniels.toolchest.legacy - packages which are out of date and either
-  don't install, or install but don't work.
+  don't install, or install but don't work. These packages are maintained for
+  historical purpose, and are not supported in any way. Some may work, so may
+  not. Use them at your peril.
 * net.cdaniels.toolchest.pycoreutil - packages which would be part of the
   coreutils if they did not depend on python.
-* net.cdaniels.toolchest.python - python libraries 
-* net.cdaniels.toolchest.testing - packages which test the toolchest,
-  including example and demo packages
-* net.cdaniels.toolchest.tools - assorted tools and utilities 
+* net.cdaniels.toolchest.python - python libraries
+* net.cdaniels.toolchest.testing - packages which test the toolchest, including
+  example and demo packages
+* net.cdaniels.toolchest.tools - assorted tools and utilities
 * net.cdaniels.toolchest.ports - programs which were written by other people
-  
+
 You may install additional repositories by placing an appropriately structured
 directory tree in the packages/ directory, and you may uninstall a repository
 by moving it out of the packages/ directory. A standalone tool to do this will
@@ -121,7 +123,7 @@ Examples
 Sample Makefile
 ---------------
 
-:: 
+::
 
   NET_CDANIELS_TOOLCHEST_DIR=$(shell echo $$NET_CDANIELS_TOOLCHEST_DIR)
   PACKAGE_NAME=tcc
@@ -134,7 +136,7 @@ Sample Makefile
   TIMESTAMP=$(shell iso8601date)
   LOG_DIR=$(NET_CDANIELS_TOOLCHEST_DIR)/local/log
   LOG_FILE=$(LOG_DIR)/$(PACKAGE_NAME)-$(TIMESTAMP).install.log
-  
+
   install: preflight
     @echo "INFO: log file for installation is: $(LOG_FILE)"
     @printf "INFO: retreving sources for $(PACKAGE_NAME) from upstream... "
@@ -148,12 +150,12 @@ Sample Makefile
     @printf "INFO: linking package files... "
     @ln -s $(INSTALL_DIR)/tcc-install/bin/tcc           $(BIN_DIR)/tcc
     @ln -s $(INSTALL_DIR)/tcc-install/bin/tiny_libmaker $(BIN_DIR)/tiny_libmaker
-    @ln -s $(INSTALL_DIR)/tcc-install/lib               $(LIB_DIR)/lib 
+    @ln -s $(INSTALL_DIR)/tcc-install/lib               $(LIB_DIR)/lib
     @ln -s $(INSTALL_DIR)/tcc-install/lib64             $(LIB_DIR)/lib64
-    @ln -s $(INSTALL_DIR)/tcc-install/include           $(LIB_DIR)/include 
-    @ln -s $(INSTALL_DIR)/tcc-install/share             $(LIB_DIR)/share 
+    @ln -s $(INSTALL_DIR)/tcc-install/include           $(LIB_DIR)/include
+    @ln -s $(INSTALL_DIR)/tcc-install/share             $(LIB_DIR)/share
     @echo "DONE"
-  
+
   preflight:
     @echo "INFO: performing preflight checks for $(PACKAGE_NAME):"
     @printf "\tgit... "
@@ -169,7 +171,7 @@ Sample Makefile
     @-rm -rf $(LIB_DIR) ||:
     @mkdir $(LIB_DIR)
     @echo "DONE"
-  
+
   uninstall:
     @printf "INFO: unlinking $(PACKAGE_NAME) files... "
     @rm $(BIN_DIR)/tcc ||:
@@ -182,4 +184,4 @@ Sample Makefile
     @printf "INFO: cleaning install directory... "
     @rm -rf $(INSTALL_DIR)/* ||:
     @echo "DONE"
-    @echo "INFO: uninstalled $($PACKAGE_NAME)"  
+    @echo "INFO: uninstalled $($PACKAGE_NAME)"
