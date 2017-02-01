@@ -395,3 +395,5 @@
       * archiveutils
       * carbonite
       * iproute2mac
+      * lprutils
+      * macosutils
