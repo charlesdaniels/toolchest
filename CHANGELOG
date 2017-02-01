@@ -417,3 +417,5 @@
         clear to me if these options can safely be assumed to exist on all
         POSIX systems. It would seem that OSX, Linux, and *BSD generally support
         these options however. 
+
+    * migrate sublime-text-3-linux to repos package style
