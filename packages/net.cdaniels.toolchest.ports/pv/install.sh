@@ -52,11 +52,10 @@ if [ $? -ne 0 ] ; then
 fi
 echo "DONE"
 
+printf "INFO: linking pv... "
 cd ../..
 mkdir bin/
 mv remote/pv/pv bin/pv
-ln -s "$PACKAGE_PATH/bin/pv" "$NET_CDANIELS_TOOLCHEST_DIR/local//bin/pv"
-
+ln -s "$PACKAGE_PATH/bin/pv" "$NET_CDANIELS_TOOLCHEST_DIR/local/bin/pv"
 rm -rf ./remote
-
-exit 1
+echo "DONE"

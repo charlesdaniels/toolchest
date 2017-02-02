@@ -411,22 +411,22 @@
     * generate-separator moved from coreutils to
       net.cdaniels.toolchest.pycoreutils, as it depends on Python.
 
-<<<<<<< HEAD
     * download moved from universal-tools to coreutils
 
     * download can now accept output file name on $2
 
-    * added ability to fetch "remote" dependancies to ``package install``. 
-=======
+    * added ability to fetch "remote" dependancies to ``package install``.
+
     * FIXED: issue #1 - toolchest package list now works on Linux systems
 
       * the fix involves using find -mindepth and -maxdepth, however it is not
         clear to me if these options can safely be assumed to exist on all
         POSIX systems. It would seem that OSX, Linux, and *BSD generally support
-        these options however. 
+        these options however.
 
     * migrate sublime-text-3-linux to repos package style
 
     * toolchest package install and uninstall now supports arbitrary number of
       targets (i.e. ``toolchest package install foo bar baz`` is now legal)
->>>>>>> 9480eb61e6b24f976f33c00b01c3f1aa0f5dafa0
+
+    * added port for pv 

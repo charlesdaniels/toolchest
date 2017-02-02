@@ -20,4 +20,6 @@ rm "$NET_CDANIELS_TOOLCHEST_DIR/local/bin/pv" >> /dev/null 2>&1
 echo "DONE"
 
 printf "INFO: cleaning package directory... "
-rm -rf "$NET_CDANIELS_TOOLCHEST_DIR/"
+rm -rf "$PACKAGE_PATH/bin/"  >> /dev/null 2>&1
+rm -rf "$PACKAGE_PATH/remote"  >> /dev/null 2>&1
+echo "DONE"
