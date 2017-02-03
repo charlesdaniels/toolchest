@@ -436,3 +436,5 @@
     * Improved reliability of check-command-exists.lib
 
     * Added wrapper for check-command-exists to coreutils
+
+    * Added pdf-from-office script to pdfutils
