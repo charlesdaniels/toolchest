@@ -1,17 +1,11 @@
+#!/bin/sh
 ########10########20########30## DOCUMENTATION #50########60########70########80
 #
-#  OVERVIEW
-#  ========
+# OVERVIEW
+# ========
 #
-#  Function that checks that a particular command is present on the system.
-#   Returns 1 if the command does NOT exist, and 0 otherwise.
+# Wrapper for the similarly named check-command-exists.lib
 #
-#  USAGE
-#  =====
-#
-#  Source this file in sh or compatible shell, then call the function.
-#
-#   $1 . . . name of command to check
 #
 ########10########20########30##### LICENSE ####50########60########70########80
 #  Copyright (c) 2016, Charles Daniels
@@ -45,18 +39,19 @@
 #
 ########10########20########30########40########50########60########70########80
 
-check_command_exists () {
-  if [ $# -ne 1 ] ; then
-    echo "ERROR CCE: invalid number of arguments $#"
-    return 1
-  fi
 
-  which "$1" | grep "$1" > /dev/null
+$(acquire-toolchest-dirs)
 
-  if [ $? -eq 0 ] ; then
-    return 0
-  else
-    return 1
-  fi
+if [ ! -e "$NET_CDANIELS_TOOLCHEST_LIB/check-command-exists.lib" ] ; then
+  echo "ERROR 45: unable to acquire check-command-exists.lib!"
+  exit 1
+fi
 
-}
+. "$NET_CDANIELS_TOOLCHEST_LIB/check-command-exists.lib"
+if [ $? -ne 0 ] ; then
+  echo "ERROR 52: failed to source check-command-exists.lib"
+  exit 1
+fi
+
+check_command_exists "$@"
+exit $?

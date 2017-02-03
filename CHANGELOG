@@ -429,4 +429,10 @@
     * toolchest package install and uninstall now supports arbitrary number of
       targets (i.e. ``toolchest package install foo bar baz`` is now legal)
 
-    * added port for pv 
+    * added port for pv
+
+  2017-02-03 - Charles Daniels:
+
+    * Improved reliability of check-command-exists.lib
+
+    * Added wrapper for check-command-exists to coreutils
