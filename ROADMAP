@@ -70,12 +70,6 @@ musicutil:
 
   * script to email out the result of the previous point to enrolled students.
 
-pv:
-
-  * would be nice to add a ``pv`` port, to add progress bars to toolchest
-    packages without introducing an external dependency. pv seems to be a good
-    candidate for this, as it seems to compile with just C, and supports
-    prefix installation.
 
 runtime:
 
