@@ -5,7 +5,7 @@ INTERVAL=2.5
 
 # sometimes, when started via i3wm, $PATH is not setup correctly and we can't
 # find invoke-sensible-date
-. $HOME/.profile 
+. $HOME/.profile
 
 while true ; do
   DATE=$(invoke-sensible-date +"%Y-%m-%d %H:%M:%S")
@@ -21,13 +21,13 @@ while true ; do
     BATTINFO="AC"
   else
     BATTINFO=$(acpi | cut -d: -f 2-5 | acpi | cut -d: -f 2-5)
-    
+
     BATTINFO=$(echo $BATTINFO | sed "s/Discharging/bat/g")
     BATTINFO=$(echo $BATTINFO | sed "s/Charging/ac/g")
     BATTINFO=$(echo $BATTINFO | sed "s/remaining/rem/g")
     BATTINFO=$(echo $BATTINFO | sed "s/until charged/to full/g")
   fi
-  
+
   command -v xbacklight > /dev/null
   if [ $? -ne 0 ] ; then
     CURRENT_BACKLIGHT="hw"
@@ -35,8 +35,8 @@ while true ; do
     CURRENT_BACKLIGHT=$(xbacklight)
     CURRENT_BACKLIGHT=$(printf "%.0f\n" "$CURRENT_BACKLIGHT")
   fi
-  
-  `which sensors` | grep sensors > /dev/null
+
+  which sensors | grep sensors > /dev/null
   if [ $? -eq 0 ] ; then
     TEMP=$(sensors | grep Physical | cut -d\  -f 5)
   else
@@ -57,9 +57,9 @@ while true ; do
       VOLUME="$VOLUME (MUTE)"
     fi
   fi
-  
+
   IP=$(ip addr | grep inet | grep -v 127 | grep -v inet6 | cut -d\  -f 6 | head -n 1)
-  
+
   echo "light $CURRENT_BACKLIGHT | cpu $TEMP | $MEMFREE free | ip $IP | $LOAD | vol $VOLUME | $BATTINFO | $DATE"
   sleep $INTERVAL
 done

@@ -403,3 +403,6 @@
       * todotxt-extensions
       * zsh-autosuggestions
       * zsh-syntax-highlighting
+
+    * Fixed a bug in system-statusline where presences of the `sensors` command
+      was not detected correctly.
