@@ -189,7 +189,6 @@
 #                     match `uname` on the current system, the installer will
 #                     fail.
 #
-<<<<<<< HEAD
 #    remote . . . . . a list of remote files which need to be downloaded for the
 #                     package to install. Each line contains the output file name
 #                     and the URL of the file, separated by a single space.
@@ -198,10 +197,8 @@
 #                     placed in a folder named "remote" under the package
 #                     directory. Failure to download the dependancy will NOT
 #                     cause toolchest to abort the installation - you need
-#                     to check for the presencce of your dependancies. 
+#                     to check for the presencce of your dependancies.
 #
-=======
->>>>>>> 1.X.X-STABLE
 #    Note that both of these files need to end in a blank line to be parsed
 #    correctly.
 #
@@ -417,11 +414,7 @@ _bsd_stat_readlink() {
 ########10########20########30########40########50########60########70########80
 
 
-<<<<<<< HEAD
 TOOLCHEST_VERSION="1.0.1-git"
-=======
-TOOLCHEST_VERSION="1.0.0-release"
->>>>>>> 1.X.X-STABLE
 
 command -v sed > /dev/null
 if [ $? -ne 0 ] ; then
@@ -743,7 +736,7 @@ case "$DIRECTIVE" in
           echo "ERROR T526: package $PACKAGE is already installed. If this is"
           echo "            not correct, you may mark it as uninstalled using"
           echo "            \"toolchest internal package mark-uninstalled $PACKAGE\""
-          
+
           if [ $# -ge 1 ] ; then
             $0 package install "$@"
             exit $?
@@ -792,10 +785,7 @@ case "$DIRECTIVE" in
             done < "$PKG_DIR/dep/toolchest"
           fi  # if [ -f "$PKG_DIR/dep/toolchest" ] ; then
 
-<<<<<<< HEAD
           # handle OS validation
-=======
->>>>>>> 1.X.X-STABLE
           if [ -f "$PKG_DIR/dep/uname" ] ; then
             printf "INFO: validating OS requirements... "
             grep `uname` < "$PKG_DIR/dep/uname" > /dev/null
