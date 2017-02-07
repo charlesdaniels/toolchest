@@ -404,6 +404,9 @@
       * zsh-autosuggestions
       * zsh-syntax-highlighting
 
+    * Fixed a bug in system-statusline where presences of the `sensors` command
+      was not detected correctly.
+
 1.0.1:
 
   2017-02-01 - Charles Daniels:
