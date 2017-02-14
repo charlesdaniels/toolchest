@@ -441,3 +441,9 @@
     * Added wrapper for check-command-exists to coreutils
 
     * Added pdf-from-office script to pdfutils
+
+  2017-02-14 - Charles Daniels:
+
+    * add audioutil package
+
+    * add audioutil-recode script to audioutil package
