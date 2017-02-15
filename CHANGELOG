@@ -449,3 +449,7 @@
     * add audioutil-recode script to audioutil package
 
     * add audioutil-publish script to audioutil package
+
+  2017-02-15 - Charles Daniels
+
+    * add audioutil-convert-m3u to audioutil package

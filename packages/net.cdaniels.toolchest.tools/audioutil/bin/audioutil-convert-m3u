@@ -1,0 +1,72 @@
+#!/usr/bin/env bash
+########10########20########30## DOCUMENTATION #50########60########70########80
+#
+# OVERVIEW
+# ========
+# 
+# This script updates all files in a given .m3u file to have the same extension.
+# This is useful when used in conjunction with audioutil-recode for batch
+# processing. It is used by audioutil-publish to repair broken references in 
+# m3u files. 
+# 
+# Note that this script modifies the file in place. Further, GNU sed must be 
+# available in a way that will be detected by ``sensible-sed``.
+# 
+# USAGE
+# =====
+# 
+#   $1 . . . file to repair
+#   $2 . . . new extensions foe media files
+#  
+########10########20########30##### LICENSE ####50########60########70########80
+#  Copyright (c) 2017, Charles Daniels
+#  All rights reserved.
+#
+#  Redistribution and use in source and binary forms, with or without
+#  modification, are permitted provided that the following conditions are met:
+#
+#  1. Redistributions of source code must retain the above copyright notice,
+#     this list of conditions and the following disclaimer.
+#
+#  2. Redistributions in binary form must reproduce the above copyright
+#     notice, this list of conditions and the following disclaimer in the
+#     documentation and/or other materials provided with the distribution.
+#
+#  3. Neither the name of the copyright holder nor the names of its
+#     contributors may be used to endorse or promote products derived from
+#     this software without specific prior written permission.
+#
+#  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+#  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+#  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+#  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+#  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+#  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+#  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+#  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+#  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+#  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+#  POSSIBILITY OF SUCH DAMAGE.
+#
+########10########20########30########40########50########60########70########80
+
+if [ $# -lt 2 ] ; then
+  echo "ERROR 68: parameter mismatch error"
+  toolchest-doc "$0"
+  exit 1
+fi
+
+INPUT_FILE="$1"
+NEW_EXTENSION="$2"
+
+if [ ! -f "$INPUT_FILE" ] ; then
+  echo "ERROR 58: nonexistent input file $INPUT_FILE"
+  exit 1
+fi
+
+cat "$INPUT_FILE" | grep -v '^#.*$' | while read line ; do
+  extension=$(echo $line |awk -F . '{if (NF>1) {print $NF}}')
+  base="${line%.*}"
+  new_line="$base.$NEW_EXTENSION"
+  $(sensible-sed) "s#$line#$new_line#g" -i "$INPUT_FILE"
+done  

@@ -59,14 +59,6 @@
 # 
 # * output library sometimes has less files than input, may warrant
 #   investigation
-#   
-# * .m3u files which point to files with different extensions break, for
-#   example adding coolsong.flac to a playlist will cause the .m3u to break
-#   when it's extensions is changed to .mp3
-#   
-#   * the proposed solution is to iterate over all .m3u files and modify the
-#     file extensions in each to match whatever we are recoding to; this will
-#     probably be added as a new audioutil tool
 #     
 # * metadata does not seem to be preserved in when converting to/from certain
 #   formats; this may be an ffmpeg issue; a fix has been added to audioutil-
@@ -103,8 +95,6 @@
 #  POSSIBILITY OF SUCH DAMAGE.
 #
 ########10########20########30########40########50########60########70########80
-
-$(acquire-toolchest-dirs)
 
 if [ $# -lt 2 ] ; then
   echo "ERROR 68: parameter mismatch error"
@@ -159,6 +149,7 @@ echo "INFO: mirroring directory structure... "
 # first, we mirror the directory structure
 find ./ -type d -exec echo "mkdir -p \"$OUTPUT_DIR/{}\"" \; | parallel --will-cite --bar 
 
+# files to re-encode
 echo "INFO: generating batch jobs... "
 find . -type f -iname "*.mp3" \
   -or -iname "*.ogg"  \
@@ -168,13 +159,18 @@ find . -type f -iname "*.mp3" \
   -exec echo "audioutil-recode \"$INPUT_DIR/{}\" \"$OUTPUT_DIR/{}.$FILE_EXTENSION\" $ENCODING_LIBRARY $BITRATE > /dev/null 2>&1" \; \
   > "$BATCH_FILE"
 
-echo "INFO: generating batch jobs... "
+# files to copy
 find . -type f -iname "*.jpg" \
   -or -iname "*.png"  \
   -or -iname "*.txt" \
   -or -iname "*.nfo"  \
   -or -iname "*.m3u" \
   -exec echo "cp \"$INPUT_DIR/{}\" \"$OUTPUT_DIR/{}\" > /dev/null 2>&1" \; \
+  >> "$BATCH_FILE"
+
+# find m3u file for repair
+find . -type f -iname "*.m3u" \
+  -exec echo "audioutil-convert-m3u \"$OUTPUT_DIR/{}\" $FILE_EXTENSION" \; \
   >> "$BATCH_FILE"
 
 echo "INFO: generated `wc -l < $BATCH_FILE` jobs"
