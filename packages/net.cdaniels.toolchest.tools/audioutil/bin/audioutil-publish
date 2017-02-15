@@ -5,17 +5,11 @@
 # ========
 # 
 # This script will translate an entire audio library, in a recursive fashion. 
-# It will call audioutil-recode on each song found in the library. Other files
-# will be copied without modification. 
+# It will call audioutil-recode on each song found in the library. . 
 # 
 # In effect, this creates a mirror of a given audio library, but with all music
 # being converted to the same container and encoding formats. This is handy
 # when "exporting" a music library to a client device, such as an MP3 player. 
-# 
-# Note that any files which already exist in the output directory will be
-# skipped. In the future, the tool may check to see if they have changed, but 
-# at present, if you want a completely "fresh" output, you need to start with
-# an empty directory.
 # 
 # The following files are considered to be audio files by this script:
 # 
@@ -25,6 +19,14 @@
 # * opus
 # * m4a
 # 
+# The following file types will be copied, but not modified
+# 
+# * jpg
+# * png
+# * txt
+# * nfo
+# * m3u
+# 
 # Encoding support will depend on your system's ffmpeg. 
 # 
 #   
@@ -33,6 +35,11 @@
 # 
 #   $1 . . . input directory
 #   $2 . . . output directory
+#   $3 . . . (optional) output file extension (default: mp3)
+#   $4 . . . (optional) encoding library to use (default: libmp3lame)
+#   $5 . . . (optional) bitrate to use (default: 128k)
+#   $6 . . . (optional) if equal to "dryrun", batch is displayed instead of 
+#            executed
 #   
 # NOTES
 # =====
@@ -50,9 +57,7 @@
 # BUGS/TODO
 # =========
 # 
-# * output file extension is hardcoded to mp3 for now
-# 
-# * output library sometimes has less files than input, may warrent
+# * output library sometimes has less files than input, may warrant
 #   investigation
 #   
 # * .m3u files which point to files with different extensions break, for
@@ -64,13 +69,8 @@
 #     probably be added as a new audioutil tool
 #     
 # * metadata does not seem to be preserved in when converting to/from certain
-#   formats; this may be an ffmpeg issue
-#   
-# * it is not possible to set desired encoding or bitrate from this file; the
-#   fix will likely involve modifying audioutil-recode to accept these options
-#   via environment variables, then having this script set those variables
-#   accordingly.
-# 
+#   formats; this may be an ffmpeg issue; a fix has been added to audioutil-
+#   recode, but it's not clear how well it works yet.
 #  
 ########10########20########30##### LICENSE ####50########60########70########80
 #  Copyright (c) 2017, Charles Daniels
@@ -112,10 +112,28 @@ if [ $# -lt 2 ] ; then
   exit 1
 fi
 
+if [ $# -ge 3 ] ; then
+  FILE_EXTENSION="$3"
+else
+  FILE_EXTENSION="mp3"
+fi
+
+if [ $# -ge 4 ] ; then 
+  ENCODING_LIBRARY="$4"
+else
+  ENCODING_LIBRARY="libmp3lame"
+fi
+
+if [ $# -ge 5 ] ; then
+  BITRATE="$5"
+else
+  BITRATE="128k"
+fi
+
 INPUT_DIR="$1"
 OUTPUT_DIR="$2"
 STARTING_DIR="`pwd`"
-FILE_EXTENSION="mp3"
+
 
 if [ ! -d "$INPUT_DIR" ] ; then
   echo "ERROR 77: input directory fails to exist"
@@ -128,64 +146,44 @@ fi
 
 INPUT_DIR="`realpath "$INPUT_DIR"`"
 OUTPUT_DIR="`realpath "$OUTPUT_DIR"`"
-if ! (: "${AUDIOUTIL_PUBLISH_BATCHFILE?}") 2>/dev/null; then
-  BATCH_FILE="/tmp/audioutil-publish-batch_`iso8601date`"
-else
-  BATCH_FILE="$AUDIOUTIL_PUBLISH_BATCHFILE"
-fi
+BATCH_FILE="/tmp/audioutil-publish-batch_`iso8601date`"
 
 export AUDIOUTIL_PUBLISH_BATCHFILE="$BATCH_FILE"
 
 echo "INFO: input directory is: $INPUT_DIR"
 echo "INFO: output directory is: $OUTPUT_DIR"
-
-
 cd "$INPUT_DIR"
-echo "INFO: begin traversal of $INPUT_DIR"
 
-for element in * ; do
-  if [ -d "$element" ] ; then
-    $0 "$element" "$OUTPUT_DIR/$element" NOTTOP
-  elif [ -f "$element" ] ; then
-    printf "INFO: processing file $element..."
-    extension=$(echo $element |awk -F . '{if (NF>1) {print $NF}}')
-    base=`basename "$element" "$extension"`
-    if [ -e "$OUTPUT_DIR/$base$FILE_EXTENSION" ] ; then
-      echo "SKIP"
-      echo "INFO: file exists in output directory already, skipping it"
-      continue
-    fi
+echo "INFO: mirroring directory structure... "
 
-    case $extension in 
-      mp3)
-        echo "audioutil-recode \"`realpath "$element"`\" \"$OUTPUT_DIR/$base$FILE_EXTENSION\" > /dev/null 2>&1" >> "$BATCH_FILE"
-        ;;
-      m4a)
-        echo "audioutil-recode \"`realpath "$element"`\" \"$OUTPUT_DIR/$base$FILE_EXTENSION\" > /dev/null 2>&1" >> "$BATCH_FILE"
-        ;;
-      ogg)
-        echo "audioutil-recode \"`realpath "$element"`\" \"$OUTPUT_DIR/$base$FILE_EXTENSION\" > /dev/null 2>&1" >> "$BATCH_FILE"
-        ;;
-      flac)
-        echo "audioutil-recode \"`realpath "$element"`\" \"$OUTPUT_DIR/$base$FILE_EXTENSION\" > /dev/null 2>&1" >> "$BATCH_FILE"
-        ;;
-      opus)
-        echo "audioutil-recode \"`realpath "$element"`\" \"$OUTPUT_DIR/$base$FILE_EXTENSION\" > /dev/null 2>&1" >> "$BATCH_FILE"
-        ;;
-      *)
-        cp "$element" "$OUTPUT_DIR/$element"
-        ;;
-      esac
-      echo "DONE"
-  else
-    echo "INFO: skipping unknown object $element"
-  fi
-done
+# first, we mirror the directory structure
+find ./ -type d -exec echo "mkdir -p \"$OUTPUT_DIR/{}\"" \; | parallel --will-cite --bar 
 
+echo "INFO: generating batch jobs... "
+find . -type f -iname "*.mp3" \
+  -or -iname "*.ogg"  \
+  -or -iname "*.opus" \
+  -or -iname "*.m4a"  \
+  -or -iname "*.flac" \
+  -exec echo "audioutil-recode \"$INPUT_DIR/{}\" \"$OUTPUT_DIR/{}.$FILE_EXTENSION\" $ENCODING_LIBRARY $BITRATE > /dev/null 2>&1" \; \
+  > "$BATCH_FILE"
 
-if [ "$3" != "NOTTOP" ] ; then
-  echo "INFO: batch generation complete, will now begin recoding"
-  echo "INFO: $(wc -l < $BATCH_FILE) jobs will be executed"
-  parallel --will-cite --progress --bar < "$BATCH_FILE" 
-  echo "INFO: all jobs complete, re-encode complete. "
+echo "INFO: generating batch jobs... "
+find . -type f -iname "*.jpg" \
+  -or -iname "*.png"  \
+  -or -iname "*.txt" \
+  -or -iname "*.nfo"  \
+  -or -iname "*.m3u" \
+  -exec echo "cp \"$INPUT_DIR/{}\" \"$OUTPUT_DIR/{}\" > /dev/null 2>&1" \; \
+  >> "$BATCH_FILE"
+
+echo "INFO: generated `wc -l < $BATCH_FILE` jobs"
+
+echo "INFO: recoding files... "
+if [ "$6" = "dryrun" ] ; then
+  cat "$BATCH_FILE"
+else
+  parallel --will-cite --bar < "$BATCH_FILE"
 fi
+
+rm "$BATCH_FILE"

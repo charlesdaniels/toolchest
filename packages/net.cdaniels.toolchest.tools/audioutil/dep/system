@@ -2,3 +2,4 @@ ffmpeg
 realpath
 awk
 parallel
+sed

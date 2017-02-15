@@ -22,6 +22,8 @@
 # 
 #   $1 . . . input file
 #   $2 . . . output file (will be overwritten, if it exists)
+#   $3 . . . (optional) override AUDIOUTIL_RECODE_FORMAT
+#   $4 . . . (optional) override AUDIOUTIL_RECODE_BITRATE
 #  
 ########10########20########30##### LICENSE ####50########60########70########80
 #  Copyright (c) 2017, Charles Daniels
@@ -64,10 +66,18 @@ else
   AUDIOUTIL_RECODE_BITRATE="128k"
 fi
 
-if [ $# -ne 2 ] ; then
+if [ $# -lt 2 ] ; then
   echo "ERROR 68: parameter mismatch error"
   toolchest-doc "$0"
   exit 1
+fi
+
+if [ $# -ge 3 ] ; then
+  AUDIOUTIL_RECODE_FORMAT="$3"
+fi
+
+if [ $# -ge 4 ] ; then
+  AUDIOUTIL_RECODE_BITRATE="$4"
 fi
 
 INPUT_FILE="$1"
@@ -78,6 +88,6 @@ if [ ! -f "$INPUT_FILE" ] ; then
   exit 1
 fi
 
-ffmpeg -i "$INPUT_FILE" -y -vsync 2 -ac 2 -b:a $AUDIOUTIL_RECODE_BITRATE -acodec $AUDIOUTIL_RECODE_FORMAT "$OUTPUT_FILE"
+ffmpeg -i "$INPUT_FILE" -y -map_metadata 0 -vsync 2 -ac 2 -b:a $AUDIOUTIL_RECODE_BITRATE -acodec $AUDIOUTIL_RECODE_FORMAT "$OUTPUT_FILE"
 
 exit $?
