@@ -65,7 +65,6 @@ if [ ! -f "$INPUT_FILE" ] ; then
 fi
 
 cat "$INPUT_FILE" | grep -v '^#.*$' | while read line ; do
-  extension=$(echo $line |awk -F . '{if (NF>1) {print $NF}}')
   base="${line%.*}"
   new_line="$base.$NEW_EXTENSION"
   $(sensible-sed) "s#$line#$new_line#g" -i "$INPUT_FILE"

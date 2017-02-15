@@ -1,4 +1,4 @@
-#/bin/sh
+#/usr/bin/env bash
 ########10########20########30## DOCUMENTATION #50########60########70########80
 #
 # OVERVIEW
@@ -149,6 +149,7 @@ echo "INFO: mirroring directory structure... "
 # first, we mirror the directory structure
 find ./ -type d -exec echo "mkdir -p \"$OUTPUT_DIR/{}\"" \; | parallel --will-cite --bar 
 
+
 # files to re-encode
 echo "INFO: generating batch jobs... "
 find . -type f -iname "*.mp3" \
@@ -156,8 +157,9 @@ find . -type f -iname "*.mp3" \
   -or -iname "*.opus" \
   -or -iname "*.m4a"  \
   -or -iname "*.flac" \
-  -exec echo "audioutil-recode \"$INPUT_DIR/{}\" \"$OUTPUT_DIR/{}.$FILE_EXTENSION\" $ENCODING_LIBRARY $BITRATE > /dev/null 2>&1" \; \
-  > "$BATCH_FILE"
+  | while read TARGET; do
+    echo "audioutil-recode \"$INPUT_DIR/$TARGET\" \"$OUTPUT_DIR/${TARGET%.*}.$FILE_EXTENSION\" $ENCODING_LIBRARY $BITRATE > /dev/null 2>&1" >> "$BATCH_FILE"
+  done
 
 # files to copy
 find . -type f -iname "*.jpg" \

@@ -1,5 +1,5 @@
 ffmpeg
 realpath
-awk
 parallel
 sed
+bash
