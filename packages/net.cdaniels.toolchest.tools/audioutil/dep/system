@@ -1,2 +1,4 @@
 ffmpeg
-
+realpath
+awk
+parallel

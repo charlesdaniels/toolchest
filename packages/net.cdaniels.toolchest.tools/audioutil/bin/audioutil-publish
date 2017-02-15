@@ -1,0 +1,174 @@
+#/bin/sh
+########10########20########30## DOCUMENTATION #50########60########70########80
+#
+# OVERVIEW
+# ========
+# 
+# This script will translate an entire audio library, in a recursive fashion. 
+# It will call audioutil-recode on each song found in the library. Other files
+# will be copied without modification. 
+# 
+# In effect, this creates a mirror of a given audio library, but with all music
+# being converted to the same container and encoding formats. This is handy
+# when "exporting" a music library to a client device, such as an MP3 player. 
+# 
+# Note that any files which already exist in the output directory will be
+# skipped. In the future, the tool may check to see if they have changed, but 
+# at present, if you want a completely "fresh" output, you need to start with
+# an empty directory.
+# 
+# The following files are considered to be audio files by this script:
+# 
+# * mp3
+# * ogg
+# * flac
+# * opus
+# * m4a
+# 
+# Encoding support will depend on your system's ffmpeg. 
+# 
+#   
+# USAGE
+# =====
+# 
+#   $1 . . . input directory
+#   $2 . . . output directory
+#   
+# NOTES
+# =====
+# 
+# Initially, this script would spawn an ffmpeg process in the background for
+# each media file. This predictably worked very poorly for large media files.
+# It would seem that XNU does not take kindly to fork()-ing 3700 threads at
+# the same time.
+# 
+# As a result, it was re-written to generate a batch file, then use GNU
+# parallel to execute each command in the batch, this results in only one 
+# ffmpeg instance being spawned per core; still a lot of load on the system, but
+# a manageable load. 
+# 
+# BUGS/TODO
+# =========
+# 
+# * output file extension is hardcoded to ogg for now
+# * output library sometimes has less files than input, may warrent investigation
+# 
+#  
+########10########20########30##### LICENSE ####50########60########70########80
+#  Copyright (c) 2017, Charles Daniels
+#  All rights reserved.
+#
+#  Redistribution and use in source and binary forms, with or without
+#  modification, are permitted provided that the following conditions are met:
+#
+#  1. Redistributions of source code must retain the above copyright notice,
+#     this list of conditions and the following disclaimer.
+#
+#  2. Redistributions in binary form must reproduce the above copyright
+#     notice, this list of conditions and the following disclaimer in the
+#     documentation and/or other materials provided with the distribution.
+#
+#  3. Neither the name of the copyright holder nor the names of its
+#     contributors may be used to endorse or promote products derived from
+#     this software without specific prior written permission.
+#
+#  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+#  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+#  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+#  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+#  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+#  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+#  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+#  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+#  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+#  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+#  POSSIBILITY OF SUCH DAMAGE.
+#
+########10########20########30########40########50########60########70########80
+
+$(acquire-toolchest-dirs)
+
+if [ $# -lt 2 ] ; then
+  echo "ERROR 68: parameter mismatch error"
+  toolchest-doc "$0"
+  exit 1
+fi
+
+INPUT_DIR="$1"
+OUTPUT_DIR="$2"
+STARTING_DIR="`pwd`"
+FILE_EXTENSION="ogg"
+
+if [ ! -d "$INPUT_DIR" ] ; then
+  echo "ERROR 77: input directory fails to exist"
+  exit 1
+fi
+
+if [ ! -d "$OUTPUT_DIR" ] ; then
+  mkdir -p "$OUTPUT_DIR"
+fi
+
+INPUT_DIR="`realpath "$INPUT_DIR"`"
+OUTPUT_DIR="`realpath "$OUTPUT_DIR"`"
+if ! (: "${AUDIOUTIL_PUBLISH_BATCHFILE?}") 2>/dev/null; then
+  BATCH_FILE="/tmp/audioutil-publish-batch_`iso8601date`"
+else
+  BATCH_FILE="$AUDIOUTIL_PUBLISH_BATCHFILE"
+fi
+
+export AUDIOUTIL_PUBLISH_BATCHFILE="$BATCH_FILE"
+
+echo "INFO: input directory is: $INPUT_DIR"
+echo "INFO: output directory is: $OUTPUT_DIR"
+
+
+cd "$INPUT_DIR"
+echo "INFO: begin traversal of $INPUT_DIR"
+
+for element in * ; do
+  if [ -d "$element" ] ; then
+    $0 "$element" "$OUTPUT_DIR/$element" NOTTOP
+  elif [ -f "$element" ] ; then
+    printf "INFO: processing file $element..."
+    extension=$(echo $element |awk -F . '{if (NF>1) {print $NF}}')
+    base=`basename "$element" "$extension"`
+    if [ -e "$OUTPUT_DIR/$base$FILE_EXTENSION" ] ; then
+      echo "SKIP"
+      echo "INFO: file exists in output directory already, skipping it"
+      continue
+    fi
+
+    case $extension in 
+      mp3)
+        echo "audioutil-recode \"`realpath "$element"`\" \"$OUTPUT_DIR/$base$FILE_EXTENSION\" > /dev/null 2>&1" >> "$BATCH_FILE"
+        ;;
+      m4a)
+        echo "audioutil-recode \"`realpath "$element"`\" \"$OUTPUT_DIR/$base$FILE_EXTENSION\" > /dev/null 2>&1" >> "$BATCH_FILE"
+        ;;
+      ogg)
+        echo "audioutil-recode \"`realpath "$element"`\" \"$OUTPUT_DIR/$base$FILE_EXTENSION\" > /dev/null 2>&1" >> "$BATCH_FILE"
+        ;;
+      flac)
+        echo "audioutil-recode \"`realpath "$element"`\" \"$OUTPUT_DIR/$base$FILE_EXTENSION\" > /dev/null 2>&1" >> "$BATCH_FILE"
+        ;;
+      opus)
+        echo "audioutil-recode \"`realpath "$element"`\" \"$OUTPUT_DIR/$base$FILE_EXTENSION\" > /dev/null 2>&1" >> "$BATCH_FILE"
+        ;;
+      *)
+        cp "$element" "$OUTPUT_DIR/$element"
+        ;;
+      esac
+      echo "DONE"
+  else
+    echo "INFO: skipping unknown object $element"
+  fi
+done
+
+
+if [ "$3" != "NOTTOP" ] ; then
+  echo "INFO: batch generation complete, will now begin recoding"
+  echo "INFO: $(wc -l < $BATCH_FILE) jobs will be executed"
+  printf "INFO: recoding... "
+  parallel --will-cite < "$BATCH_FILE" > /dev/null
+  echo "DONE"
+fi

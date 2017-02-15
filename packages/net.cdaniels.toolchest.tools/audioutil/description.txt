@@ -1,3 +1,5 @@
 A collection of tools, scripts, and utilities for working with audo files. 
 
 audioutil-recode . . . re-encode audio files individually
+
+audioutil-publish  . . re-encode an audio library, keeping structure

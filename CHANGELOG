@@ -447,3 +447,5 @@
     * add audioutil package
 
     * add audioutil-recode script to audioutil package
+
+    * add audioutil-publish script to audioutil package
