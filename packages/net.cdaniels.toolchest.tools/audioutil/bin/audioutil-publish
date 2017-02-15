@@ -97,7 +97,7 @@ fi
 INPUT_DIR="$1"
 OUTPUT_DIR="$2"
 STARTING_DIR="`pwd`"
-FILE_EXTENSION="ogg"
+FILE_EXTENSION="mp3"
 
 if [ ! -d "$INPUT_DIR" ] ; then
   echo "ERROR 77: input directory fails to exist"

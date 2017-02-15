@@ -13,7 +13,7 @@
 # Note that this file is sourced by sh, and should be written appropriately. 
 # Keys not specified are set to their defaults. 
 # 
-#   AUDIOUTIL_RECODE_FORMAT . . . audio library to use (default: libopus)
+#   AUDIOUTIL_RECODE_FORMAT . . . audio library to use (default: libmp3lame)
 #   
 #   AUDIOUTIL_RECODE_BITRATE  . . audio bitrate (default: 128k)
 #   
@@ -60,7 +60,7 @@ CONFIG_FILE="$NET_CDANIELS_TOOLCHEST_DIR/local/config/audioutil-recode.cfg"
 if [ -f "$CONFIG_FILE" ] ; then
   . "$CONFIG_FILE"
 else
-  AUDIOUTIL_RECODE_FORMAT="libopus"
+  AUDIOUTIL_RECODE_FORMAT="libmp3lame"
   AUDIOUTIL_RECODE_BITRATE="128k"
 fi
 
@@ -78,6 +78,6 @@ if [ ! -f "$INPUT_FILE" ] ; then
   exit 1
 fi
 
-ffmpeg -i "$INPUT_FILE" -b:a $AUDIOUTIL_RECODE_BITRATE -c:a $AUDIOUTIL_RECODE_FORMAT "$OUTPUT_FILE"
+ffmpeg -i "$INPUT_FILE" -y -vsync 2 -ac 2 -b:a $AUDIOUTIL_RECODE_BITRATE -acodec $AUDIOUTIL_RECODE_FORMAT "$OUTPUT_FILE"
 
 exit $?
