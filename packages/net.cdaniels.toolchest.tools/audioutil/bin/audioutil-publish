@@ -168,7 +168,6 @@ done
 if [ "$3" != "NOTTOP" ] ; then
   echo "INFO: batch generation complete, will now begin recoding"
   echo "INFO: $(wc -l < $BATCH_FILE) jobs will be executed"
-  printf "INFO: recoding... "
-  parallel --will-cite < "$BATCH_FILE" > /dev/null
-  echo "DONE"
+  parallel --will-cite --progress --bar < "$BATCH_FILE" 
+  echo "INFO: all jobs complete, re-encode complete. "
 fi
