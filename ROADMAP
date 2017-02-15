@@ -52,13 +52,6 @@ net.cdaniels.python:
 
     * default log path should probably go to /tmp, rather than ./
 
-musicutil:
-
-  * tool for exporting music library with various encodings; should be able to
-    take a given music library with a particular folder structure, and produce
-    a media library with the same folder structure, but re-encoded using the
-    desired settings. The tool should use ffmpeg for encoding.
-
 215util:
 
   * package for CSCE215-TA related utilities
@@ -98,3 +91,11 @@ invoke-pdfpenpro-ocr:
   "/Users/cad/.net.cdaniels.toolchest/local/bin/invoke-pdfpenpro-
   ocr:3089:3095: script error: Expected end of line, etc. but found
   identifier. (-2741)"
+
+audioutil:
+
+  * new script, audioutil-namebytag, which would rename a media file according
+    to it's metadata tags
+
+  * new script, audioutil-organize, which would leverage audioutil-namebytag
+    to validate folder structure, file naming conventions, and tags

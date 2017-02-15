@@ -50,8 +50,26 @@
 # BUGS/TODO
 # =========
 # 
-# * output file extension is hardcoded to ogg for now
-# * output library sometimes has less files than input, may warrent investigation
+# * output file extension is hardcoded to mp3 for now
+# 
+# * output library sometimes has less files than input, may warrent
+#   investigation
+#   
+# * .m3u files which point to files with different extensions break, for
+#   example adding coolsong.flac to a playlist will cause the .m3u to break
+#   when it's extensions is changed to .mp3
+#   
+#   * the proposed solution is to iterate over all .m3u files and modify the
+#     file extensions in each to match whatever we are recoding to; this will
+#     probably be added as a new audioutil tool
+#     
+# * metadata does not seem to be preserved in when converting to/from certain
+#   formats; this may be an ffmpeg issue
+#   
+# * it is not possible to set desired encoding or bitrate from this file; the
+#   fix will likely involve modifying audioutil-recode to accept these options
+#   via environment variables, then having this script set those variables
+#   accordingly.
 # 
 #  
 ########10########20########30##### LICENSE ####50########60########70########80
