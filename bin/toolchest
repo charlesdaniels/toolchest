@@ -414,7 +414,7 @@ _bsd_stat_readlink() {
 ########10########20########30########40########50########60########70########80
 
 
-TOOLCHEST_VERSION="1.0.1-git"
+TOOLCHEST_VERSION="1.0.1-release"
 
 command -v sed > /dev/null
 if [ $? -ne 0 ] ; then
