@@ -112,3 +112,18 @@ archiveutil:
     over simply using cvfz/cvfJ, it will make it easier to plug in tools like
     pv, and will also improve compatibility with older versions of tar which
     lack native support for gz and/or xz.
+
+  * it may be worthwhile to create a slightly more advanced archive format, 
+    perhaps by splitting files into, say, 100M chunks, then generating parity 
+    blocks using par2, then compressing each individual file with gz/xz as 
+    before. This would confer a number of potential benefits, for one both 
+    compressions and decompression could be easily parallelized using off the
+    shelf tools like parallel, and adding parity would improve archive durability. 
+    Further, this would not reduce compatibility, as anyone in the future 
+    who can decompress gz/xz files should be able to concatenate the results, 
+    even if not on UNIX systems. The par2 parity files may be rendered useless
+    in the future, but provided the chunks of the archive are not corrupt, 
+    that will not prevent the archive from being reconstructed. 
+
+    The compatibility of gz/xz/tar with future systems as moot, as archive-
+    create already creates those anyway.
