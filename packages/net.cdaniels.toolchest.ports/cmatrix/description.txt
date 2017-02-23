@@ -1,0 +1,18 @@
+Upstream description: 
+
+     
+
+        CMatrix is a program I wrote one evening because I didn't want to have
+        to run Wind*ws to see the cool scrolling lines from 'The Matrix', my
+        fave movie.  If you haven't seen this movie and you are a fan of
+        computers or sci-fi in general, go see this movie!!!  I have seen it
+        twice, and I'm pondering seeing it again before it comes out on VHS.
+
+        Cmatrix is written in ncurses under Linux, and should compile on other
+        OSes with few modifications.  I  am always interested to hear from
+        people who use this program and any modifications they make to it!
+
+        CMatrix is distributed via the GNU GPL, please see the COPYING file or
+        the GNU Project homepage  for more information.
+
+
