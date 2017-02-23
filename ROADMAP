@@ -99,3 +99,16 @@ audioutil:
 
   * new script, audioutil-organize, which would leverage audioutil-namebytag
     to validate folder structure, file naming conventions, and tags
+
+archiveutil:
+
+  * archive-create should check the total size of the folder being archived. If
+    it exceeds 1GB in size, archive-create should use gzip compression, rather
+    than xz. This is because xz falls off a performance cliff for large files. 
+
+  * archive-create should utilize streams for compression. That is, the
+    archive tarball will be generated first, then piped through gz or xz to
+    produce the output file. While this does not confer any obvious benefit
+    over simply using cvfz/cvfJ, it will make it easier to plug in tools like
+    pv, and will also improve compatibility with older versions of tar which
+    lack native support for gz and/or xz.

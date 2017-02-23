@@ -84,7 +84,7 @@ CWD = os.getcwd()
 # file extensions which are considered valid candidates for notes
 file_extensions = ['pdf', 'rst']
 # directory where school-related documents are stored
-school_dir = os.path.join(HOME, "Documents/School/Spring 2017")
+school_dir = os.path.join(HOME, "RCS/School/Spring 2017")
 # substrings which indicate lecture notes
 lecture_notes = ['lecture notes', 'lecture']
 # substrings which indicate projects
