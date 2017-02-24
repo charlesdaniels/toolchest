@@ -4,14 +4,14 @@
 #  OVERVIEW
 #  ========
 #  This script produces an archive, as well as a manifest file and checksums
-#  for both the archive and it's contents. It uses xz compression to generate
+#  for both the archive and it's contents. It uses gz compression to generate
 #  the archive.
 #  
 #  USAGE
 #  =====
 #   $1 . . . . the directory to archive
 #
-########10########20########30#### LISCENSE ####50########60########70########80
+########10########20########30##### LICENSE ####50########60########70########80
 #  Copyright (c) 2016, Charles Daniels
 #  All rights reserved.
 # 
@@ -56,8 +56,8 @@ if [ ! -d "$ARCHIVE_DIR" ] ; then
   exit 1
 fi
 
-if [ -e "$ARCHIVE_DIR.tar.xz" ] ; then
-  echo "ERROR: $ARCHIVE_DIR.tar.xz already exists"
+if [ -e "$ARCHIVE_DIR.tar.gz" ] ; then
+  echo "ERROR: $ARCHIVE_DIR.tar.gz already exists"
   exit 1
 fi
 
@@ -115,7 +115,7 @@ cp $TEMP_DIR/*txt "$ARCHIVE_DIR/archive_info"
 echo "done"
 
 printf "STATUS: compressing archive ... "
-tar cvfJ "$ARCHIVE_DIR.tar.xz" "$ARCHIVE_DIR" > "$ARCHIVE_DIR.manifest" 2>&1
+tar cvfz "$ARCHIVE_DIR.tar.gz" "$ARCHIVE_DIR" > "$ARCHIVE_DIR.manifest" 2>&1
 echo "done"
 
 printf "STATUS: removing workspace... "
