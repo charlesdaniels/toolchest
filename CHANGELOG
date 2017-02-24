@@ -456,6 +456,10 @@
 
 1.0.2: 
 
-  2017-02-18 - Charles Daniels
+  2017-02-18 - Charles Daniels:
 
     * add cmatrix port
+
+  2017-02-24 - Charles Daniels:
+
+    * archive-create now create .gz files, rather than .xz
