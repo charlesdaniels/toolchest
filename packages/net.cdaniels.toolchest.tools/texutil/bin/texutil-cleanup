@@ -105,8 +105,8 @@ for file in $TARGET_FILES; do
     if [ -e "$file_base.toc" ] ; then
       rm "$file_base.toc"
     fi
-    if [ -e *-blx.bib ] ; then
-      rm *-blx.bib
+    if [ -e `echo "$file_base" | tr " " "_"`-blx.bib ] ; then
+      rm `echo "$file_base" | tr " " "_"`-blx.bib
     fi
     if [ -e "texput.log" ] ; then
       rm texput.log
