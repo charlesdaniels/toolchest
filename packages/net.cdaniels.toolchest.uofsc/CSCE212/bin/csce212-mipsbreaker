@@ -200,5 +200,5 @@ for line in stdin:
   elif instruction_meta['type'] == 'I':
     stdout(parseInstruction_I(instruction))
   else:
-    stdout("#{} (mupsbreaker does not understand instruction format {})"
+    stdout("#{} (mipsbreaker does not understand instruction format {})"
       .format(instruction_pretty, instruction_meta['type']))
