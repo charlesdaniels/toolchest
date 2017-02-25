@@ -468,3 +468,7 @@
 
     * fixed a bug in texutil-cleanup where multiple files ending in -blx.bib
       would cause the script to crash.
+
+    * add net.cdaniels.toolchest.uofsc package repo for UofSC related scripts
+
+    * add CSCE212 package to uofsc package repo for CSCE212 related utilities

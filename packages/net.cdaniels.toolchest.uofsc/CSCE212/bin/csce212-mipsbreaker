@@ -1,0 +1,204 @@
+#!/usr/bin/env python3
+########10########20########30## DOCUMENTATION #50########60########70########80
+#
+#  OVERVIEW
+#  ========
+# 
+#  This tool provides simple disassembly facilities for MIPS, as implemented
+#  by MARS. 
+#  
+#  USAGE
+#  =====
+#  
+#  Lines should be passed in on standard input where each line is a hexadecimal
+#  number of the format 0xNNNNNNNN
+#  
+#  Care should be taken to avoid malformed input, as rigorous error checking is
+#  not used. 
+#  
+#  Informational messages will be displayed on standard error, and MARS-
+#  compatible MIPS instructions will be emitted on standard output.
+#  
+#  Note that not all instructions are supported; typically they are added on an
+#  as-needed basis. 
+#  
+########10########20########30##### LICENSE ####50########60########70########80
+#  Copyright (c) 2017, Charles Daniels
+#  All rights reserved.
+# 
+#  Redistribution and use in source and binary forms, with or without
+#  modification, are permitted provided that the following conditions are met:
+# 
+#  1. Redistributions of source code must retain the above copyright notice,
+#     this list of conditions and the following disclaimer.
+#  
+#  2. Redistributions in binary form must reproduce the above copyright
+#     notice, this list of conditions and the following disclaimer in the
+#     documentation and/or other materials provided with the distribution.
+# 
+#  3. Neither the name of the copyright holder nor the names of its
+#     contributors may be used to endorse or promote products derived from
+#     this software without specific prior written permission.
+# 
+#  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+#  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+#  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+#  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+#  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+#  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+#  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+#  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+#  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+#  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+#  POSSIBILITY OF SUCH DAMAGE.
+#  
+########10########20########30########40########50########60########70########80
+
+import os
+import sys
+
+stdin = sys.stdin
+stdout = sys.stdout.write
+stderr = sys.stderr.write
+
+# care must be taken to ensure that this list matches up exactly with the
+# actual register layout, that way we can subscript into it by register
+# number.
+registers = ['$zero',
+             '$at',
+             '$v0',
+             '$v1',
+             '$a0',
+             '$a1',
+             '$a2',
+             '$a3',
+             '$t0',
+             '$t1',
+             '$t2',
+             '$t3',
+             '$t4',
+             '$t5',
+             '$t6',
+             '$t7',
+             '$s0',
+             '$s1',
+             '$s2',
+             '$s3',
+             '$s4',
+             '$s5',
+             '$s6',
+             '$s7',
+             '$t8',
+             '$t9',
+             '$k0',
+             '$k1',
+             '$gp',
+             '$sp',
+             '$fp',
+             '$ra']
+
+
+# define known instructions
+# 
+# Keys are instruction's opcode in binary, as strings. For R-type instructions, 
+# the trailing 11 bits are appended after a ':'
+# 
+# literal_zero should be True if 00000 should produce '$zero' when used as a
+# register index, and False if 00000 should produce '' when used as a register
+# index.
+instructions = {}
+instructions['001000']             = {'type':'I', 'name':'addi', 'literal_zero':True  }
+instructions['000000:00000100000'] = {'type':'R', 'name':'add',  'literal_zero':True  }
+instructions['000000:00000100010'] = {'type':'R', 'name':'sub',  'literal_zero':True  }
+instructions['000000:00000011000'] = {'type':'R', 'name':'mul',  'literal_zero':False }
+instructions['000000:00000011010'] = {'type':'R', 'name':'div',  'literal_zero':False }
+instructions['101011']             = {'type':'I', 'name':'sw',   'literal_zero':True  }
+instructions['000000:00000101010'] = {'type':'R', 'name':'slt',  'literal_zero':True  }
+instructions['000000:00000100100'] = {'type':'R', 'name':'and',  'literal_zero':True  }
+instructions['001010']             = {'type':'I', 'name':'slti', 'literal_zero':True  }
+instructions['001100']             = {'type':'I', 'name':'andi', 'literal_zero':True  }
+
+def parseInstruction_I(i):
+  # parse an I-type instruction
+  assert(len(i) == 32)
+
+  opcode = str(instructions[i[0:6]]['name'])
+  Rs     = str(registers[int(i[6 :11], 2)])
+  Rt     = str(registers[int(i[11:16], 2)])
+  const  = str(int(i[16:32], 2))
+
+  return("{} {}, {}, {}\n".format(opcode, Rs, Rt, const))
+
+def parseInstruction_R(i):
+  # parse an R-type instruction
+  assert(len(i) == 32)
+
+  index = i[0:6] + ":" + i[21:32]
+  opcode = str(instructions[index]['name'])
+  Rs     = str(registers[int(i[6 :11], 2)])
+  Rt     = str(registers[int(i[11:16], 2)])
+  Rd     = str(registers[int(i[16:21], 2)])
+
+  if not instructions[index]['literal_zero']:
+    if Rs == '$zero':
+      Rs = ''
+    if Rt == '$zero':
+      Rt = ''
+    if Rd == '$zero':
+      Rd = ''
+
+  return("{} {}, {}, {}\n".format(opcode, Rs, Rt, Rd))
+
+for line in stdin:
+  # clean up the right hand side
+  line = line.rstrip()
+  line = line.replace('\n', '')
+  line = line.replace('\r', '')
+
+  # strip the 0x, we don't need it
+  if line[0:2] == '0x':
+    line = line[2:]
+
+  # convert the line to binary
+  stderr("INFO: processing line '{}'\n".format(line))
+  instruction = str(bin(int(line, 16)))[2:]
+
+  # make sure the instruction is 32 bits long
+  while len(instruction) < 32:
+    instruction = "0" + instruction
+
+  # display the way we parsed the line in a pleasing format (spaces every byte)
+  byte_length = 8
+  instruction_pretty = \
+    ' '.join(instruction[i:i+byte_length] for i in range(0, 
+                                                         len(instruction),
+                                                         byte_length))
+  stderr("INFO: converted line as such: '{}'\n".format(instruction_pretty))
+
+  # parse out the opcode
+  opcode = instruction[0:6]
+  stderr("INFO: instruction opcode is: {}\n".format(opcode))
+
+  # if we don't have this instruction on file, cop out
+  instruction_meta = None
+  if opcode not in instructions:
+    index = opcode + ":" + instruction[21:32]
+    if index not in instructions:
+      stdout("#{} (mipsbreaker was not able to parse this instruction)\n"
+        .format(instruction_pretty))
+      continue
+    else:
+      instruction_meta = instructions[index]
+  else:
+    instruction_meta = instructions[opcode]
+
+  assert(instruction_meta is not None)
+
+  # parse and display the instruction
+  if instruction_meta['type'] == 'R':
+    stdout(parseInstruction_R(instruction))
+  elif instruction_meta['type'] == 'I':
+    stdout(parseInstruction_I(instruction))
+  else:
+    stdout("#{} (mupsbreaker does not understand instruction format {})"
+      .format(instruction_pretty, instruction_meta['type']))
