@@ -30,3 +30,12 @@ pakages/net.cdaniels.toolchest.tools/audioutil
       Tested on: Darwin leto.local 16.4.0 Darwin Kernel Version 16.4.0: Thu Dec 22 22:53:21 PST 2016; root:xnu-3789.41.3~3/RELEASE_X86_64 x86_64
 
                  Mon Feb 27 22:00:21 EST 2017
+
+    # 3 - OPEN
+
+    * script seems to produce garbled output from certain lines of input. This 
+      is likely due to inputs containing special characters, or characters that
+      the shell does not know how to handle. Further investigation is required,
+      but it seems like the most sensible course of action would be to simply
+      rewrite audioutil-convert-m3u in python, which should handle special
+      characters in filenames without issue. 
