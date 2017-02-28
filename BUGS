@@ -12,7 +12,7 @@ packages/net.cdaniels.toolchest.tools/texutil:
 
                  Sat Feb 25 16:18:32 EST 2017
 
-pakages/net.cdaniels.toolchest.tools/audioutil
+packages/net.cdaniels.toolchest.tools/audioutil
 
   audioutil-convert-m3u
 
@@ -31,7 +31,7 @@ pakages/net.cdaniels.toolchest.tools/audioutil
 
                  Mon Feb 27 22:00:21 EST 2017
 
-    # 3 - CLOSED
+    # 3 - CLOSED 2017-02-28
 
     * script seems to produce garbled output from certain lines of input. This 
       is likely due to inputs containing special characters, or characters that
@@ -40,4 +40,21 @@ pakages/net.cdaniels.toolchest.tools/audioutil
       rewrite audioutil-convert-m3u in python, which should handle special
       characters in filenames without issue. 
 
-    * resolved on 2017-02-28
+packages/net.cdaniels.toolchest.tools/pdfutils
+
+  invoke-pdfpenpro-ocr
+
+    #4 - OPEN
+
+    * Script seems to have bitrotted and no longer works correctly. 
+
+    * Sample error output:
+
+      "/Users/cad/.net.cdaniels.toolchest/local/bin/invoke-pdfpenpro-
+      ocr:3089:3095: script error: Expected end of line, etc. but found
+      identifier. (-2741)"
+
+    * Further tested on 2017-02-28 confirms that this issue is not related to
+      special characters in file names, or other pathing-related issues. 
+
+    Tested on: 2017-01-30

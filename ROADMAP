@@ -34,7 +34,7 @@ toolchest:
     * validate that python is installed for generate-separator or move it to a
       package
 
-  * the toolchest management utility (i.ew. the ``toolchest`` command) has
+  * the toolchest management utility (i.e. the ``toolchest`` command) has
     become a bit unwieldy in terms of size (> 1k LOC). It should probably be
     split apart into libraries.
 
@@ -83,14 +83,6 @@ runtime:
 sort-notes:
 
   * should be configurable via local/config
-
-invoke-pdfpenpro-ocr:
-
-  * confirmed on 2017-01-30 that invoke-pdfpenpro-ocr breaks with this error:
-
-  "/Users/cad/.net.cdaniels.toolchest/local/bin/invoke-pdfpenpro-
-  ocr:3089:3095: script error: Expected end of line, etc. but found
-  identifier. (-2741)"
 
 audioutil:
 
