@@ -9,3 +9,20 @@ packages/net.cdaniels.toolchest.tools/texutil:
       Tested on: Darwin leto.local 16.4.0 Darwin Kernel Version 16.4.0: Thu Dec 22 22:53:21 PST 2016; root:xnu-3789.41.3~3/RELEASE_X86_64 x86_64
 
                  Sat Feb 25 16:18:32 EST 2017
+
+pakages/net.cdaniels.toolchest.tools/audioutil
+
+  audioutil-convert-m3u
+
+    * Script does not update the library root path. For example, converting 
+      a playlist which formerly referred to /foo/bar/baz, but now refers to 
+      /foo/bar/music would result in the playlist's entries still being given
+      relative to /foo/bar/baz.
+
+      To fix this, a check needs to be added to see if the current element 
+      is specified by an absolute path, and if so, convert it to a relative 
+      path or otherwise update the root component thereof. 
+
+      Tested on: Darwin leto.local 16.4.0 Darwin Kernel Version 16.4.0: Thu Dec 22 22:53:21 PST 2016; root:xnu-3789.41.3~3/RELEASE_X86_64 x86_64
+
+                 Mon Feb 27 22:00:21 EST 2017
