@@ -2,8 +2,8 @@ packages/net.cdaniels.toolchest.tools/texutil:
   
   texutil-mktex:
 
-    # 1
-    
+    # 1 - OPEN
+
     * Script does not respond correctly to providing input files on $@, but 
       does work correctly when "-r" is passed. This may be due to handling of
       spaces in the input file list. 
@@ -16,7 +16,7 @@ pakages/net.cdaniels.toolchest.tools/audioutil
 
   audioutil-convert-m3u
 
-    # 2
+    # 2 - OPEN
 
     * Script does not update the library root path. For example, converting 
       a playlist which formerly referred to /foo/bar/baz, but now refers to 
