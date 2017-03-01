@@ -1,0 +1,128 @@
+#!/bin/sh
+########10########20########30## DOCUMENTATION #50########60########70########80
+#
+# OVERVIEW
+# ========
+# 
+# Accepts a music library by argument. Calls into itunes_tools to import all 
+# music files in the library. The result should be comparable to manually 
+# importing each song one at a time via the iTunes GUI. 
+# 
+# It will also import playlists/*.m3u (relative to input library root), other
+# m3u files will be ignored. 
+# 
+# !!! WARNING !!!
+# 
+# This script will DELETE all existing iTunes data each time it is executed.
+# Any changes you have made in iTunes to playlists, media files, and so on, as
+# well as any music files which exist only in iTunes will be PERMENANTLY
+# DESTROYED.
+# 
+# USAGE
+# =====
+# 
+# $1 . . . . path to input library
+# 
+# $2 . . . . (optional) path to iTunes library (default: ~/Music/iTunes)
+#  
+########10########20########30##### LICENSE ####50########60########70########80
+#  Copyright (c) 2017, Charles Daniels
+#  All rights reserved.
+#
+#  Redistribution and use in source and binary forms, with or without
+#  modification, are permitted provided that the following conditions are met:
+#
+#  1. Redistributions of source code must retain the above copyright notice,
+#     this list of conditions and the following disclaimer.
+#
+#  2. Redistributions in binary form must reproduce the above copyright
+#     notice, this list of conditions and the following disclaimer in the
+#     documentation and/or other materials provided with the distribution.
+#
+#  3. Neither the name of the copyright holder nor the names of its
+#     contributors may be used to endorse or promote products derived from
+#     this software without specific prior written permission.
+#
+#  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+#  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+#  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+#  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+#  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+#  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+#  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+#  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+#  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+#  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+#  POSSIBILITY OF SUCH DAMAGE.
+#
+########10########20########30########40########50########60########70########80
+
+check-command-exists itunes_add_missing
+if [ $? -ne 0 ] ; then
+  echo "ERROR 62: could not locate command 'itunes_add_missing', is itunes_tools installed?" > /dev/stderr
+  exit 1
+fi
+
+check-command-exists build_itunes_playlists
+if [ $? -ne 0 ] ; then
+  echo "ERROR 68: could not locate command 'build_itunes_playlists', is itunes_tools installed?" > /dev/stderr
+  exit 1
+fi
+
+INPUT_LIBRARY="$1"
+OUTPUT_LIBRARY="$HOME/Music/iTunes"
+
+if [ $# -ne 1 ] ; then
+  if [ $# -eq 2 ] ; then
+    OUTPUT_LIBRARY="$2"
+  else
+    echo "ERROR 79: invalid arguments!"
+    toolchest-doc $0
+    exit 1
+  fi
+fi 
+
+if [ ! -d "$INPUT_LIBRARY" ] ; then
+  echo "ERROR 86: input library '$INPUT_LIBRARY' fails to exist"
+  exit 1
+fi
+
+if [ ! -d "$OUTPUT_LIBRARY" ] ; then
+  echo "ERROR 91: output library '$OUTPUT_LIBRARY' fails to exist"
+  exit 1
+fi
+
+printf "INFO: killing running iTunes instance, if any... "
+osascript -e "tell application \"iTunes\" to quit" > /dev/null 2>&1
+killall iTunesHelper > /dev/null 2>&1
+echo "DONE"
+
+printf "INFO: deleting iTunes library... "
+rm -r "$OUTPUT_LIBRARY" > /dev/null 2>&1
+mkdir "$OUTPUT_LIBRARY"
+echo "DONE"
+
+printf "INFO: launching iTunes... "
+osascript -e "tell application \"iTunes\" to launch" > /dev/null 2>&1
+sleep 1
+osascript -e "tell application \"iTunes\" to launch" > /dev/null 2>&1
+sleep 1
+osascript -e "tell application \"iTunes\" to launch" > /dev/null 2>&1
+sleep 1
+echo "DONE"
+
+printf "INFO: import music files (this may take some time)... "
+find "$INPUT_LIBRARY" -name "*.mp3" | itunes_add_missing > /dev/null 2>&1
+find "$INPUT_LIBRARY" -name "*.aac" | itunes_add_missing > /dev/null 2>&1
+find "$INPUT_LIBRARY" -name "*.aiff" | itunes_add_missing > /dev/null 2>&1
+echo "DONE"
+
+printf "INFO: importing playlists... "
+if [ -d "$INPUT_LIBRARY/playlists" ] ; then
+  cd "$INPUT_LIBRARY/playlists"
+  build_itunes_playlists . > /dev/null 2>&1
+  echo "DONE"
+else
+  echo "FAIL"
+  echo "ERROR 126: '$INPUT_LIBRARY/playlists' does not exist!"
+fi

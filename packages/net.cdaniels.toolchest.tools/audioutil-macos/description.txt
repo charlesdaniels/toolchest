@@ -1,0 +1,10 @@
+audioutil-related extensions which interact with iTunes on macos
+
+audioutil-publish-itunes 
+
+  invokes audioutil-publish, then audioutil-itunes-import on the resulting
+  library
+
+audioutil-itunes-import
+
+  takes a music library and imports it into iTunes

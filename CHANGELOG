@@ -482,3 +482,9 @@
   2017-03-01 - Charles Daniels:
 
     * added itunes_tools port 
+
+    * added audioutil-macos package
+
+      * audioutil-itunes-import
+
+      * audioutil-publish-itunes
