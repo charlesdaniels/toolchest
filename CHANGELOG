@@ -473,8 +473,12 @@
 
     * add CSCE212 package to uofsc package repo for CSCE212 related utilities
 
-  2017-02-28 - Charles Daniels
+  2017-02-28 - Charles Daniels:
 
     * fixed bug #3
 
     * python3 is now a system dependency of audioutil
+
+  2017-03-01 - Charles Daniels:
+
+    * added itunes_tools port 

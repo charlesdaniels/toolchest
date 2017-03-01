@@ -38,6 +38,11 @@ toolchest:
     become a bit unwieldy in terms of size (> 1k LOC). It should probably be
     split apart into libraries.
 
+  * it would be neat if missing ``system`` dependancies could automatically
+    be searched using a tool like static-get and installed to local/bin. 
+
+    static-get: http://javier.io/blog/en/2015/06/23/static-get.html
+
 carbonite:
 
   * remove limitation where payload filename cannot contain spaces
@@ -91,6 +96,11 @@ audioutil:
 
   * new script, audioutil-organize, which would leverage audioutil-namebytag
     to validate folder structure, file naming conventions, and tags
+
+  * script to take the output of audioutil-publish and import it into iTunes.
+    Will most likely be backed by this:
+
+    https://github.com/jacobvosmaer/itunes_tools
 
 archiveutil:
 
