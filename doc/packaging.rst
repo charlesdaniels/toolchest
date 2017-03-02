@@ -34,6 +34,10 @@ Toolchest packages are simply directories which contain the following files:
   - ``uname`` - newline delimited list of OS ``uname``s - the host OS must
     match one or more of them in order for the package to install.
 
+  - ``remote`` - a list of URLs which are to be fetched before attempting to
+    install the package; should the fetching fail, the installer will not 
+    be executed. 
+
 The rest of the package folder may be structured in whatever way best suits
 the package.
 
@@ -104,6 +108,8 @@ At time of writing, the following repositories come with the toolchest:
   example and demo packages
 * net.cdaniels.toolchest.tools - assorted tools and utilities
 * net.cdaniels.toolchest.ports - programs which were written by other people
+* net.cdaniels.toolchest.uofsc - tool and utilities relating to University of
+  South Carolina courses and whatnot. 
 
 You may install additional repositories by placing an appropriately structured
 directory tree in the packages/ directory, and you may uninstall a repository

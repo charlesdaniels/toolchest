@@ -488,3 +488,10 @@
       * audioutil-itunes-import
 
       * audioutil-publish-itunes
+
+    * modified audioutil-recode to check for the environment variable 
+      AUDIOUTIL_RECODE_NOVERWRITE, if it is "YES", and the output file
+      already exists, then the script exists silently.
+
+    * $NET_CDANIELS_TOOLCHEST_LOCAL/cache is now a part of the standard
+      installation.

@@ -43,6 +43,10 @@ toolchest:
 
     static-get: http://javier.io/blog/en/2015/06/23/static-get.html
 
+  * an updater should be added, which given the path to a .tar.gz or directory
+    with a newer toolchest version which can update the local installation 
+    with the new version. 
+
 carbonite:
 
   * remove limitation where payload filename cannot contain spaces
