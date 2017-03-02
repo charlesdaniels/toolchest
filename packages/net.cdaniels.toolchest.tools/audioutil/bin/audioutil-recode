@@ -3,28 +3,38 @@
 #
 # OVERVIEW
 # ========
-# 
-# This script re-encodes a given music file to ogg/vorbis. 
-# 
-# The following settings can be specified in 
-# 
+#
+# This script re-encodes a given music file to ogg/vorbis.
+#
+# The following settings can be specified in
+#
 # $NET_CDANIELS_TOOLCHEST_DIR/local/config/audioutil-recode.cfg
-# 
-# Note that this file is sourced by sh, and should be written appropriately. 
-# Keys not specified are set to their defaults. 
-# 
+#
+# Note that this file is sourced by sh, and should be written appropriately.
+# Keys not specified are set to their defaults.
+#
 #   AUDIOUTIL_RECODE_FORMAT . . . audio library to use (default: libmp3lame)
-#   
+#
 #   AUDIOUTIL_RECODE_BITRATE  . . audio bitrate (default: 128k)
-#   
+#
 # USAGE
 # =====
-# 
+#
 #   $1 . . . input file
 #   $2 . . . output file (will be overwritten, if it exists)
 #   $3 . . . (optional) override AUDIOUTIL_RECODE_FORMAT
 #   $4 . . . (optional) override AUDIOUTIL_RECODE_BITRATE
-#  
+#
+# ENVIRONMENT VARIABLES
+# =====================
+#
+#   AUDIOUTIL_RECODE_NOVERWRITE . . . if "YES", and the output file exists,
+#                                     then the script will silently skip
+#                                     without overwriting it. This feature is
+#                                     intended for use by other toolchest
+#                                     scripts only.
+#
+#
 ########10########20########30##### LICENSE ####50########60########70########80
 #  Copyright (c) 2017, Charles Daniels
 #  All rights reserved.
@@ -82,6 +92,12 @@ fi
 
 INPUT_FILE="$1"
 OUTPUT_FILE="$2"
+
+if [ -e "$OUTPUT_FILE" ] ; then
+  if [ $AUDIOUTIL_RECODE_NOVERWRITE = "YES" ] ; then
+    exit 0
+  fi
+fi
 
 if [ ! -f "$INPUT_FILE" ] ; then
   echo "ERROR 77: input file fails to exist"
