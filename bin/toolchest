@@ -956,6 +956,7 @@ case "$DIRECTIVE" in
     mkdir "$NET_CDANIELS_TOOLCHEST_DIR/local/log"
     mkdir "$NET_CDANIELS_TOOLCHEST_DIR/local/backup"
     mkdir "$NET_CDANIELS_TOOLCHEST_DIR/local/config"
+    mkdir "$NET_CDANIELS_TOOLCHEST_DIR/local/cache"
     cp -r local.bak/config/* local/config/
     rm local/config/packages.list
     for packagename in `cat local.bak/config/packages.list` ; do
