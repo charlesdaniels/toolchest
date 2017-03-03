@@ -3,67 +3,69 @@
 #
 # OVERVIEW
 # ========
-# 
-# This script will translate an entire audio library, in a recursive fashion. 
-# It will call audioutil-recode on each song found in the library. . 
-# 
+#
+# This script will translate an entire audio library, in a recursive fashion.
+# It will call audioutil-recode on each song found in the library. .
+#
 # In effect, this creates a mirror of a given audio library, but with all music
 # being converted to the same container and encoding formats. This is handy
-# when "exporting" a music library to a client device, such as an MP3 player. 
-# 
+# when "exporting" a music library to a client device, such as an MP3 player.
+#
 # The following files are considered to be audio files by this script:
-# 
+#
 # * mp3
 # * ogg
 # * flac
 # * opus
 # * m4a
-# 
+#
 # The following file types will be copied, but not modified
-# 
+#
 # * jpg
 # * png
 # * txt
 # * nfo
-# * m3u
-# 
-# Encoding support will depend on your system's ffmpeg. 
-# 
-#   
+#
+# Further, files ending in ".m3u" are copied and translated using audioutil-
+# convert-m3u.
+#
+# Encoding support will depend on your system's ffmpeg.
+#
+#
 # USAGE
 # =====
-# 
+#
 #   $1 . . . input directory
 #   $2 . . . output directory
 #   $3 . . . (optional) output file extension (default: mp3)
 #   $4 . . . (optional) encoding library to use (default: libmp3lame)
 #   $5 . . . (optional) bitrate to use (default: 128k)
-#   $6 . . . (optional) if equal to "dryrun", batch is displayed instead of 
+#   $6 . . . (optional) if equal to "dryrun", batch is displayed instead of
 #            executed
-#   
+#
 # NOTES
 # =====
-# 
+#
 # Initially, this script would spawn an ffmpeg process in the background for
 # each media file. This predictably worked very poorly for large media files.
 # It would seem that XNU does not take kindly to fork()-ing 3700 threads at
 # the same time.
-# 
+#
 # As a result, it was re-written to generate a batch file, then use GNU
-# parallel to execute each command in the batch, this results in only one 
+# parallel to execute each command in the batch, this results in only one
 # ffmpeg instance being spawned per core; still a lot of load on the system, but
-# a manageable load. 
-# 
+# a manageable load.
+#
 # BUGS/TODO
 # =========
-# 
+#
 # * output library sometimes has less files than input, may warrant
 #   investigation
-#     
+#
 # * metadata does not seem to be preserved in when converting to/from certain
 #   formats; this may be an ffmpeg issue; a fix has been added to audioutil-
 #   recode, but it's not clear how well it works yet.
-#  
+#
 ########10########20########30##### LICENSE ####50########60########70########80
 #  Copyright (c) 2017, Charles Daniels
 #  All rights reserved.
@@ -108,7 +110,7 @@ else
   FILE_EXTENSION="mp3"
 fi
 
-if [ $# -ge 4 ] ; then 
+if [ $# -ge 4 ] ; then
   ENCODING_LIBRARY="$4"
 else
   ENCODING_LIBRARY="libmp3lame"
@@ -147,7 +149,7 @@ cd "$INPUT_DIR"
 echo "INFO: mirroring directory structure... "
 
 # first, we mirror the directory structure
-find ./ -type d -exec echo "mkdir -p \"$OUTPUT_DIR/{}\"" \; | parallel --will-cite --bar 
+find ./ -type d -exec echo "mkdir -p \"$OUTPUT_DIR/{}\"" \; | parallel --will-cite --bar
 
 
 # files to re-encode
