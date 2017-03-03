@@ -2,7 +2,7 @@ packages/net.cdaniels.toolchest.tools/texutil:
   
   texutil-mktex:
 
-    # 1 - OPEN
+    #1 - CLOSE - 2017-03-03 - 1.0.2
 
     * Script does not respond correctly to providing input files on $@, but 
       does work correctly when "-r" is passed. This may be due to handling of
@@ -16,7 +16,7 @@ packages/net.cdaniels.toolchest.tools/audioutil
 
   audioutil-convert-m3u
 
-    # 2 - OPEN
+    #2 - OPEN
 
     * Script does not update the library root path. For example, converting 
       a playlist which formerly referred to /foo/bar/baz, but now refers to 
@@ -31,7 +31,7 @@ packages/net.cdaniels.toolchest.tools/audioutil
 
                  Mon Feb 27 22:00:21 EST 2017
 
-    # 3 - CLOSED 2017-02-28
+    #3 - CLOSED - 2017-02-28 - 1.0.2
 
     * script seems to produce garbled output from certain lines of input. This 
       is likely due to inputs containing special characters, or characters that

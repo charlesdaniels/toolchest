@@ -495,3 +495,25 @@
 
     * $NET_CDANIELS_TOOLCHEST_LOCAL/cache is now a part of the standard
       installation.
+
+  2017-03-03 - Charles Daniels:
+
+    * `toolchest dir` no longer has a newline after output
+
+      * this does not break acquire-toolchest-dirs, so scripts using that
+        are unaffected. 
+
+    * added texfot port
+
+    * texutil:
+
+      * texutil-mktex rewritten in perl
+
+      * texutil-mktex now uses texfot to provide more useful output
+
+      * fixed bug #1 (texutil-mktex now correctly handles multiple input files
+        on argv, and multiple input files which include spaces)
+
+      * perl is now a dependancy of texutil
+
+      * texfot port is now a dependency of texutil 

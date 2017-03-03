@@ -941,7 +941,7 @@ case "$DIRECTIVE" in
     toolchest info
   ;;
   dir)
-    echo "$NET_CDANIELS_TOOLCHEST_DIR"
+    printf "$NET_CDANIELS_TOOLCHEST_DIR"
     exit 0
   ;;
   version)

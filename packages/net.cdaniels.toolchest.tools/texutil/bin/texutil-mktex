@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env perl
 ########10########20########30## DOCUMENTATION #50########60########70########80
 #
 #  OVERVIEW
@@ -11,9 +11,12 @@
 #  If $1 is '-r', then texutil-mktex will instead recurse into directories,
 #  including ./, and attempt to compile *.tex there.
 #  
-#  This script will always run pdflatex such that it will not pause on errors.
-#  Further, this script will always exit with an exit code of 0, even if one
-#  or more compilations failed.
+#  This script will by default run pdflatex such that it will not pause on
+#  errors. Further, this script will always exit with an exit code of 0, even
+#  if one or more compilations failed.
+#  
+#  Further, this script will utilize texfot to display only
+#  pertinent/important error messages.
 #  
 #  CONFIGURATION
 #  =============
@@ -61,44 +64,71 @@
 #  
 ########10########20########30########40########50########60########70########80
 
-$(acquire-toolchest-dirs)
 
-# read configuration file if it is present
-CONFIG_PATH="$NET_CDANIELS_TOOLCHEST_LOCAL/config/texutil-mktex.cfg"
-PDFLATEX_COMMAND="pdflatex"
-PDFLATEX_OPTS="-interaction=nonstopmode"
+use strict;
+use warnings;
 
-if [ -f "$CONFIG_PATH" ] ; then
-  . "$CONFIG_PATH"
-fi
+# this snippet sourced from SO
+# http://stackoverflow.com/a/6829502
+# User: Chas. Owens
+sub source {
+    my $name = shift;
 
-TARGET_FILES="$@"
-RECURSE="NO"
+    open my $fh, "<", $name
+        or die "could not open $name: $!";
 
-if [ "$1" = "-r" ] ; then
-  RECURSE="YES"
-  TARGET_FILES="*.tex"
-  shift
-fi
+    while (<$fh>) {
+        chomp;
+        my ($k, $v) = split /=/, $_, 2;
+        $v =~ s/^(['"])(.*)\1/$2/; #' fix highlighter
+        $v =~ s/\$([a-zA-Z]\w*)/$ENV{$1}/g;
+        $v =~ s/`(.*?)`/`$1`/ge; #dangerous
+        $ENV{$k} = $v;
+    }
+}
 
-for file in $TARGET_FILES; do
-  outfile=`basename "$file" .tex`.pdf
-  if [ -f "$file" ] ; then
-    echo "file: $file, output: $outfile"
-    # do multiple passes so bibtex and friends can do their thing
-    $PDFLATEX_COMMAND $PDFLATEX_OPTS "$file" -o "$outfile"
-    $PDFLATEX_COMMAND $PDFLATEX_OPTS "$file" -o "$outfile"
-    $PDFLATEX_COMMAND $PDFLATEX_OPTS "$file" -o "$outfile"
-  fi
-done
+# establish configuration
+my $NET_CDANIELS_TOOLCHEST_DIR = `toolchest dir`;
+my $CONFIG_PATH = "$NET_CDANIELS_TOOLCHEST_DIR/local/config/texutil-mktex.cfg";
+my $PDFLATEX_COMMAND = "pdflatex";
+my $PDFLATEX_OPTS = "-interaction=nonstopmode";
 
-if [ $RECURSE = "YES" ] ; then
-  for dir in */ ; do
-    if [ -e "$dir" ] ; then 
-      cd "$dir" && $0 -r
-      cd ..
-    fi
-  done 
-fi
+if ( -e "$CONFIG_PATH" ) {
+  source("$CONFIG_PATH");
+  if ( exists $ENV{PDFLATEX_COMMAND} ) {
+    $PDFLATEX_COMMAND = $ENV{PDFLATEX_COMMAND};
+  }
+  if ( exists $ENV{PDFLATEX_OPTS} ) {
+    $PDFLATEX_OPTS = $ENV{PDFLATEX_OPTS};
+  }
+}
 
+my $recursive = 0;  # FALSE
+if ( $ARGV[0] eq "-r" ) {
+  $recursive = 1;  # TRUE
+  shift;
+}
 
+my @TARGET_FILES = @ARGV;
+
+if ($recursive) {
+  @TARGET_FILES = <*.tex>;
+}
+
+foreach my $file (@TARGET_FILES) {
+  print("\nCOMPILE: $file\n");
+  print(`texfot $PDFLATEX_COMMAND $PDFLATEX_OPTS "$file"`);
+}
+
+if ( ! $recursive ) {
+  # we are done
+  exit(0);
+}
+
+foreach my $file (<*>) {
+  if ( -d "$file" ) {
+    chdir $file;
+    print(`$0 -r`);
+    chdir "..";
+  }
+}

@@ -1,0 +1,27 @@
+upstream:
+
+texfot invokes texcmd with the given texarg arguments, filtering the online
+output for ‘‘interesting’’ messages. Its exit value is that of texcmd.
+Examples:
+
+        # Sample basic invocation:
+        texfot pdflatex file.tex
+        # Ordinarily all output is copied to /tmp/fot before filtering;
+        # that can be omitted:
+        texfot pdflatex −−tee=/dev/null file.tex
+        # Example of more complex engine invocation:
+        texfot lualatex −−recorder '\nonstopmode\input file'
+
+Aside from its own options, described below, texfot just runs the given
+command with the given arguments (same approach to command line syntax as env,
+nice, time, timeout, etc.). Thus, texfot works with any engine and any command
+line options.
+
+texfot does not look at the log file or any other possible output file(s); it
+only looks at the standard output and standard error from the command. stdout
+is processed first, then stderr. Lines from stderr have an identifying prefix.
+texfot writes all accepted lines to its stdout.
+
+The messages shown are intended to be those which likely need action by the
+author: error messages, overfull and underfull boxes, undefined citations,
+missing characters from fonts, etc.

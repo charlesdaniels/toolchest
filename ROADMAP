@@ -101,11 +101,6 @@ audioutil:
   * new script, audioutil-organize, which would leverage audioutil-namebytag
     to validate folder structure, file naming conventions, and tags
 
-  * script to take the output of audioutil-publish and import it into iTunes.
-    Will most likely be backed by this:
-
-    https://github.com/jacobvosmaer/itunes_tools
-
 archiveutil:
 
   * archive-create should utilize streams for compression. That is, the
