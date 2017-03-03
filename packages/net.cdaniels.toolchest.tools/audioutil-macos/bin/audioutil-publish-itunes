@@ -58,6 +58,8 @@
 ITUNES_DIR="$1"
 shift
 
+$(acquire-toolchest-dirs)
+
 TEMP_DIR="$2"
 
 audioutil-publish $@

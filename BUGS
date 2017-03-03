@@ -2,7 +2,7 @@ packages/net.cdaniels.toolchest.tools/texutil:
   
   texutil-mktex:
 
-    #1 - CLOSE - 2017-03-03 - 1.0.2
+    #1 - CLOSED - 2017-03-03 - 1.0.2
 
     * Script does not respond correctly to providing input files on $@, but 
       does work correctly when "-r" is passed. This may be due to handling of
