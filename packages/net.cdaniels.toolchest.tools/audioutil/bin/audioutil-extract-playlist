@@ -1,4 +1,4 @@
-#/usr/bin/env bash
+#!/usr/bin/env perl
 ########10########20########30## DOCUMENTATION #50########60########70########80
 #
 # OVERVIEW
@@ -12,10 +12,17 @@
 # a given time. This script can also be used in conjunction with audioutil-
 # publish to produce small libraries containing only the songs needed for a
 # small set of playlist(s).
+# 
+# The script will also attempt to transfer any album covers (named
+# "cover.jpg", "cover.png", "folder.jpg", or "folder.png") into appropriate
+# folders in the output as well.
 #
-# This script also copies the input .m3u file into the output in the same
-# location relative to the library root.
-#
+# Because this script does not know where the root of the input library
+# resides, it does not know where to put the .m3u relative to the destination
+# root. Consequentially, the input playlist will be placed in a folder named
+# "playlists" in the output directory, and will have the same name as the
+# input file. This behavior can be "fixed" in the future if needed by accepting
+# the input library root as a third argument. 
 #
 # USAGE
 # =====
@@ -54,3 +61,114 @@
 #  POSSIBILITY OF SUCH DAMAGE.
 #
 ########10########20########30########40########50########60########70########80
+
+use strict;
+use warnings;
+use Cwd;
+use Path::Tiny;
+
+my $input_file = $ARGV[0];
+my $output_directory = $ARGV[1];
+
+if (! length $input_file) {
+  print("ERROR 64: failure to specify input file\n\n");
+  print(`toolchest-doc $0`);
+  die;
+}
+
+if (! length $output_directory) {
+  print("ERROR 72: failure to specify output directory \n\n");
+  print(`toolchest-doc $0`);
+  die;
+}
+
+open(FILE, $input_file) or die;
+
+my @batch_job = ();
+
+while (<FILE>) {
+
+  # consume the next line
+  chomp;
+  my $current_line = $_;
+
+  # skip empty lines
+  if (! length $current_line) { next; }
+
+  # drop comments
+  if (substr($current_line, 0, 1) eq "#") { next; }
+
+  # set up path variables
+  my $wd = cwd();
+  my $targetpath = "$wd" . "/" . "$current_line";
+  my $targetparent = path($targetpath)->parent;
+  my $destpath = "$output_directory" . "/playlists/" . "$current_line";
+  my $destparent = path($destpath)->parent;
+
+  # if the input path doesn't exist, skip it
+  if (! -e $targetpath) {
+    print(STDERR "WARN 86: failure to locate target \"$current_line\", check your CWD!\n");
+    print(STDERR "INFO: input \"$current_line\" will be skipped\n");
+    next;
+  }
+
+  # absolute paths will lead to problems, so we'll skip those too
+  if ( path("$current_line")->is_absolute ) {
+    print(STDERR "WARN 94: target \"$current_line\" is absolute, so cannot be processed.\n");
+    print(STDERR "INFO: input \"$current_line\" will be skipped\n");
+    next;
+  }
+
+  # generate batch operations
+  push(@batch_job, "mkdir -p \"$destparent\"");
+  push(@batch_job, "cp \"$targetpath\" \"$destpath\"");
+
+  # if there is an album cover it the directory with the target, bring that too
+  if ( -e ($targetparent . "/cover.png" )) {
+    push(@batch_job, "cp \"$targetparent/cover.png\" \"$destparent\"");
+  }
+  if ( -e ($targetparent . "/cover.jpg" )) {
+    push(@batch_job, "cp \"$targetparent/cover.jpg\" \"$destparent\"");
+  }
+  if ( -e ($targetparent . "/folder.png" )) {
+    push(@batch_job, "cp \"$targetparent/folder.png\" \"$destparent\"");
+  }
+  if ( -e ($targetparent . "/folder.jpg" )) {
+    push(@batch_job, "cp \"$targetparent/folder.jpg\" \"$destparent\"");
+  }
+
+}
+
+close(FILE);
+
+# generate a batch operation to copy this playlist
+push(@batch_job, "mkdir -p \"$output_directory/playlists\"");
+push(@batch_job, "cp \"$input_file\" \"$output_directory/playlists\"");
+
+# generate the batch file
+my $APPTAG = "audioutil-extract-playlist_" . time();
+system("temputils", "$APPTAG", "create");
+chomp(my $TEMP_DIR = `temputils $APPTAG get`);
+my $BATCH_FILE_PATH = "$TEMP_DIR/batchfile";
+
+print("$BATCH_FILE_PATH\n");
+
+# write out the file
+open(BATCHFILE, ">", "$BATCH_FILE_PATH") or die "failure to open $BATCH_FILE_PATH";
+for my $i (0..$#batch_job) {
+  print(BATCHFILE $batch_job[$i]);
+  print(BATCHFILE "\n");
+}
+
+# execute the batch file
+my $batch_exec = "parallel --will-cite --bar < $BATCH_FILE_PATH";
+open(my $batch_handle, "$batch_exec |") or die "failure to obtain file handler for batch execution command";
+while (<$batch_handle>) {
+  print("$_");
+}
+close("$batch_handle");
+
+# clean up temp directory
+system("temputils", "$APPTAG", "destroy");
+
+

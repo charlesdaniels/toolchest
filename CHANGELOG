@@ -517,3 +517,9 @@
       * perl is now a dependancy of texutil
 
       * texfot port is now a dependency of texutil 
+
+  2017-03-04 - Charles Daniels:
+
+    * added audioutil-extract-playlist
+
+    * toolchest now supports dependency checking for perl modules
