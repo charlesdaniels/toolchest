@@ -20,10 +20,6 @@ systemutils:
 
   * DPI_SCRIPT points to a file that no longer exists
 
-todotxt-extensions
-
-  * requires GNU sed or 100% compatible (always an issue on systems with BSD
-    sed as the default). Sensible sed should take care of invoking this
 
 toolchest:
 
