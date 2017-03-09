@@ -126,6 +126,7 @@ Further Documentation
 * `packaging guide <doc/packaging.rst>`_
 * `versioning scheme <doc/version.rst>`_
 * `toolchest management tool <bin/toolchest>`_
+* `system requirements & supported OSes <doc/support.rst>`_
 * `reference package installer <lib/generic-install.sh>`_
 * `reference package uninstaller <lib/generic-uninstall.sh>`_
 * `example with sh installer <packages/example>`_
