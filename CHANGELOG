@@ -543,3 +543,5 @@
     * ERROR T196 is now WARN T196 and is now written to stderr
 
     * added toolchest-genpath to net.cdaniels.toolchest.coreutils
+
+1.0.3: 
