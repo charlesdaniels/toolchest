@@ -72,21 +72,26 @@
 #  
 ########10########20########30########40########50########60########70########80
 
-TOOLCHEST_CMD="toolchest"
-command -v toolchest > /dev/null
+TOOLCHSET_CMD="toolchest"
+which "$TOOLCHSET_CMD" 2>&1 | grep "$TOOLCHSET_CMD" | grep -v "which: no" > /dev/null 
 if [ $? -ne 0 ] ; then
-  if [ -e ./toolchest ] ; then
-    TOOLCHEST_CMD="./toolchest"
-  elif [ -e ../toolchest ] ; then 
-    TOOLCHEST_CMD="../toolchest"
-  elif [ -e ./bin/toolchest ] ; then
-    TOOLCHEST_CMD="./bin/toolchest"
-  elif [ -e ../bin/toolchest ] ; then
-    TOOLCHEST_CMD="../bin/toolchest"
-  else
-    echo "ERROR ATD87: failed to locate toolchest binary"
-    exit 1
-  fi
+  # we may be running before $PATH has been setup, so lets try to guess where 
+  # toolchest is
+  POSSIBLE_PATHS="./toolchest     \
+                 ../toolchest     \
+                 ./bin/toolchest  \
+                 ../bin/toolchest \
+                 ./.net.cdaniels.toolchest/bin/toolchest  \
+                 ./net.cdaniels.toolchest/bin/toolchest   \
+                 ../.net.cdaniels.toolchest/bin/toolchest \
+                 ../net.cdaniels.toolchest/bin/toolchest "
+
+  for p in $POSSIBLE_PATHS ; do
+    if [ -e $p ] ; then
+      TOOLCHSET_CMD="$p"
+      break
+    fi
+  done
 fi
 
 DIR=`$TOOLCHEST_CMD dir`
