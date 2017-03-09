@@ -532,3 +532,5 @@
 
     * toolchest now supports OpenIndiana 5.11 - this should bring support for 
       any other UNIX which uses ksh93 or similar as /bin/sh also.  
+
+    * fixed the behavior of check-command-exists on OpenIndiana 5.11
