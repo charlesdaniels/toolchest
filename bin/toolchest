@@ -419,6 +419,16 @@ _bsd_stat_readlink() {
 }
 ########10########20########30########40########50########60########70########80
 
+# we support ksh93, which does automatic local scoping, making the local keywod
+# break. Thus, we check if the local keyword works, and if not alias it to
+# something that won't cause trouble. 
+
+local foobar=5 > /dev/null 2>&1
+if [ $? -ne 0 ] ; then
+  local () {
+    printf ""  # do nothing
+  }
+fi
 
 TOOLCHEST_VERSION="1.0.2-git"
 
