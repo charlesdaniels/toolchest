@@ -422,7 +422,6 @@ _bsd_stat_readlink() {
 # detect older shells like ksh93 which do not support local
 type local 2>&1 | grep local | grep -v "not found" > /dev/null
 if [ $? -ne 0 ] ; then
-  echo "NO LOCAL!"
   # first, we will try to find a shell on the system which is supported
   which bash | grep bash > /dev/null
   if [ $? -eq 0 ] ; then
