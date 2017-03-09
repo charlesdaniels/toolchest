@@ -539,3 +539,5 @@
 
     * acquire-toolchest-dirs will now attempt to make an educated guess about
       the toolchest's location if it is not in $PATH
+
+    * ERROR T196 is now WARN T196 and is now written to stderr
