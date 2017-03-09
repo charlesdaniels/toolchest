@@ -441,9 +441,10 @@ if [ $? -ne 0 ] ; then
     exit $?
   fi
 
-  echo "ERROR T425: the shell mapped to /bin/sh does not support he 'local'"
-  echo "            keyword. Shells known to work include Bourne shell, BASH,"
-  echo "            Dash, and zsh. Shells known not to work include ksh93."
+  echo "ERROR T425: the shell mapped to /bin/sh does not support" > /dev/stderr
+  echo "            the 'local' keyword. Shells known to work"    > /dev/stderr
+  echo "            include Bourne shell, BASH, Dash, and zsh."   > /dev/stderr 
+  echo "            Shells known not to work include ksh93."      > /dev/stderr
   exit 425
 fi
 
