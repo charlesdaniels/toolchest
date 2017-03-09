@@ -536,3 +536,6 @@
     * fixed the behavior of check-command-exists on OpenIndiana 5.11
 
     * tcc's Makefile now uses check-command-exists, rather than command  -v
+
+    * acquire-toolchest-dirs will now attempt to make an educated guess about
+      the toolchest's location if it is not in $PATH
