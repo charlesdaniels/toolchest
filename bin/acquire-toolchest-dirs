@@ -77,12 +77,12 @@ command -v toolchest > /dev/null
 if [ $? -ne 0 ] ; then
   if [ -e ./toolchest ] ; then
     TOOLCHEST_CMD="./toolchest"
-  else if [ -e ../toolchest ] ; then 
+  elif [ -e ../toolchest ] ; then 
     TOOLCHEST_CMD="../toolchest"
-  else if [ -e ./bin/toolchest ] ; then
-    TOOLCHEST_CMD="./bin/toolchest" ;
-  else if [ -e ../bin/toolchest ] ; then
-    TOOLCHEST_CMD="../bin/toolchest" ;
+  elif [ -e ./bin/toolchest ] ; then
+    TOOLCHEST_CMD="./bin/toolchest"
+  elif [ -e ../bin/toolchest ] ; then
+    TOOLCHEST_CMD="../bin/toolchest"
   else
     echo "ERROR ATD87: failed to locate toolchest binary"
     exit 1
