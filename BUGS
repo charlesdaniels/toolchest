@@ -58,3 +58,14 @@ packages/net.cdaniels.toolchest.tools/pdfutils
       special characters in file names, or other pathing-related issues. 
 
     Tested on: 2017-01-30
+
+bin
+  
+  toolchest
+
+    #5 - OPEN
+
+    * the toolchest binary make use of the "local" keyword, which is not 
+      supported on all platforms. Specifically, OpenIndiana's /bin/sh 
+      does not support it. This appears to affect several subsystems, chiefly
+      `toolchest package install` does not seem to work at all. 

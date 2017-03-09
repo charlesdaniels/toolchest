@@ -419,15 +419,33 @@ _bsd_stat_readlink() {
 }
 ########10########20########30########40########50########60########70########80
 
-# we support ksh93, which does automatic local scoping, making the local keywod
-# break. Thus, we check if the local keyword works, and if not alias it to
-# something that won't cause trouble. 
-
-local foobar=5 > /dev/null 2>&1
+# detect older shells like ksh93 which do not support local
+type local | grep local > /dev/null
 if [ $? -ne 0 ] ; then
-  local () {
-    printf ""  # do nothing
-  }
+  echo "NO LOCAL!"
+  # first, we will try to find a shell on the system which is supported
+  which bash | grep bash > /dev/null
+  if [ $? -eq 0 ] ; then
+    `which bash` $0 $@
+    exit $? 
+  fi
+
+  which dash | grep dash > /dev/null
+  if [ $? -eq 0 ] ; then
+    `which dash` $0 $@
+    exit $?
+  fi
+
+  which zsh | grep zsh > /dev/null
+  if [ $? -eq 0 ] ; then 
+    `which zsh` $0 $@
+    exit $?
+  fi
+
+  echo "ERROR T425: the shell mapped to /bin/sh does not support he 'local'"
+  echo "            keyword. Shells known to work include Bourne shell, BASH,"
+  echo "            Dash, and zsh. Shells known not to work include ksh93."
+  exit 425
 fi
 
 TOOLCHEST_VERSION="1.0.2-git"
