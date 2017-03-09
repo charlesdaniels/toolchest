@@ -534,3 +534,5 @@
       any other UNIX which uses ksh93 or similar as /bin/sh also.  
 
     * fixed the behavior of check-command-exists on OpenIndiana 5.11
+
+    * tcc's Makefile now uses check-command-exists, rather than command  -v

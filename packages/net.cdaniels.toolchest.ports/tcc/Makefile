@@ -32,7 +32,7 @@ install: preflight
 preflight:
 	@echo "INFO: performing preflight checks for $(PACKAGE_NAME):"
 	@printf "\tgit... "
-	@command -v > /dev/null ; if [ "$$?" -eq 0 ] ; then true ; else false ; fi
+	@check-command-exists git
 	@echo "OK"
 	@echo "INFO: preflight check complete"
 	@printf "INFO: preparing environment... "
