@@ -523,3 +523,12 @@
     * added audioutil-extract-playlist
 
     * toolchest now supports dependency checking for perl modules
+
+  2017-03-09 - Charles Daniels:
+
+    * toolchest now checks if /bin/sh does not support `local`, if not, 
+      it will attempt to run through a supported shell. Should this fail, it
+      will crash itself. 
+
+    * toolchest now supports OpenIndiana 5.11 - this should bring support for 
+      any other UNIX which uses ksh93 or similar as /bin/sh also.  

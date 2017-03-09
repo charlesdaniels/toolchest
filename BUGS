@@ -63,9 +63,14 @@ bin
   
   toolchest
 
-    #5 - OPEN
+    #5 - CLOSED - 2017-03-09 - 1.0.2
 
     * the toolchest binary make use of the "local" keyword, which is not 
       supported on all platforms. Specifically, OpenIndiana's /bin/sh 
       does not support it. This appears to affect several subsystems, chiefly
       `toolchest package install` does not seem to work at all. 
+
+    * issue was resolved by checking if the shell the toolchest is running in
+      does not support `local` - if not, it attempts to run itself in bash, 
+      dash, or zsh (in that order). If none of these emits, the toolchest 
+      crashes and emits error T425. 
