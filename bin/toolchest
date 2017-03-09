@@ -429,6 +429,7 @@ if [ $? -ne 0 ] ; then
     exit $? 
   fi
 
+<<<<<<< HEAD
   which dash | grep dash > /dev/null
   if [ $? -eq 0 ] ; then
     `which dash` $0 $@
