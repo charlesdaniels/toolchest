@@ -551,3 +551,7 @@
     * Fixed some typos in acquire-toolchest-dirs which caused it to crash. 
 
 1.0.3: 
+
+  2017-03-10 - Charles Daniels:
+
+    * texutil-mktex now compiles with multiple passes

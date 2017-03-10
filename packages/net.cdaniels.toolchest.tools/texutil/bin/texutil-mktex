@@ -117,7 +117,10 @@ if ($recursive) {
 
 foreach my $file (@TARGET_FILES) {
   print("\nCOMPILE: $file\n");
+  `texfot $PDFLATEX_COMMAND $PDFLATEX_OPTS "$file"`;
+  `texfot $PDFLATEX_COMMAND $PDFLATEX_OPTS "$file"`;
   print(`texfot $PDFLATEX_COMMAND $PDFLATEX_OPTS "$file"`);
+
 }
 
 if ( ! $recursive ) {
