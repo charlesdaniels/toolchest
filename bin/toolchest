@@ -429,7 +429,6 @@ if [ $? -ne 0 ] ; then
     exit $? 
   fi
 
-<<<<<<< HEAD
   which dash | grep dash > /dev/null
   if [ $? -eq 0 ] ; then
     `which dash` $0 $@
@@ -449,7 +448,8 @@ if [ $? -ne 0 ] ; then
   exit 425
 fi
 
-TOOLCHEST_VERSION="1.0.2-release"
+
+TOOLCHEST_VERSION="1.0.2-release-2"
 
 command -v sed > /dev/null
 if [ $? -ne 0 ] ; then

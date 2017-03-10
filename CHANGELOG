@@ -543,3 +543,11 @@
     * ERROR T196 is now WARN T196 and is now written to stderr
 
     * added toolchest-genpath to net.cdaniels.toolchest.coreutils
+
+1.0.2-R2:
+
+  2017-03-09 - Charles Daniels:
+
+    * Fixed some typos in acquire-toolchest-dirs which caused it to crash. 
+
+1.0.3: 

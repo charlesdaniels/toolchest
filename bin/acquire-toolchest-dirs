@@ -72,8 +72,8 @@
 #  
 ########10########20########30########40########50########60########70########80
 
-TOOLCHSET_CMD="toolchest"
-which "$TOOLCHSET_CMD" 2>&1 | grep "$TOOLCHSET_CMD" | grep -v "which: no" > /dev/null 
+TOOLCHEST_CMD="toolchest"
+which "$TOOLCHEST_CMD" 2>&1 | grep "$TOOLCHEST_CMD" | grep -v "which: no" > /dev/null 
 if [ $? -ne 0 ] ; then
   # we may be running before $PATH has been setup, so lets try to guess where 
   # toolchest is
@@ -88,7 +88,7 @@ if [ $? -ne 0 ] ; then
 
   for p in $POSSIBLE_PATHS ; do
     if [ -e $p ] ; then
-      TOOLCHSET_CMD="$p"
+      TOOLCHEST_CMD="$p"
       break
     fi
   done
