@@ -559,3 +559,10 @@
   2017-03-14 - Charles Daniels:
 
     * added clean-mac script to net.cdaniels.toolchest.tools
+
+  2017-03-15 - Charles Daniels:
+
+    * texutil-mktex now supports advanced argument parsing
+
+    * added --bibtex and --biber to texutil-mktex to invoke biber or bibtex
+      during compilation. 
