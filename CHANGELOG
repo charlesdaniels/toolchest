@@ -555,3 +555,7 @@
   2017-03-10 - Charles Daniels:
 
     * texutil-mktex now compiles with multiple passes
+
+  2017-03-15 - Charles Daniels:
+	
+    * added 215utils-normalbash
