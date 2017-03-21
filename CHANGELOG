@@ -566,3 +566,5 @@
 
     * added --bibtex and --biber to texutil-mktex to invoke biber or bibtex
       during compilation. 
+
+    * texutil-mktex now enables shell escape by default

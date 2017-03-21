@@ -102,7 +102,7 @@ sub source {
 my $NET_CDANIELS_TOOLCHEST_DIR = `toolchest dir`;
 my $CONFIG_PATH = "$NET_CDANIELS_TOOLCHEST_DIR/local/config/texutil-mktex.cfg";
 my $PDFLATEX_COMMAND = "pdflatex";
-my $PDFLATEX_OPTS = "-interaction=nonstopmode";
+my $PDFLATEX_OPTS = "-interaction=nonstopmode --shell-escape";
 
 if ( -e "$CONFIG_PATH" ) {
   source("$CONFIG_PATH");
