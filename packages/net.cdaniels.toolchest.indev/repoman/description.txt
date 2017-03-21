@@ -1,0 +1,6 @@
+A tool for managing toolchest repositories installed from remote sources such
+as git. Currently in development. This package is pre-alpha quality and will
+probably break your stuff, it is also not feature complete. 
+
+When this package is complete it will be moved to coreutils - this will likely
+be the main feature of the 1.1.0 release. 
