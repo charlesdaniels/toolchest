@@ -568,3 +568,6 @@
       during compilation. 
 
     * texutil-mktex now enables shell escape by default
+
+    * added 215utils-normalbash
+
