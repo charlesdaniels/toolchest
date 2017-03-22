@@ -165,7 +165,7 @@ case "$DIRECTIVE" in
   activate)
     for repo in "$REPOMAN_DIR"/* ; do
       REPOMAN_REPONAME="`basename $repo`"
-      REPOMAN_REPO_DIR="$repo"
+      REPOMAN_REPO_DIR="."
       if [ -e "$repo/.repoman.cfg" ] ; then
         . "$repo/.repoman.cfg"
       fi
