@@ -2,6 +2,7 @@ local/*
 *.o
 *.log
 *.carbonite
+repoman
 packages/net.cdaniels.toolchest.testing/helloworld/helloworld
 packages/net.cdaniels.toolchest.ports/m-cli/bin/*
 packages/net.cdaniels.toolchest.ports/iproute2mac/bin/*
