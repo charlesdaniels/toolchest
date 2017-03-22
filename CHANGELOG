@@ -550,7 +550,7 @@
 
     * Fixed some typos in acquire-toolchest-dirs which caused it to crash. 
 
-1.0.3: 
+1.0.3-RC1: 
 
   2017-03-10 - Charles Daniels:
 
