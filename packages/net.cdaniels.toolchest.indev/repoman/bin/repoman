@@ -124,7 +124,7 @@ fi
 
 $(acquire-toolchest-dirs)
 
-REPOMAN_DIR="$NET_CDANIELS_TOOLCHEST_LOCAL/repoman"
+REPOMAN_DIR="$NET_CDANIELS_TOOLCHEST_DIR/repoman"
 
 # validate the repo storage directory exists
 if [ ! -d "$REPOMAN_DIR" ] ; then
@@ -146,15 +146,20 @@ case "$DIRECTIVE" in
   ;;
 
   activate)
-    for repo in "$REPOMAN_DIR" ; do
-      REPOMAN_REPO_NAME="`basename $repo`"
+    for repo in "$REPOMAN_DIR"/* ; do
+      echo "DEBUG: considering repo $repo"
+      REPOMAN_REPONAME="`basename $repo`"
       REPOMAN_REPO_DIR="$repo"
       if [ -e "$repo/.repoman.cfg" ] ; then
         . "$repo/.repoman.cfg"
-      if [ "$TARGET" = "$REPOMAN_REPO_NAME" ] ; then
-        ln -s "$repo/$REPOMAN_REPO_DIR" \
-              "$NET_CDANIELS_TOOLCHEST_PACKAGES/$REPOMAN_REPO_NAME"
-        exit
+      fi
+
+      echo "DEBUG: REPO_NAME: $REPOMAN_REPONAME"
+      echo "DEBUG: REPO_DIR: $REPOMAN_REPO_DIR"
+
+      if [ "$TARGET" = "$REPOMAN_REPONAME" ] ; then
+        ln -s "$repo/$REPOMAN_REPO_DIR" "$NET_CDANIELS_TOOLCHEST_PACKAGES/$REPOMAN_REPONAME"
+        exit 0 
       fi
     done
 

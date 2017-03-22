@@ -56,14 +56,13 @@ fi
 
 wget \
   --recursive \
-  --no-clobber \
   --page-requisites \
   --html-extension \
   --convert-links \
   --domains "$2" \
   --no-parent \
-  --limit-rate=100k \ # try to be nice to the website
-  --wait=0.25 \ # try to be nice to the website
-  -e robots=off \ # but don't respect the robots.txt
-  -U "Mozilla/5.0 (compatible; Konqueror/3.2; Linux)" \ # spoof our user agent
+  --limit-rate=100k \
+  --wait=1 \
+  -e robots=off \
+  -U "Mozilla/5.0 (compatible; Konqueror/3.2; Linux)" \
   "$1"

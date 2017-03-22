@@ -571,6 +571,10 @@
 
     * added 215utils-normalbash
 
+  2017-03-20 - Charles Daniels:
+
+    * moved code-tools from net.cdaniels.toolchest.legacy to
+      net.cdaniels.toolchest.tools, as it still works just fine. 
 
   2017-03-21 - Charles Daniels: 
 
