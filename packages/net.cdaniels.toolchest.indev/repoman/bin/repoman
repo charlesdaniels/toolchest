@@ -145,17 +145,25 @@ case "$DIRECTIVE" in
     done
   ;;
 
+  list-installed)
+    for repo in "$REPOMAN_DIR"/* ; do
+      REPOMAN_REPONAME="`basename $repo`"
+      REPOMAN_REPO_DIR="$repo"
+      if [ -e "$repo/.repoman.cfg" ] ; then
+        . "$repo/.repoman.cfg"
+      fi 
+    done
+
+    echo "$REPOMAN_REPONAME"
+  ;;
+
   activate)
     for repo in "$REPOMAN_DIR"/* ; do
-      echo "DEBUG: considering repo $repo"
       REPOMAN_REPONAME="`basename $repo`"
       REPOMAN_REPO_DIR="$repo"
       if [ -e "$repo/.repoman.cfg" ] ; then
         . "$repo/.repoman.cfg"
       fi
-
-      echo "DEBUG: REPO_NAME: $REPOMAN_REPONAME"
-      echo "DEBUG: REPO_DIR: $REPOMAN_REPO_DIR"
 
       if [ "$TARGET" = "$REPOMAN_REPONAME" ] ; then
         ln -s "$repo/$REPOMAN_REPO_DIR" "$NET_CDANIELS_TOOLCHEST_PACKAGES/$REPOMAN_REPONAME"
@@ -166,6 +174,29 @@ case "$DIRECTIVE" in
     echo "ERROR 161: failure to activate repository '$TARGET' (did you remember to install it first?)"
     exit 1
 
+  ;;
+
+  deactivate)
+    for repo in "$REPOMAN_DIR"/* ; do
+      REPOMAN_REPONAME="`basename $repo`"
+      REPOMAN_REPO_DIR="$repo"
+      if [ -e "$repo/.repoman.cfg" ] ; then
+        . "$repo/.repoman.cfg"
+      fi
+
+      if [ "$TARGET" = "$REPOMAN_REPONAME" ] ; then
+        printf "INFO: uninstalling packages from $REPOMAN_REPONAME... "
+        for package in "$repo"/* ; do 
+          toolchest package uninstall `basename $package` > /dev/null 2>&1
+        done
+        echo "DONE"
+
+        printf "INFO: unlinking $REPOMAN_REPONAME... "
+        rm "$NET_CDANIELS_TOOLCHEST_PACKAGES/$REPOMAN_REPONAME" > /dev/null 2>&1
+        echo "DONE"
+        exit 0 
+      fi
+    done
   ;;
 
   install)
@@ -184,5 +215,15 @@ case "$DIRECTIVE" in
       exit 1
     fi
     echo "INFO: finished retrieving repository."
+  ;;
+
+  uninstall)
+    $0 deactivate "$TARGET"
+    printf "INFO: deleting $TARGET files... "
+    if [ -d "$REPOMAN_DIR/$TARGET" ] ; then
+      rm -rf "$REPOMAN_DIR/$TARGET"
+    fi
+    echo "DONE"
+  ;;
 
 esac
