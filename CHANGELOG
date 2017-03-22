@@ -583,4 +583,8 @@
   2017-03-22 - Charles Daniels:
 
     * rewrote `toolchest package list` so it no longer depends on find, and
-      works as expected when repos or packages are symlinks. 
+      works as expected when repos or packages are symlinks.
+
+    * `repoman` is now feature-complete, and is now considered "beta" quality,
+      it will be moved to coreutils as stability and correctness are verified
+      in testing.

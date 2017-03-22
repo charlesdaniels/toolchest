@@ -33,7 +33,7 @@
 # 
 # update  . . . . . . . For each installed repo, run `repoman update $repo`.
 # 
-# update [repo] . . . . cd into the repo and run `git pull`. If .repoman.cfg
+# update-repo [repo]  . cd into the repo and run `git pull`. If .repoman.cfg
 #                       defines REPOMAN_UPDATE_COMMAND, that will be executed
 #                       instead.
 # 
@@ -151,10 +151,15 @@ case "$DIRECTIVE" in
       REPOMAN_REPO_DIR="$repo"
       if [ -e "$repo/.repoman.cfg" ] ; then
         . "$repo/.repoman.cfg"
-      fi 
-    done
+      fi
 
-    echo "$REPOMAN_REPONAME"
+      if [ "$REPOMAN_REPONAME" = '*' ] ; then
+        echo "INFO: no repositories installed"
+        exit 0
+      fi
+
+      echo "$REPOMAN_REPONAME"
+    done
   ;;
 
   activate)
@@ -217,13 +222,58 @@ case "$DIRECTIVE" in
     echo "INFO: finished retrieving repository."
   ;;
 
+  update-repo)
+    for repo in "$REPOMAN_DIR"/* ; do
+      REPOMAN_REPONAME="`basename $repo`"
+      REPOMAN_REPO_DIR="$repo"
+      REPOMAN_UPDATE_COMMAND='git pull'
+      if [ -e "$repo/.repoman.cfg" ] ; then
+        . "$repo/.repoman.cfg"
+      fi
+
+      if [ "$TARGET" = "$REPOMAN_REPONAME" ] ; then
+        cd "$repo"
+        echo "INFO: updating $REPOMAN_REPONAME... "
+        $REPOMAN_UPDATE_COMMAND
+        echo "INFO: finished updating $REPOMAN_REPONAME"
+        exit 0 
+      fi
+    done 
+
+    echo "ERROR 243: target repository $TARGET does not exist"
+    exit 1
+  ;;
+
+  update)
+    for repo in `$0 list-installed` ; do 
+      $0 update-repo "$repo"
+    done
+  ;;
+
   uninstall)
     $0 deactivate "$TARGET"
-    printf "INFO: deleting $TARGET files... "
-    if [ -d "$REPOMAN_DIR/$TARGET" ] ; then
-      rm -rf "$REPOMAN_DIR/$TARGET"
-    fi
-    echo "DONE"
+    for repo in "$REPOMAN_DIR"/* ; do
+      REPOMAN_REPONAME="`basename $repo`"
+      REPOMAN_REPO_DIR="$repo"
+      if [ -e "$repo/.repoman.cfg" ] ; then
+        . "$repo/.repoman.cfg"
+      fi
+
+      if [ "$TARGET" = "$REPOMAN_REPONAME" ] ; then
+        printf "INFO: removing $REPOMAN_REPONAME files... "
+        rm -rf "$repo"
+        echo "DONE"
+        exit 0 
+      fi
+    done
+    
+    echo "ERROR 264: target repository $TARGET does not exist"
+  ;;
+
+  *)
+    echo "ERROR 274: directive \"$DIRECTIVE\" not recognized"
+    $0 help
+    exit 1
   ;;
 
 esac
