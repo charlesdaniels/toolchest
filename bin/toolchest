@@ -738,16 +738,35 @@ case "$DIRECTIVE" in
     case "$VERB" in
       list)
         cd "$NET_CDANIELS_TOOLCHEST_DIR/packages"
-        for dir in `find . -mindepth 2 -maxdepth 2 -type d` ; do
-          PACKAGE_NAME="`basename $dir`"
-          REPO_NAME="`get_package_repo $PACKAGE_NAME`"
-          PACKAGE_PATH="$NET_CDANIELS_TOOLCHEST_DIR/packages/$REPO_NAME/$PACKAGE_NAME"
-          printf "%30s/%-30s" "$REPO_NAME" "$PACKAGE_NAME"
-          if [ -f "$PACKAGE_PATH/brief.txt" ] ; then
-            echo " - `cat $PACKAGE_PATH/brief.txt`"
-          else
-            echo ""
+
+        for repo in ./* ; do  # loop over each repository 
+          cwd=`pwd`
+          if [ ! -d "$repo" ] ; then
+            # repo may be a broken symlink or empty
+            continue 
           fi
+
+          cd "$repo"
+          for package in ./* ; do  # loop over each package
+            if [ ! -d "$package" ] ; then
+              # repo may be empty, or package a broken symlink
+              continue
+            fi
+
+            PACKAGE_NAME="`basename $package`"
+            REPO_NAME="`get_package_repo $PACKAGE_NAME`"
+            PACKAGE_PATH="$NET_CDANIELS_TOOLCHEST_DIR/packages/$REPO_NAME/$PACKAGE_NAME"
+
+            printf "%30s/%-30s" "$REPO_NAME" "$PACKAGE_NAME"
+
+            # display package brief if one is present
+            if [ -f "$PACKAGE_PATH/brief.txt" ] ; then
+              echo " - `cat $PACKAGE_PATH/brief.txt`"
+            else
+              echo ""
+            fi
+          done
+          cd "$cwd"
         done
       ;;
       desc)

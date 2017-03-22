@@ -575,3 +575,8 @@
   2017-03-21 - Charles Daniels: 
 
     * added the pageget script to univesral-tools
+
+  2017-03-22 - Charles Daniels:
+
+    * rewrote `toolchest package list` so it no longer depends on find, and
+      works as expected when repos or packages are symlinks. 

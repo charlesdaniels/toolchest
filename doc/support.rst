@@ -28,7 +28,6 @@ The ``toolchest`` management tool requires the following:
 
   - MUST support the ``local`` keyword (see bug #5)
 
-* ``find`` which supports ``-mindepth`` ``-maxdepth`` and ``-type``
 * ``printf``
 * ``sed`` 
 
