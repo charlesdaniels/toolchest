@@ -588,3 +588,5 @@
     * `repoman` is now feature-complete, and is now considered "beta" quality,
       it will be moved to coreutils as stability and correctness are verified
       in testing.
+
+1.0.4: 
