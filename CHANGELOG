@@ -551,3 +551,40 @@
     * Fixed some typos in acquire-toolchest-dirs which caused it to crash. 
 
 1.0.3: 
+
+  2017-03-10 - Charles Daniels:
+
+    * texutil-mktex now compiles with multiple passes
+
+  2017-03-14 - Charles Daniels:
+
+    * added clean-mac script to net.cdaniels.toolchest.tools
+
+  2017-03-15 - Charles Daniels:
+
+    * texutil-mktex now supports advanced argument parsing
+
+    * added --bibtex and --biber to texutil-mktex to invoke biber or bibtex
+      during compilation. 
+
+    * texutil-mktex now enables shell escape by default
+
+    * added 215utils-normalbash
+
+  2017-03-20 - Charles Daniels:
+
+    * moved code-tools from net.cdaniels.toolchest.legacy to
+      net.cdaniels.toolchest.tools, as it still works just fine. 
+
+  2017-03-21 - Charles Daniels: 
+
+    * added the pageget script to univesral-tools
+
+  2017-03-22 - Charles Daniels:
+
+    * rewrote `toolchest package list` so it no longer depends on find, and
+      works as expected when repos or packages are symlinks.
+
+    * `repoman` is now feature-complete, and is now considered "beta" quality,
+      it will be moved to coreutils as stability and correctness are verified
+      in testing.

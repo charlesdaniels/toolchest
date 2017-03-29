@@ -61,7 +61,7 @@ Consequentially:
   compatibility of any kind, and may make breaking changes to any part of the
   toolchest
 
-Releases to Date (current 2017-01-30)
+Releases to Date (current 2017-03-29)
 =====================================
 
 +-------------+-----------+----------------+
@@ -77,7 +77,7 @@ Releases to Date (current 2017-01-30)
 +-------------+-----------+----------------+
 | 1.0.1       | stable    | unsupported    |
 +-------------+-----------+----------------+
-| 1.0.2       | stable    | released       |
+| 1.0.2       | stable    | unsupported    |
 +-------------+-----------+----------------+
-| 1.0.3       | alpha     | in-development |
+| 1.0.3       | stable    | released       |
 +-------------+-----------+----------------+

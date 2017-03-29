@@ -1,37 +1,46 @@
 #!/usr/bin/env perl
 ########10########20########30## DOCUMENTATION #50########60########70########80
 #
-#  OVERVIEW
-#  ========
+# OVERVIEW
+# ========
 # 
-#  This script will attempt to compile a given .tex file using pdflatex. 
-#  
-#  Multiple .tex file may be specified for compilation. 
-#  
-#  If $1 is '-r', then texutil-mktex will instead recurse into directories,
-#  including ./, and attempt to compile *.tex there.
-#  
-#  This script will by default run pdflatex such that it will not pause on
-#  errors. Further, this script will always exit with an exit code of 0, even
-#  if one or more compilations failed.
-#  
-#  Further, this script will utilize texfot to display only
-#  pertinent/important error messages.
-#  
-#  CONFIGURATION
-#  =============
-#  
-#  This script may be configured via the file
-#  $NET_CDANIELS_TOOLCHEST_LOCAL/config/texutil-mktex.cfg
-#  
-#  The following keys are recognized: 
-#  
-#    PDFLATEX_COMMAND . . . command which invokes `pdflatex`; defaults to
-#                           `pdflatex` if not specified
-#                           
-#    PDFLATEX_OPTS  . . . . options to pass to pdflatex; defaults to
-#                           `-interaction=nonstopmode` if not specified
-#  
+# This script will attempt to compile a given .tex file using pdflatex. 
+# 
+# Multiple .tex file may be specified for compilation. 
+# 
+# If $1 is '-r', then texutil-mktex will instead recurse into directories,
+# including ./, and attempt to compile *.tex there.
+# 
+# This script will by default run pdflatex such that it will not pause on
+# errors. Further, this script will always exit with an exit code of 0, even
+# if one or more compilations failed.
+# 
+# Further, this script will utilize texfot to display only
+# pertinent/important error messages.
+# 
+# 
+# USAGE
+# =====
+# 
+#   -r,--recursive . . . . operate on *.tex, recurse into subdirectories, and
+#                          operate in *.tex in those as well. 
+#                          
+#   -b,--bibtex  . . . . . compile with bibtex
+# 
+# CONFIGURATION
+# =============
+# 
+# This script may be configured via the file
+# $NET_CDANIELS_TOOLCHEST_LOCAL/config/texutil-mktex.cfg
+# 
+# The following keys are recognized: 
+# 
+#   PDFLATEX_COMMAND . . . command which invokes `pdflatex`; defaults to
+#                          `pdflatex` if not specified
+#                          
+#   PDFLATEX_OPTS  . . . . options to pass to pdflatex; defaults to
+#                          `-interaction=nonstopmode` if not specified
+# 
 ########10########20########30##### LICENSE ####50########60########70########80
 #  Copyright (c) 2017, Charles Daniels
 #  All rights reserved.
@@ -68,6 +77,8 @@
 use strict;
 use warnings;
 
+# This snippet is used to source sh-style .CFG files safely. 
+#
 # this snippet sourced from SO
 # http://stackoverflow.com/a/6829502
 # User: Chas. Owens
@@ -91,7 +102,7 @@ sub source {
 my $NET_CDANIELS_TOOLCHEST_DIR = `toolchest dir`;
 my $CONFIG_PATH = "$NET_CDANIELS_TOOLCHEST_DIR/local/config/texutil-mktex.cfg";
 my $PDFLATEX_COMMAND = "pdflatex";
-my $PDFLATEX_OPTS = "-interaction=nonstopmode";
+my $PDFLATEX_OPTS = "-interaction=nonstopmode --shell-escape";
 
 if ( -e "$CONFIG_PATH" ) {
   source("$CONFIG_PATH");
@@ -104,20 +115,38 @@ if ( -e "$CONFIG_PATH" ) {
 }
 
 my $recursive = 0;  # FALSE
-if ( $ARGV[0] eq "-r" ) {
-  $recursive = 1;  # TRUE
-  shift;
-}
+my $bibtex    = 0;  # FALSE
+my $biber     = 0;  # FALSE
+my @TARGET_FILES;
 
-my @TARGET_FILES = @ARGV;
+# parse argv
+foreach (@ARGV) {
+  if ($_ eq "-r")             { $recursive = 1;          }
+  elsif ($_ eq "--recursive") { $recursive = 1;          }
+  elsif ($_ eq "-b")          { $bibtex    = 1;          }
+  elsif ($_ eq "--bibtex")    { $bibtex    = 1;          }
+  elsif ($_ eq "-i"      )    { $biber     = 1;          }
+  elsif ($_ eq "--biber")     { $biber     = 1;          }
+  else                        { push(@TARGET_FILES, $_); }
+
+}
 
 if ($recursive) {
   @TARGET_FILES = <*.tex>;
 }
 
 foreach my $file (@TARGET_FILES) {
-  print("\nCOMPILE: $file\n");
-  print(`texfot $PDFLATEX_COMMAND $PDFLATEX_OPTS "$file"`);
+  (my $without_extension = $file) =~ s/\.[^.]+$//;
+  print("\nCOMPILE: $without_extension\n");
+  `texfot $PDFLATEX_COMMAND $PDFLATEX_OPTS "$without_extension"`;
+  if ($bibtex) { 
+    print("BIBTEX:\n");
+    print(`bibtex "$without_extension"`)
+  }
+  if ($biber) { print(`biber "$without_extension"`); }
+  `texfot $PDFLATEX_COMMAND $PDFLATEX_OPTS "$without_extension"`;
+  print(`texfot $PDFLATEX_COMMAND $PDFLATEX_OPTS "$without_extension"`);
+
 }
 
 if ( ! $recursive ) {

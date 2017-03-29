@@ -28,12 +28,11 @@ The ``toolchest`` management tool requires the following:
 
   - MUST support the ``local`` keyword (see bug #5)
 
-* ``find`` which supports ``-mindepth`` ``-maxdepth`` and ``-type``
 * ``printf``
 * ``sed`` 
 
-  - the ``toolchest`` management tool supports BSD and GNU sed, but many packages
-    require GNU sed 
+  - the ``toolchest`` management tool supports BSD and GNU sed, but many
+    packages require GNU sed
 
 * ``cut``
 * ``sort``

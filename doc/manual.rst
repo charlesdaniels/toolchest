@@ -2,7 +2,7 @@
 net.cdaniels.toolchest User's Manual
 ************************************
 
-Current as of 0.0.5-ALPHA 
+Current as of 1.0.2-RELEASE-2
 
 .. contents:: 
 
@@ -31,7 +31,7 @@ As of 0.0.5, there is no special installation procedure for the toolchest.
 Simply ``git clone`` the repo, or download a release tarball and extract it
 anywhere. It is suggested, but not required, that you name the resulting
 directory ``.net.cdaniels.toolchest``, and place it either in ``$HOME`` or
-``/opt/``
+``/opt/`` (or anywhere convienient).
 
 **NOTE**: the toolchest contains a number of symbolic links - make sure you
 preserve them while copying or extracting it, or you may get unexpected
@@ -45,6 +45,16 @@ Now add the following directories to ``$PATH``
 
 * ``$NET_CDANIELS_TOOLCHEST_DIR/bin``
 * ``$NET_CDANIELS_TOOLCHEST_DIR/local/bin``
+ 
+As of 1.0.2, `bin/toolchest-genpath` can be used to produce appropriate export
+commands to add the toolchest's bin folders to your PATH. You can setup 
+your PATH with the following commands:
+
+1. ``./bin/toolchest-genpath >> ~/.bashrc``
+2. ``./bin/toolchest-genpath >> ~/.bash_profile``
+3. ``./bin/toolchest-genpath >> ~/.profile``
+
+**NOTE**: These commands assume your CWD is ``NET_CDANIELS_TOOLCHEST_DIR``. 
 
 Uninstalling the Toolchest
 --------------------------

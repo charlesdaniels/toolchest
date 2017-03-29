@@ -1,0 +1,65 @@
+#!/usr/bin/env python3
+########10########20########30## DOCUMENTATION #50########60########70########80
+#
+#  OVERVIEW
+#  ========
+#  
+#  Accepts one or more MAC addresses on standard input, formats them to be
+#  lower case and colon-delimited. Characters which are not valid hexadecimal
+#  characters will be discarded. Each converted input is displayed on it's own
+#  line on standard out. Error checking is not done - if you put invalid MACs
+#  in, you will get invalid MACs back out.
+#    
+########10########20########30##### LICENSE ####50########60########70########80
+#  Copyright (c) 2017, Charles Daniels
+#  All rights reserved.
+# 
+#  Redistribution and use in source and binary forms, with or without
+#  modification, are permitted provided that the following conditions are met:
+# 
+#  1. Redistributions of source code must retain the above copyright notice,
+#     this list of conditions and the following disclaimer.
+#  
+#  2. Redistributions in binary form must reproduce the above copyright
+#     notice, this list of conditions and the following disclaimer in the
+#     documentation and/or other materials provided with the distribution.
+# 
+#  3. Neither the name of the copyright holder nor the names of its
+#     contributors may be used to endorse or promote products derived from
+#     this software without specific prior written permission.
+# 
+#  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+#  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+#  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+#  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+#  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+#  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+#  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+#  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+#  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+#  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+#  POSSIBILITY OF SUCH DAMAGE.
+#  
+########10########20########30########40########50########60########70########80
+
+import sys
+import re
+
+stderr = sys.stderr.write 
+stdout = sys.stdout.write
+
+def format_mac(mac):
+  mac = mac.lower()
+  mac = re.sub(r"[^0-9a-f]","", mac)
+
+  # http://stackoverflow.com/a/3258596
+  # 
+  # This inserts the colons
+  mac = ":".join(a+b for a,b in zip(mac[::2], mac[1::2]))
+
+  return mac
+
+
+for line in sys.stdin.readlines(): 
+  print(format_mac(line))
+
