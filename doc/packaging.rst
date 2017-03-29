@@ -36,7 +36,7 @@ Toolchest packages are simply directories which contain the following files:
 
   - ``remote`` - a list of URLs which are to be fetched before attempting to
     install the package; should the fetching fail, the installer will not 
-    be executed. 
+    be executed. Note that git repos are not supported here at this time. 
 
 The rest of the package folder may be structured in whatever way best suits
 the package.
