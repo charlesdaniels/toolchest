@@ -31,8 +31,8 @@ The ``toolchest`` management tool requires the following:
 * ``printf``
 * ``sed`` 
 
-  - the ``toolchest`` management tool supports BSD and GNU sed, but many packages
-    require GNU sed 
+  - the ``toolchest`` management tool supports BSD and GNU sed, but many
+    packages require GNU sed
 
 * ``cut``
 * ``sort``
