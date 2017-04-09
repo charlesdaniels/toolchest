@@ -598,3 +598,12 @@
   2017-04-03 - Charles Daniels
 
     * Added csv2img script to universal-tools (not working properly yet)
+
+  2017-04-08 - Charles Daniels:
+
+    * universal-tools now uses the standard dependancy handling mechanism
+
+    * universal-tools no longer requires wget (it is now an optional
+      depenancy - some tools still don't work without it)
+
+    * universal-tools now works out-of-box on stock Mac OSX 10.5.8
