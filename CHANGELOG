@@ -594,3 +594,7 @@
   2017-03-30 - Charles Daniels:
 
     * Added archive-mkdmg script for producing .dmg files on macOS systems.
+
+  2017-04-03 - Charles Daniels
+
+    * Added csv2img script to universal-tools (not working properly yet)
