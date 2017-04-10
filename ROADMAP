@@ -35,6 +35,11 @@ toolchest:
     with a newer toolchest version which can update the local installation 
     with the new version. 
 
+  * there should be a standardized way to add optional "system" dependancies
+    to the dep/ tree. See for example the preinstall script for universal-tools
+    where there are several dependancies which are not required for core
+    package functionality, but enable some componants of it. 
+
 carbonite:
 
   * remove limitation where payload filename cannot contain spaces
