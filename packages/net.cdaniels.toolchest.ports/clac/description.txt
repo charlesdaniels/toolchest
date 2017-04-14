@@ -1,0 +1,9 @@
+A command line, stack-based calculator with postfix notation that displays the
+stack contents at all times. As you type, the stack changes are reflected
+immediately.
+
+In a stack-based postfix calculator, entering a number pushes it on a stack, and
+arithmetic operations pop their arguments from the stack and push the result. As
+all the operations take a fix number of arguments, there's no room for
+ambiguity: parenthesis and operator precedence are not needed. Postfix notation
+is also known as reverse Polish notation, or RPN.

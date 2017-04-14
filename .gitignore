@@ -1,4 +1,5 @@
 local/*
+.DS_Store
 *.o
 *.log
 *.carbonite
@@ -21,3 +22,4 @@ packages/net.cdaniels.toolchest.ports/pv/bin
 packages/net.cdaniels.toolchest.ports/pv/remote
 packages/net.cdaniels.toolchest.ports/cmatrix/bin
 packages/net.cdaniels.toolchest.ports/itunes_tools/bin
+packages/net.cdaniels.toolchest.ports/clac/bin

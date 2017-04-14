@@ -611,3 +611,7 @@
   2017-04-11 - Charles Daniels:
 
     * Updated `sysenv` to include additional information in reports. 
+
+  2017-04-14 - Charles Daniels:
+
+    * Added net.cdaniels.ports.clac
