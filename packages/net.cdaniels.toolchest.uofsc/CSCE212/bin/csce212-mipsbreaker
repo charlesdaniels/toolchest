@@ -117,6 +117,8 @@ instructions['000000:00000101010'] = {'type':'R', 'name':'slt',  'literal_zero':
 instructions['000000:00000100100'] = {'type':'R', 'name':'and',  'literal_zero':True  }
 instructions['001010']             = {'type':'I', 'name':'slti', 'literal_zero':True  }
 instructions['001100']             = {'type':'I', 'name':'andi', 'literal_zero':True  }
+instructions['100011']             = {'type':'I', 'name':'lw',   'literal_zero':True  }
+
 
 def parseInstruction_I(i):
   # parse an I-type instruction

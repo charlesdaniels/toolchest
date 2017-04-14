@@ -578,7 +578,7 @@
 
   2017-03-21 - Charles Daniels: 
 
-    * added the pageget script to univesral-tools
+    * added the pageget script to universal-tools
 
   2017-03-22 - Charles Daniels:
 
@@ -607,3 +607,7 @@
       depenancy - some tools still don't work without it)
 
     * universal-tools now works out-of-box on stock Mac OSX 10.5.8
+
+  2017-04-11 - Charles Daniels:
+
+    * Updated `sysenv` to include additional information in reports. 

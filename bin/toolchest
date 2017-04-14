@@ -195,15 +195,15 @@
 #                     space. Either CuRL or Wget will be used to download the
 #                     file, depending on which is available. The output file
 #                     will be placed in a folder named "remote" under the
-#                     package directory. Failure to download the dependancy
+#                     package directory. Failure to download the dependency
 #                     will NOT cause toolchest to abort the installation - you
-#                     need to check for the presencce of your dependancies.
+#                     need to check for the presence of your dependencies.
 #                     
 #    perl . . . . . . a list of perl modules which need to be installed for the
 #                     package to work. If any are not currently installed, the 
 #                     package installer fails. The toolchest will not attempt 
 #                     to install the module, as on many systems doing so
-#                     requires root access. 
+#                     requires root access.su
 #
 #    Note that both of these files need to end in a blank line to be parsed
 #    correctly.
