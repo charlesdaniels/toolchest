@@ -615,3 +615,7 @@
   2017-04-14 - Charles Daniels:
 
     * Added net.cdaniels.ports.clac
+
+	2017-04-21 - Charles Daniels:
+		
+		* added audioutil-flac2alac
