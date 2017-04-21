@@ -619,3 +619,5 @@
 	2017-04-21 - Charles Daniels:
 		
 		* added audioutil-flac2alac
+
+		* ytrip no longer re-encodes downloaded tracks
