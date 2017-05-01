@@ -626,3 +626,9 @@
 
     * Fixed a minor bug in sysenv where some outputs went to stderr instead of
       stdout
+
+
+  2016-05-01 - Charles Daniels:
+
+     * Fixed a bug in texutil-cleanup where it would miss the write18 test file
+      if the .tex file being used for input contained spaces. 
