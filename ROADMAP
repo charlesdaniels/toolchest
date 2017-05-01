@@ -53,19 +53,6 @@ net.cdaniels.python:
   loggingutils:
 
     * default log path should probably go to /tmp, rather than ./
-
-215util:
-
-  * package for CSCE215-TA related utilities
-
-  * script to setup tmux session with whiteboard, script session, and so on
-
-  * script to package up demos, whiteboard, script session, etc. for
-    redistribution after lessons are over.
-
-  * script to email out the result of the previous point to enrolled students.
-
-
 runtime:
 
   * it should be possible to package the toolchest coreutils and (maybe)
