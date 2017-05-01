@@ -117,3 +117,24 @@ archiveutil:
 
     The compatibility of gz/xz/tar with future systems as moot, as archive-
     create already creates those anyway.
+
+1.1.X release series:
+
+  * As I no longer use audioutil, it will likely be placed in the 
+    net.cdaniels.toolchest.legacy repo
+
+  * Any "legacy" packages which still have not been updated to work correctly
+    with the 1.0.X release series will likely be removed permanently, probably
+    by creating a new repo (net.cdaniels.toolchest.deprecated). 
+
+  * repoman will become part of coreutils
+
+  * A tool needs to be added to detect broken symlinks left over during updates.
+    The 1.1.X series will likely involve mass shuffling of packages and repos,
+    and will probably cause the same such problems as the 1.0.0 release did. 
+    This tool should be called as part of the refresh operation. 
+
+  * Some repos and packages which are currently in the base install will
+    likely be moved to external git repos and will be accessible via repoman. 
+    Some thought will need to go into which packages and repos should really be
+    part of the standard base install, and which should not. 
