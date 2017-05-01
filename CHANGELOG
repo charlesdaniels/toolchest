@@ -632,3 +632,5 @@
 
      * Fixed a bug in texutil-cleanup where it would miss the write18 test file
       if the .tex file being used for input contained spaces. 
+
+    * Created a package for toolchest-doctor and placed a stub in it. 
