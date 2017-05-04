@@ -644,3 +644,8 @@
 
   * repoman is now a core utility under the name toolchest-repoman
 
+  * Broke utility functions for working with packages out to 
+    lib/toolchest-package.lib
+
+  * Created a stub for toolchest-package
+

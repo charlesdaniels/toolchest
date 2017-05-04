@@ -1,0 +1,279 @@
+########10########20########30## DOCUMENTATION #50########60########70########80
+#
+# OVERVIEW
+# ========
+# 
+# Toolchest internal-use functions for managing packages. Each function
+# is preceeded by a header documenting it's use.  
+#
+########10########20########30##### LICENSE ####50########60########70########80
+# Copyright (c) 2017, Charles Daniels
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without 
+# modification, are permitted provided that the following conditions are met:
+#
+# 1. Redistributions of source code must retain the above copyright notice, 
+# this list of conditions and the following disclaimer.
+# 
+# 2. Redistributions in binary form must reproduce the above copyright notice, 
+# this list of conditions and the following disclaimer in the documentation 
+# and/or other materials provided with the distribution.
+#
+# 3. Neither the name of the copyright holder nor the names of its 
+# contributors may be used to endorse or promote products derived from this 
+# software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
+# ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE 
+# LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF 
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
+# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+# POSSIBILITY OF SUCH DAMAGE.
+########10########20########30########40########50########60########70########80
+
+# check that required variables are present
+if ! (: "${PACKAGE_LIST?}") 2>/dev/null; then
+  echo "ERROR TP42: PACKAGE_LIST is not defined"
+  exit 1
+fi
+if ! (: "${NET_CDANIELS_TOOLCHEST_DIR?}") 2>/dev/null; then
+  echo "ERROR TP46: NET_CDANIELS_TOOLCHEST_DIR is not defined"
+  exit 1
+fi
+########10########20########30 UTILITY FUNCTIONS 0########60########70########80
+
+#  check_package_installed
+#  =======================
+#
+#  Checks to see if a package has been marked as installed
+#
+#  USAGE
+#  =====
+#
+#    $1 . . . package name to check
+#
+#  RETURNS
+#  =======
+#
+#  If the package is installed, the return code is zero. If the package is not
+#  installed, the return code is one. If the package list does not exist, the
+#  return code is one.
+#
+check_package_installed () {
+  if [ -f "$PACKAGE_LIST" ] ; then
+    cat "$PACKAGE_LIST" | grep "$1" > /dev/null
+    if [ $? -eq 0 ]  ; then
+      return 0
+    else
+      return 1
+    fi
+  else
+    return 1
+  fi
+}
+
+#  mark_package_installed
+#  ======================
+#
+#  Marks a package as installed unconditionally.
+#
+#  USAGE
+#  =====
+#
+#    $1 . . . the package to mark installed
+#
+mark_package_installed () {
+  check_package_installed "$1"
+  if [ $? -eq 0 ] ; then
+    # package is already installed
+    printf "" # do northing
+  else
+    # package is not already installed
+    echo "$1" >> "$PACKAGE_LIST"
+  fi
+  dedupe_packages
+}
+
+#  dedupe_packages
+#  ===============
+#
+#  Ensure that the package list does not contain any duplicate package names
+dedupe_packages () {
+  if [ ! -f "$PACKAGE_LIST" ] ; then
+    return 1
+  fi
+  cat "$PACKAGE_LIST" | sort | uniq > "$PACKAGE_LIST.tmp"
+  mv "$PACKAGE_LIST.tmp" "$PACKAGE_LIST"
+}
+
+#  mark_package_uninstalled
+#  ========================
+#
+#  Mark a package as uninstalled unconditionally.
+#
+#  USAGE
+#  =====
+#
+#    $1 . . . the package to mark uninstalled
+mark_package_uninstalled () {
+  if [ ! -f "$PACKAGE_LIST" ] ; then
+    return 1
+  fi
+  dedupe_packages
+  cat "$PACKAGE_LIST" | grep -v "$1" > "$PACKAGE_LIST.tmp"
+  mv "$PACKAGE_LIST.tmp" "$PACKAGE_LIST"
+}
+
+#  install_package
+#  ===============
+#
+#  Install a package unconditionally, ignoring the package list.
+#
+#  USAGE
+#  =====
+#
+#    $1 . . . the package to be installed
+#
+#  RETURNS
+#  =======
+#
+#    If the package does not exist, returns 1 and prints an error.
+#
+#    If the package does not have an installer, returns 1 and prints an error.
+#
+#    In all other cases, the return code of the installer script is returned.
+#
+install_package () {
+  local PACKAGE="$1"
+  local REPO="`get_package_repo "$PACKAGE"`"
+  local PACKAGE_PATH="`realpath "$NET_CDANIELS_TOOLCHEST_DIR/packages/$REPO/$PACKAGE"`"
+  # make sure the package exists
+  if [ ! -d "$PACKAGE_PATH" ] ; then
+    echo "ERROR T288: no such package directory $PACKAGE_PATH"
+    return 1
+  fi
+
+  cd "$PACKAGE_PATH"
+
+  if [ -e "./Makefile" ] ; then
+    NET_CDANIELS_TOOLCHEST_DIR="$NET_CDANIELS_TOOLCHEST_DIR" \
+    PACKAGE_NAME="$PACKAGE" \
+    PACKAGE_PATH="$PACKAGE_PATH" \
+    make install
+    RET=$?
+  elif [ -e "./makefile" ] ; then
+    NET_CDANIELS_TOOLCHEST_DIR="$NET_CDANIELS_TOOLCHEST_DIR" \
+    PACKAGE_NAME="$PACKAGE" \
+    PACKAGE_PATH="$PACKAGE_PATH" \
+    make install
+    RET=$?
+  elif [ -e "./install.sh" ] ; then
+    NET_CDANIELS_TOOLCHEST_DIR="$NET_CDANIELS_TOOLCHEST_DIR" \
+    PACKAGE_NAME="$PACKAGE" \
+    PACKAGE_PATH="$PACKAGE_PATH" \
+    ./install.sh "$@"
+    RET=$?
+  else
+    echo "ERROR T304: package $PACKAGE has no installer"
+    return 1
+  fi
+
+  return $RET
+
+}
+
+#  uninstall_package
+#  =================
+#
+#  Uninstall a package unconditionally, ignoring the package list.
+#
+#  USAGE
+#  =====
+#
+#    $1 . . . the package to be uninstalled
+#
+#  RETURNS
+#  =======
+#
+#   If the package does not exist, returns 1 and prints an error
+#
+#   If the package does not have an uninstaller, returns 1 and prints an error
+#
+#   In all other cases, returns the exit code of the package uninstaller.
+#
+uninstall_package () {
+  local PACKAGE="$1"
+  local REPO="`get_package_repo "$PACKAGE"`"
+  local PACKAGE_PATH="`realpath "$NET_CDANIELS_TOOLCHEST_DIR/packages/$REPO/$PACKAGE"`"
+  # make sure the package exists
+  if [ ! -d "$PACKAGE_PATH" ] ; then
+    echo "ERROR T288: no such package directory $PACKAGE_PATH"
+    return 1
+  fi
+
+  cd "$PACKAGE_PATH"
+
+  if [ -e "./Makefile" ] ; then
+    NET_CDANIELS_TOOLCHEST_DIR="$NET_CDANIELS_TOOLCHEST_DIR" \
+    PACKAGE_NAME="$PACKAGE" \
+    PACKAGE_PATH="$PACKAGE_PATH" \
+    make uninstall
+    RET=$?
+  elif [ -e "./makefile" ] ; then
+    NET_CDANIELS_TOOLCHEST_DIR="$NET_CDANIELS_TOOLCHEST_DIR" \
+    PACKAGE_NAME="$PACKAGE" \
+    PACKAGE_PATH="$PACKAGE_PATH" \
+    make uninstall
+    RET=$?
+  elif [ -e "./uninstall.sh" ] ; then
+    NET_CDANIELS_TOOLCHEST_DIR="$NET_CDANIELS_TOOLCHEST_DIR" \
+    PACKAGE_NAME="$PACKAGE" \
+    PACKAGE_PATH="$PACKAGE_PATH" \
+    ./uninstall.sh "$@"
+    RET=$?
+  else
+    echo "ERROR T359: package $PACKAGE has no uninstaller"
+    return 1
+  fi
+
+  return $RET
+}
+
+#  get_package_repo
+#  ================
+#
+#  Find a package's repo, and output the found repo on stdout.
+#
+#  USAGE
+#  =====
+#
+#    $1 . . . the package to find the repo of
+#
+#  RETURNS
+#  =======
+#
+#    Returns 0 on success
+#
+#    Returns 1 if the package is not found, or if another error is encountered
+get_package_repo () {
+  local STARTING_DIR=`pwd`
+  local PACKAGE="$1"
+  cd $NET_CDANIELS_TOOLCHEST_DIR/packages
+  for candidate in */ ; do
+    if [ -d "$candidate/$PACKAGE" ] ; then
+      echo "$candidate" | tr -d "/"
+      cd "$STARTING_DIR"
+      return 0
+    fi
+  done
+  cd "$STARTING_DIR"
+  return 1
+
+}
+

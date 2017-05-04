@@ -63,6 +63,8 @@
 #   REPOMAN_UPDATE_COMMAND . Override the command used to update this repo,
 #                            useful if you need to `git pull` from a specific
 #                            branch.
+#
+#   REPOMAN_LINK_INSTALLER . If this path, when concatenate
 #   
 # NOTES
 # =====
