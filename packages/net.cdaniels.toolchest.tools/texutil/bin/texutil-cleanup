@@ -113,6 +113,21 @@ for file in $TARGET_FILES; do
     fi
   fi
 
+  # handle the annoying tendency of pdflatex to create a file named 
+  # as the first space-delimited substring of the input file name for 
+  # "write testing", then failing to clean it up. 
+  write18test=`echo $file | cut -d\  -f 1`
+  if [ -e "$write18test" ] ; then
+    grep "write18-test" < $write18test > /dev/null 2>&1
+    if [ $? -eq 0 ] ; then
+      if [ "$DRY_RUN" = "YES" ] ; then
+        echo "\t $write18test";
+      else
+        rm "$write18test"
+      fi
+    fi
+  fi
+
 done
 
 if [ $RECURSE = "YES" ] ; then

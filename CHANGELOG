@@ -578,7 +578,7 @@
 
   2017-03-21 - Charles Daniels: 
 
-    * added the pageget script to univesral-tools
+    * added the pageget script to universal-tools
 
   2017-03-22 - Charles Daniels:
 
@@ -588,3 +588,49 @@
     * `repoman` is now feature-complete, and is now considered "beta" quality,
       it will be moved to coreutils as stability and correctness are verified
       in testing.
+
+1.0.4: 
+
+  2017-03-30 - Charles Daniels:
+
+    * Added archive-mkdmg script for producing .dmg files on macOS systems.
+
+  2017-04-03 - Charles Daniels
+
+    * Added csv2img script to universal-tools (not working properly yet)
+
+  2017-04-08 - Charles Daniels:
+
+    * universal-tools now uses the standard dependancy handling mechanism
+
+    * universal-tools no longer requires wget (it is now an optional
+      depenancy - some tools still don't work without it)
+
+    * universal-tools now works out-of-box on stock Mac OSX 10.5.8
+
+  2017-04-11 - Charles Daniels:
+
+    * Updated `sysenv` to include additional information in reports. 
+
+  2017-04-14 - Charles Daniels:
+
+    * Added net.cdaniels.ports.clac
+
+  2017-04-21 - Charles Daniels:
+
+    * added audioutil-flac2alac
+
+    * ytrip no longer re-encodes downloaded tracks
+
+  2017-04-24 - Charles Daniels:
+
+    * Fixed a minor bug in sysenv where some outputs went to stderr instead of
+      stdout
+
+
+  2016-05-01 - Charles Daniels:
+
+     * Fixed a bug in texutil-cleanup where it would miss the write18 test file
+      if the .tex file being used for input contained spaces. 
+
+    * Created a package for toolchest-doctor and placed a stub in it. 

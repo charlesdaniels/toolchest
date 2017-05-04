@@ -6,8 +6,8 @@ $(acquire-toolchest-dirs)
 
 . "$NET_CDANIELS_TOOLCHEST_LIB/check-command-exists.lib"
 
-DEPENDS="python wget awk curl"
-OPTIONAL="youtube-dl"
+DEPENDS=""
+OPTIONAL="youtube-dl wget"
 
 
 
