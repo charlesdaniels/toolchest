@@ -647,5 +647,6 @@
   * Broke utility functions for working with packages out to 
     lib/toolchest-package.lib
 
-  * Created a stub for toolchest-package
+  * Moved functionality required for "toolchest package" directive into a
+    new coreutils binary: toolchest-package
 
