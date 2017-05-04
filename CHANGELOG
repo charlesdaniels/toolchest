@@ -628,9 +628,19 @@
       stdout
 
 
-  2016-05-01 - Charles Daniels:
+  2017-05-01 - Charles Daniels:
 
      * Fixed a bug in texutil-cleanup where it would miss the write18 test file
       if the .tex file being used for input contained spaces. 
 
     * Created a package for toolchest-doctor and placed a stub in it. 
+
+
+1.1.0:
+
+  2017-05-04 - Charles Daniels:
+
+  * Depricated net.cdaniels.toolchest.indev/repoman
+
+  * repoman is now a core utility under the name toolchest-repoman
+
