@@ -595,17 +595,16 @@ case "$DIRECTIVE" in
     echo "INFO: setup finished successfully"
   ;;
   *)
-    # if the directive is not found in the above switch statement, we search
-    # for an avilable binary whith the same name. i.e. bin/toolchest-* is 
-    # searched for a script or binary such that the part of it's name after
-    # the first "-" is equal to the directive. This allows stripped-down 
-    # distributions of the toolchest to be built without, for example, 
-    # package management. 
-    binary="$NET_CDANIELS_TOOLCHEST_DIR/bin/toolchest-$DIRECTIVE"
-    if [ -x "$binary" ] ; then
-      "$binary" $@
-    else
-     echo "ERROR T613: no such directive $DIRECTIVE, or the request directive is not installed in this toolchest distro"
-    fi
+    # search for an appropriate directive binary and call if if one is found
+    for parentdir in "lib/directives" "local/lib/directives" ; do
+      binary="$NET_CDANIELS_TOOLCHEST_DIR/$parentdir/toolchest-$DIRECTIVE"
+      if [ -x "$binary" ] ; then
+        "$binary" $@
+        exit #?
+      fi
+    done
+
+    echo "ERROR T613: no such directive $DIRECTIVE, or the request directive is not installed in this toolchest distro"
+    exit 1
    ;;
 esac
