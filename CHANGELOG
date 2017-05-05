@@ -642,11 +642,15 @@
 
   * Depricated net.cdaniels.toolchest.indev/repoman
 
-  * repoman is now a core utility under the name toolchest-repoman
+  * repoman is now a core utility under the name toolchest-repo
 
   * Broke utility functions for working with packages out to 
     lib/toolchest-package.lib
 
   * Moved functionality required for "toolchest package" directive into a
     new coreutils binary: toolchest-package
+
+  * If a directive is not found, the toolchest management utility will 
+    search for toolchest-DIRECTIVE in bin/ and invoke that - to this end, 
+    the package and repo directives are now done "on the fly"
 

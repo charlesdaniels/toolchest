@@ -491,7 +491,6 @@ DIRECTIVE="$1"
 shift
 
 case "$DIRECTIVE" in
-########10########20########30##### PACKAGE ####50########60########70########80
 ########10########20########30#### INTERNAL ####50########60########70########80
   internal)
     INTERNAL_DIRECTIVE="$1"
@@ -597,6 +596,17 @@ case "$DIRECTIVE" in
     echo "INFO: setup finished successfully"
   ;;
   *)
-    echo "ERROR T46: no such directive $DIRECTIVE"
-  ;;
+    # if the directive is not found in the above switch statement, we search
+    # for an avilable binary whith the same name. i.e. bin/toolchest-* is 
+    # searched for a script or binary such that the part of it's name after
+    # the first "-" is equal to the directive. This allows stripped-down 
+    # distributions of the toolchest to be built without, for example, 
+    # package management. 
+    binary="$NET_CDANIELS_TOOLCHEST_DIR/bin/toolchest-$DIRECTIVE"
+    if [ -x "$binary" ] ; then
+      "$binary" $@
+    else
+     echo "ERROR T613: no such directive $DIRECTIVE, or the request directive is not installed in this toolchest distro"
+    fi
+   ;;
 esac
