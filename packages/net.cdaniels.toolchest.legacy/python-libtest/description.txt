@@ -1,6 +1,0 @@
-This package cannot be installed, and will actually error if you try it. This
-package is just a container to test code for locating and importing toolchest
-Python libraries.
-
-In short, this is an internal toolchest development tool, you should probably
-ignore it.

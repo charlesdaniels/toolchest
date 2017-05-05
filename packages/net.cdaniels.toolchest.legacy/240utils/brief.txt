@@ -1,1 +1,0 @@
-utilities for USC's CSCE240 class

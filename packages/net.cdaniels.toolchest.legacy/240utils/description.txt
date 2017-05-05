@@ -1,4 +1,0 @@
-This package contains a number of tools which I wrote for professor Buell's
-section of CSCE240 at University of South Carolina. As I have now completed
-that class, these are not actively maintained anymore, but may prove useful
-for others.

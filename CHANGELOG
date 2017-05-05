@@ -678,3 +678,19 @@
   2017-05-05 - Charles Daniels:
 
     * "internal" is now a dynamic directive 
+    
+    * youtube-dl has been tested and moved to the ports repo
+
+    * the following packages have been deprecated:
+
+      * net.cdaniels.toolchest.legacy/240utils
+      
+      * net.cdaniels.toolchest.legacy/check-connection
+
+      * net.cdaniels.toolchest.legacy/create-project
+      
+      * net.cdaniels.toolchest.legacy/posixcube
+
+      * net.cdaniels.toolchest.legacy/python-libtest
+
+      * net.cdaniels.toolchest.legacy/net.cdaniels.python
