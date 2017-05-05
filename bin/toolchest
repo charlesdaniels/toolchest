@@ -508,40 +508,6 @@ DIRECTIVE="$1"
 shift
 
 case "$DIRECTIVE" in
-########10########20########30#### INTERNAL ####50########60########70########80
-  internal)
-    INTERNAL_DIRECTIVE="$1"
-    shift
-    case "$INTERNAL_DIRECTIVE" in
-      package)
-        VERB="$1"
-        shift
-        PACKAGE="$1"
-        shift
-
-        case "$VERB" in
-          unconditional-install)
-            install_package "$PACKAGE"
-            exit $?
-          ;;
-          unconditional-uninstall)
-            uninstall_package "$PACKAGE"
-            exit $?
-          ;;
-          mark-installed)
-            mark_package_installed "$PACKAGE"
-            exit $?
-          ;;
-          mark-uninstalled)
-            mark_package_uninstalled "$PACKAGE"
-          ;;
-          get-repo)
-            get_package_repo "$PACKAGE"
-          ;;
-        esac
-      ;;
-    esac
-  ;;
 ########10########20########30###### MISC ######50########60########70########80
   info)
     echo "INFO: toolchest configuration: "

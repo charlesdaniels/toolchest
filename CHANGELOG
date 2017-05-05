@@ -673,3 +673,8 @@
 
   * fixed a minor bug in generic-uninstall where it failed to correctly clean
     up the packages' library directories. 
+
+
+  2017-05-05 - Charles Daniels:
+
+    * "internal" is now a dynamic directive 
