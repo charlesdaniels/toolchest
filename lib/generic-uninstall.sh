@@ -103,6 +103,11 @@ cd ..
 if [ -d lib ] ; then
   # for convenience, we go relative to the already calculated directories
   LIB_DIR="$DEST_DIR/../lib/$PACKAGE_NAME"
+  
+  if [ ! -d "$LIB_DIR" ] ; then
+    echo "INFO: (lib) no library directory present"
+    break
+  fi
 
   cd lib 
   for f in * ; do

@@ -670,3 +670,6 @@
 
   * to demonstrate the above, macosutils now specifies it's installer and
     uninstaller via package.cfg. 
+
+  * fixed a minor bug in generic-uninstall where it failed to correctly clean
+    up the packages' library directories. 
