@@ -574,44 +574,6 @@ case "$DIRECTIVE" in
     done
     rm -rf local.bak
   ;;
-  setup)
-    for dir in local local/bin local/lib local/log local/backup local/config ; do
-      FULLDIR="$NET_CDANIELS_TOOLCHEST_DIR/$dir"
-      if [ ! -e "$FULLDIR" ] ; then
-        printf "INFO: \"$FULLDIR\" does not exist, creating it... "
-        mkdir -p "$FULLDIR"
-        if [ $? -ne 0 ] ; then
-          echo "FAIL"
-          echo "ERROR: failed to create \"$FULLDIR\""
-          exit 1
-        else
-          echo "OK"
-        fi
-      fi
-    done
-
-    printf "INFO: validating realpath in PATH... "
-    which realpath | grep realpath > /dev/null
-    if [ $? -ne 0 ] ; then
-      echo "FAIL"
-      printf "INFO: symlinking normalize-path to realpath..."
-      ln -s $NET_CDANIELS_TOOLCHEST_DIR/bin/normalize-path $NET_CDANIELS_TOOLCHEST_DIR/bin/realpath
-    fi
-    echo "DONE"
-
-    which md5sum | grep md5sum > /dev/null
-    if [ $? -eq 0 ] ; then
-      which md5 | grep md5 > /dev/null
-      if [ $? -ne 0 ] ; then
-        printf "INFO: symlinking md5sum to md5... "
-        ln -s `which md5sum` $NET_CDANIELS_TOOLCHEST_DIR/bin/md5
-        echo "DONE"
-      fi
-    fi
-
-    touch "$NET_CDANIELS_TOOLCHEST_DIR/local/config/setup-done"
-    echo "INFO: setup finished successfully"
-  ;;
   *)
     # search for an appropriate directive binary and call if if one is found
     for parentdir in "lib/directives" "local/lib/directives" ; do

@@ -1,0 +1,94 @@
+#!/bin/sh
+########10########20########30## DOCUMENTATION #50########60########70########80
+#
+# OVERVIEW
+# ========
+# 
+# Performs first-time setup for a toolchest installation. This directive is
+# run by default if the file local/config/setup-done is not present 
+# (this is done by the toolchest management tool itself). 
+#
+# This tool performs the following actions:
+#
+# * validates that realpath is present on the system, and if not links the 
+#   sh implementation (normalize-path) into PATH. 
+#
+# * validates that md5 will produce md5 sums, and if not, symlinks md5sum to md5
+#
+# * validates that all directories which are assumed to exist by the toolchest
+#   do actually exist, and if not creates them. 
+#
+########10########20########30##### LICENSE ####50########60########70########80
+# Copyright (c) 2017, Charles Daniels
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without 
+# modification, are permitted provided that the following conditions are met:
+#
+# 1. Redistributions of source code must retain the above copyright notice, 
+# this list of conditions and the following disclaimer.
+# 
+# 2. Redistributions in binary form must reproduce the above copyright notice, 
+# this list of conditions and the following disclaimer in the documentation 
+# and/or other materials provided with the distribution.
+#
+# 3. Neither the name of the copyright holder nor the names of its 
+# contributors may be used to endorse or promote products derived from this 
+# software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
+# ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE 
+# LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF 
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
+# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+# POSSIBILITY OF SUCH DAMAGE.
+########10########20########30########40########50########60########70########80
+
+if ! (: "${NET_CDANIELS_TOOLCHEST_DIR?}") 2>/dev/null; then
+  echo "ERROR P41: NET_CDANIELS_TOOLCHEST_DIR is not defined"
+  exit 1
+fi
+
+cd "$NET_CDANIELS_TOOLCHEST_DIR"
+
+for dir in local local/bin local/lib local/log local/backup local/config ; do
+  FULLDIR="$NET_CDANIELS_TOOLCHEST_DIR/$dir"
+  if [ ! -e "$FULLDIR" ] ; then
+    printf "INFO: \"$FULLDIR\" does not exist, creating it... "
+    mkdir -p "$FULLDIR"
+    if [ $? -ne 0 ] ; then
+      echo "FAIL"
+      echo "ERROR: failed to create \"$FULLDIR\""
+      exit 1
+    else
+      echo "OK"
+    fi
+  fi
+done
+
+printf "INFO: validating realpath in PATH... "
+which realpath | grep realpath > /dev/null
+if [ $? -ne 0 ] ; then
+  echo "FAIL"
+  printf "INFO: symlinking normalize-path to realpath..."
+  ln -s $NET_CDANIELS_TOOLCHEST_DIR/bin/normalize-path $NET_CDANIELS_TOOLCHEST_DIR/bin/realpath
+fi
+echo "DONE"
+
+which md5sum | grep md5sum > /dev/null
+if [ $? -eq 0 ] ; then
+  which md5 | grep md5 > /dev/null
+  if [ $? -ne 0 ] ; then
+    printf "INFO: symlinking md5sum to md5... "
+    ln -s `which md5sum` $NET_CDANIELS_TOOLCHEST_DIR/bin/md5
+    echo "DONE"
+  fi
+fi
+
+touch "$NET_CDANIELS_TOOLCHEST_DIR/local/config/setup-done"
+echo "INFO: setup finished successfully"
