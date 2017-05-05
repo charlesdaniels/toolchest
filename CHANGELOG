@@ -694,3 +694,6 @@
       * net.cdaniels.toolchest.legacy/python-libtest
 
       * net.cdaniels.toolchest.legacy/net.cdaniels.python
+
+    * toolchest-doc now supports directives (eg. "toolchest-doc repo" works as
+      expected)

@@ -48,11 +48,23 @@ if [ $# -ne 1 ] ; then
   exit 1
 fi
 
+$(acquire-toolchest-dirs)
+
 if [ -f "./$1" ] ; then
   TARGET_PATH="./$1"
 else
   TARGET_PATH=`which $1`
 fi
+
+# check to see if there is a directive by this name
+if [ ! -f "$TARGET_PATH" ] ; then
+  if [ -f "$NET_CDANIELS_TOOLCHEST_DIR/lib/directives/$1.directive" ] ; then
+    TARGET_PATH="$NET_CDANIELS_TOOLCHEST_DIR/lib/directives/$1.directive" 
+  elif [ -f "$NET_CDANIELS_TOOLCHEST_DIR/local/lib/directives/$1.directive" ] ; then
+    TARGET_PATH="$NET_CDANIELS_TOOLCHEST_DIR/local/lib/directives/$1.directive" 
+  fi
+fi
+
 
 if [ ! -f "$TARGET_PATH" ] ; then
   echo "ERROR 58: could not locate target" > /dev/stderr
