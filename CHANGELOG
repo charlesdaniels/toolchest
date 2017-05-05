@@ -660,3 +660,13 @@
   * "repo" is now a dynamic directive
 
   * "setup" is now a dynamic directive
+
+  * added package.cfg (optional) file to package directories, which may
+    specfiy an installer or uninstaller script relative to the toolchest
+    directory. The primary use case here is to avoid using symlinks for 
+    packages in external repositories managed by toolchest repo. 
+  
+    This documented in lib/toolchest-package.lib
+
+  * to demonstrate the above, macosutils now specifies it's installer and
+    uninstaller via package.cfg. 

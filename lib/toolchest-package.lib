@@ -6,6 +6,20 @@
 # Toolchest internal-use functions for managing packages. Each function
 # is preceeded by a header documenting it's use.  
 #
+# PACKAGE CONFIGURATION 
+# =====================
+# 
+# A package may optionally contain the file package.cfg, if so, it will
+# be sourced in the event that another installer/uninstaller is not
+# found and used to decide how to proceed. The following variables may
+# thus be defined in this file:
+# 
+# TOOLCHEST_PACKAGE_INSTALLER . . . . . . path to installer script relative to
+#                                         NET_CDANIELS_TOOLCHEST_DIR
+#
+# TOOLCHEST_PACKAGE_UNINSTALLER . . . . . path to uninstaller script relative to
+#                                         NET_CDANIELS_TOOLCHEST_DIR
+#
 ########10########20########30##### LICENSE ####50########60########70########80
 # Copyright (c) 2017, Charles Daniels
 # All rights reserved.
@@ -179,6 +193,14 @@ install_package () {
     PACKAGE_PATH="$PACKAGE_PATH" \
     ./install.sh "$@"
     RET=$?
+  elif [ -e "./package.cfg" ] ; then 
+    source "./package.cfg"
+    NET_CDANIELS_TOOLCHEST_DIR="$NET_CDANIELS_TOOLCHEST_DIR" \
+    PACKAGE_NAME="$PACKAGE" \
+    PACKAGE_PATH="$PACKAGE_PATH" \
+    "$NET_CDANIELS_TOOLCHEST_DIR/$TOOLCHEST_PACKAGE_INSTALLER" "$@"
+    RET=$?
+
   else
     echo "ERROR T304: package $PACKAGE has no installer"
     return 1
@@ -236,6 +258,13 @@ uninstall_package () {
     PACKAGE_NAME="$PACKAGE" \
     PACKAGE_PATH="$PACKAGE_PATH" \
     ./uninstall.sh "$@"
+    RET=$?
+  elif [ -e "./package.cfg" ] ; then
+    source "./package.cfg"
+    NET_CDANIELS_TOOLCHEST_DIR="$NET_CDANIELS_TOOLCHEST_DIR" \
+    PACKAGE_NAME="$PACKAGE" \
+    PACKAGE_PATH="$PACKAGE_PATH" \
+    "$NET_CDANIELS_TOOLCHEST_DIR/$TOOLCHEST_PACKAGE_UNINSTALLER" $@
     RET=$?
   else
     echo "ERROR T359: package $PACKAGE has no uninstaller"
