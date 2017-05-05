@@ -617,8 +617,8 @@ case "$DIRECTIVE" in
     for parentdir in "lib/directives" "local/lib/directives" ; do
       binary="$NET_CDANIELS_TOOLCHEST_DIR/$parentdir/$DIRECTIVE.directive"
       if [ -x "$binary" ] ; then
-        "$binary" $@
-        exit #?
+        NET_CDANIELS_TOOLCHEST_DIR="$NET_CDANIELS_TOOLCHEST_DIR" "$binary" $@
+        exit $?
       fi
     done
 

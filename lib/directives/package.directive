@@ -38,7 +38,12 @@
 # POSSIBILITY OF SUCH DAMAGE.
 ########10########20########30########40########50########60########70########80
 
-$(acquire-toolchest-dirs)
+if ! (: "${NET_CDANIELS_TOOLCHEST_DIR?}") 2>/dev/null; then
+  echo "ERROR P41: NET_CDANIELS_TOOLCHEST_DIR is not defined"
+  exit 1
+fi
+
+$("$NET_CDANIELS_TOOLCHEST_DIR/bin/acquire-toolchest-dirs")
 PACKAGE_LIST="$NET_CDANIELS_TOOLCHEST_DIR/local/config/packages.list"
 source "$NET_CDANIELS_TOOLCHEST_LIB/toolchest-package.lib"
 if [ $? -ne 0 ] ; then
