@@ -51,6 +51,8 @@
 #    package list-installed . . . . . . . display a list of packages which
 #                                         have been marked as installed to the
 #                                         console.
+#   repo [directive] [target] . . . . . . interact with the toolchest's 
+#                                         repository management subsystem. 
 #
 #    info . . . . . . . . . . . . . . . . display toolchest's configuration
 #
@@ -225,6 +227,22 @@
 #                                     preferred.
 #
 #
+#
+#  DYNAMIC DIRECTIVES
+#  ==================
+#
+#  If a directive is issued which is not explicitly declared in this file, it
+#  will be searched for within lib/directives and local/lib/directives, and
+#  if found executed. Many directives documented in this header are implemented
+#  as dynamic directives, including "package" and "repo". Note that in some 
+#  cases, such as an embedded distributions, directives may be omitted to 
+#  save space if functionality is not required. For example, a toolchest install
+#  which is used as a runtime likely does not require package or repository 
+#  management to be enabled. 
+#
+#  Dynamic directives must be marked executeable, should have the extension
+#  ".directive". 
+#
 #  AUTHOR'S NOTE ON STOW
 #  =====================
 #
@@ -302,7 +320,7 @@
 #
 #  ---------
 #
-#  This software used and modified from it's origonal version on 2016-12-31 by
+#  This software used and modified from it's original version on 2016-12-31 by
 #  Charles Daniels.
 #
 ########10########20########30########40########50########60########70########80
@@ -597,7 +615,7 @@ case "$DIRECTIVE" in
   *)
     # search for an appropriate directive binary and call if if one is found
     for parentdir in "lib/directives" "local/lib/directives" ; do
-      binary="$NET_CDANIELS_TOOLCHEST_DIR/$parentdir/toolchest-$DIRECTIVE"
+      binary="$NET_CDANIELS_TOOLCHEST_DIR/$parentdir/$DIRECTIVE.directive"
       if [ -x "$binary" ] ; then
         "$binary" $@
         exit #?
