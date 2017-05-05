@@ -1,0 +1,118 @@
+#!/bin/sh
+########10########20########30## DOCUMENTATION #50########60########70########80
+#
+# OVERVIEW
+# ========
+#  
+# Creates a new package "template".
+#
+# USAGE
+# =====
+#
+# $1 . . . . repository - must exist and be active
+#
+# $2 . . . . name of the new package
+# 
+#
+########10########20########30##### LICENSE ####50########60########70########80
+#  Copyright (c) 2016, Charles Daniels
+#  All rights reserved.
+# 
+#  Redistribution and use in source and binary forms, with or without
+#  modification, are permitted provided that the following conditions are met:
+# 
+#  1. Redistributions of source code must retain the above copyright notice,
+#     this list of conditions and the following disclaimer.
+#  
+#  2. Redistributions in binary form must reproduce the above copyright
+#     notice, this list of conditions and the following disclaimer in the
+#     documentation and/or other materials provided with the distribution.
+# 
+#  3. Neither the name of the copyright holder nor the names of its
+#     contributors may be used to endorse or promote products derived from
+#     this software without specific prior written permission.
+# 
+#  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+#  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+#  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+#  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+#  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+#  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+#  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+#  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+#  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+#  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+#  POSSIBILITY OF SUCH DAMAGE.
+#  
+########10########20########30########40########50########60########70########80
+
+$(acquire-toolchest-dirs)
+
+if [ $# -ne 2 ] ; then
+  echo "ERROR 52: incorrect number of arguments"
+  toolchest-doc $0
+  exit 1
+fi
+
+REPONAME="$1"
+PKGNAME="$2"
+
+REPOPATH="$NET_CDANIELS_TOOLCHEST_DIR/packages/$REPONAME"
+PKGPATH="$REPOPATH/$PKGNAME"
+
+printf "INFO: repository is: $REPOPATH\n"
+printf "INFO: package is: $PKGPATH\n"
+
+if [ ! -e "$REPOPATH" ] ; then
+  echo "ERROR 67: requested repository does not exist"
+  exit 1
+fi
+
+if [ -e "$PKGPATH" ] ; then
+  echo "ERROR 72: requested package name already exists"
+  exit 1
+fi
+
+printf "INFO: creating package directories... "
+mkdir "$PKGPATH" > /dev/null 2>&1
+if [ $? -ne 0 ] ; then
+  echo "FAIL"
+  echo "ERROR 80: failed to create package directory"
+  exit 1
+fi
+
+mkdir "$PKGPATH/bin"
+if [ $? -ne 0 ] ; then
+  echo "FAIL"
+  echo "ERROR 86: failed to create bin directory"
+  exit 1
+fi
+
+mkdir "$PKGPATH/lib"
+if [ $? -ne 0 ] ; then
+  echo "FAIL"
+  echo "ERROR 94: failed to create lib directory"
+  exit 1
+fi
+
+mkdir "$PKGPATH/dep"
+if [ $? -ne 0 ] ; then
+  echo "FAIL"
+  echo "ERROR 101: failed to create dep directory"
+  exit 1
+fi
+
+echo "DONE"
+
+printf "INFO: creating file stubs... "
+for f in system toolchest uname remote perl ; do
+  touch "$PKGPATH/$f"
+done
+echo "DONE"
+
+printf "INFO: creating templates... "
+echo "Sample package brief from tcdev-makepkg" > "$PKGPATH/brief.txt"
+echo "Sample package description from tcdev-makepkg" > "$PKGPATH/description.txt"
+echo 'TOOLCHEST_PACKAGE_INSTALLER="lib/generic-install.sh"' > "$PKGPATH/package.cfg"
+echo 'TOOLCHEST_PACKAGE_UNINSTALLER="lib/generic-uninstall.sh"' >> "$PKGPATH/package.cfg"
+echo "DONE"
