@@ -654,3 +654,6 @@
     search for toolchest-DIRECTIVE in bin/ and invoke that - to this end, 
     the package and repo directives are now done "on the fly"
 
+  * Toolchest now runs the requested directive even if setup has not been
+    completed yet (setup will still run on the first run)
+

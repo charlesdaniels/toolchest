@@ -472,7 +472,6 @@ if [ ! -f "$NET_CDANIELS_TOOLCHEST_DIR/local/config/setup-done" ] && \
    [ "$1" != "setup" ]; then
   echo "INFO: performing first time setup."
   $0 setup
-  exit $?
 fi
 
 # make sure that we are somewhere in $PATH (toolchest likes to recursively
