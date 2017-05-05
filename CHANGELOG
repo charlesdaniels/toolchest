@@ -697,3 +697,8 @@
 
     * toolchest-doc now supports directives (eg. "toolchest-doc repo" works as
       expected)
+    
+    * moved a number of script from net.cdaniels.toolchest.tools/universal-tools
+      to net.cdaniels.toolchest.tools/aliases
+    
+    * added the alias gir->git
