@@ -117,5 +117,8 @@ if [ -d lib ] ; then
     echo "DONE"
   done
   cd ..
+
+  printf "INFO: (lib) removing library directory for $PACKAGE_NAME..."
+  rmdir "$LIB_DIR"
   echo "DONE"
 fi
