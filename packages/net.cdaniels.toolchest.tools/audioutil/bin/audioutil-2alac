@@ -49,7 +49,7 @@ fi
 
 for f in "$@" ; do
   IF="$f"
-  OF="`basename "$IF" .flac`.m4a"
+  OF="`audioutil-stripextension "$IF"`.m4a"
   printf "INFO: converting file \"$IF\" -> \"$OF\"... "
   MSG=`ffmpeg -i "$IF" $FFMPEG_OPTS "$OF" 2>&1`
   if [ $? -ne 0 ] ; then

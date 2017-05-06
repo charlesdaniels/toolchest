@@ -706,3 +706,11 @@
     * added toolchest-dev package
 
     * added toolchest-dev/tcdev-makepkg
+
+    * renamed audioutil-flac2alac -> audioutil-2alac
+    
+    * added audioutil-stripextension command to audioutil
+
+    * added audioutil/audioutil-2aac
+
+    * patched audioutil-2alac to correctly strip extensions other than .flac
