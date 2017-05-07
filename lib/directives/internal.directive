@@ -45,7 +45,7 @@ fi
 
 $("$NET_CDANIELS_TOOLCHEST_DIR/bin/acquire-toolchest-dirs")
 PACKAGE_LIST="$NET_CDANIELS_TOOLCHEST_DIR/local/config/packages.list"
-source "$NET_CDANIELS_TOOLCHEST_LIB/toolchest-package.lib"
+. "$NET_CDANIELS_TOOLCHEST_LIB/toolchest-package.lib"
 if [ $? -ne 0 ] ; then
   echo "ERROR I50: failure to locate toolchest-package.lib"
   exit 1

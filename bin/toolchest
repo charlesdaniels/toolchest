@@ -501,7 +501,7 @@ fi
 
 PACKAGE_LIST="$NET_CDANIELS_TOOLCHEST_DIR/local/config/packages.list"
 
-source "$NET_CDANIELS_TOOLCHEST_DIR/lib/toolchest-package.lib"
+. "$NET_CDANIELS_TOOLCHEST_DIR/lib/toolchest-package.lib"
 
 
 DIRECTIVE="$1"
