@@ -60,7 +60,43 @@ if ! (: "${NET_CDANIELS_TOOLCHEST_DIR?}") 2>/dev/null; then
   echo "ERROR TP46: NET_CDANIELS_TOOLCHEST_DIR is not defined"
   exit 1
 fi
+
+
+
 ########10########20########30 UTILITY FUNCTIONS 0########60########70########80
+
+
+# get_make_cmd
+# ============
+#
+# Obtain the correct command to run on this system to invoke GNU make, echo said
+# command and return 0 on success. On failure, echo "ERROR".  
+#
+get_make_cmd () {
+  # check that make is installed on the system
+  if [ ! -e `which make` ] ; then
+    echo "ERROR T79: make not present on the system" > /dev/stderr
+    echo "ERROR"
+    exit 1
+  fi
+
+  # check that the make is GNU make
+  make --version 2>&1 | grep 'GNU Make'  > /dev/null 2>&1
+  if [ $? -ne 0 ] ; then
+    if [ ! -e "`which gmake`" ] ; then
+      echo "ERROR T87: GNU make not present on the system" > /dev/stderr
+      echo "ERROR"
+      exit 1
+    else
+      echo "gmake"
+      return 0
+    fi
+  else
+    echo "make"
+    return 0
+  fi
+
+}
 
 #  check_package_installed
 #  =======================
@@ -173,19 +209,26 @@ install_package () {
     return 1
   fi
 
+  MAKE_CMD=`get_make_cmd`
+
+  if [ "$MAKE_CMD" = "ERROR" ] ; then
+    echo "ERROR T215: failed to ascertain correct GNU make infocation"
+    exit 1
+  fi
+
   cd "$PACKAGE_PATH"
 
   if [ -e "./Makefile" ] ; then
     NET_CDANIELS_TOOLCHEST_DIR="$NET_CDANIELS_TOOLCHEST_DIR" \
     PACKAGE_NAME="$PACKAGE" \
     PACKAGE_PATH="$PACKAGE_PATH" \
-    make install
+    $MAKE_CMD install
     RET=$?
   elif [ -e "./makefile" ] ; then
     NET_CDANIELS_TOOLCHEST_DIR="$NET_CDANIELS_TOOLCHEST_DIR" \
     PACKAGE_NAME="$PACKAGE" \
     PACKAGE_PATH="$PACKAGE_PATH" \
-    make install
+    $MAKE_CMD install
     RET=$?
   elif [ -e "./install.sh" ] ; then
     NET_CDANIELS_TOOLCHEST_DIR="$NET_CDANIELS_TOOLCHEST_DIR" \
@@ -239,19 +282,26 @@ uninstall_package () {
     return 1
   fi
 
+  MAKE_CMD=`get_make_cmd`
+
+  if [ "$MAKE_CMD" = "ERROR" ] ; then
+    echo "ERROR T215: failed to ascertain correct GNU make infocation"
+    exit 1
+  fi
+  
   cd "$PACKAGE_PATH"
 
   if [ -e "./Makefile" ] ; then
     NET_CDANIELS_TOOLCHEST_DIR="$NET_CDANIELS_TOOLCHEST_DIR" \
     PACKAGE_NAME="$PACKAGE" \
     PACKAGE_PATH="$PACKAGE_PATH" \
-    make uninstall
+    $MAKE_CMD uninstall
     RET=$?
   elif [ -e "./makefile" ] ; then
     NET_CDANIELS_TOOLCHEST_DIR="$NET_CDANIELS_TOOLCHEST_DIR" \
     PACKAGE_NAME="$PACKAGE" \
     PACKAGE_PATH="$PACKAGE_PATH" \
-    make uninstall
+    $MAKE_CMD uninstall
     RET=$?
   elif [ -e "./uninstall.sh" ] ; then
     NET_CDANIELS_TOOLCHEST_DIR="$NET_CDANIELS_TOOLCHEST_DIR" \

@@ -714,3 +714,10 @@
     * added audioutil/audioutil-2aac
 
     * patched audioutil-2alac to correctly strip extensions other than .flac
+
+  2017-05-07 - Charles Daniels:
+
+    * toolchest-package.lib will now refuse to install/uninstall a package which 
+      uses a Makefile for installation/uninstallation if GNU make is not present
+      on the system. To this end, packages may now safely assume that GNU make
+      will be used for installation/uninstallation
