@@ -194,7 +194,7 @@ install_package () {
     ./install.sh "$@"
     RET=$?
   elif [ -e "./package.cfg" ] ; then 
-    source "./package.cfg"
+    . "./package.cfg"
     NET_CDANIELS_TOOLCHEST_DIR="$NET_CDANIELS_TOOLCHEST_DIR" \
     PACKAGE_NAME="$PACKAGE" \
     PACKAGE_PATH="$PACKAGE_PATH" \
@@ -260,7 +260,7 @@ uninstall_package () {
     ./uninstall.sh "$@"
     RET=$?
   elif [ -e "./package.cfg" ] ; then
-    source "./package.cfg"
+    . "./package.cfg"
     NET_CDANIELS_TOOLCHEST_DIR="$NET_CDANIELS_TOOLCHEST_DIR" \
     PACKAGE_NAME="$PACKAGE" \
     PACKAGE_PATH="$PACKAGE_PATH" \
