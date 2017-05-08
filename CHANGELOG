@@ -721,3 +721,11 @@
       uses a Makefile for installation/uninstallation if GNU make is not present
       on the system. To this end, packages may now safely assume that GNU make
       will be used for installation/uninstallation
+   
+    * net.cdaniels.toolchest.tools/universal-tools is now marked as a dependency
+      of net.cdaniels.toolchest.ports/cmatrix, which depends one "extract", but
+      was not correctly marked as depending on universal-tools. 
+
+    * fixed incorrect presence of trailing newline in dep/ files for several 
+      packages 
+
