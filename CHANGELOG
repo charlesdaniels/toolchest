@@ -729,3 +729,7 @@
     * fixed incorrect presence of trailing newline in dep/ files for several 
       packages 
 
+  2017-04-19 - Charles Daniels:
+
+    * Added 2mif utility code-tools package. 
+
