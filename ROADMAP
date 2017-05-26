@@ -107,9 +107,6 @@ archiveutil:
 
 1.1.X release series:
 
-  * As I no longer use audioutil, it will likely be placed in the 
-    net.cdaniels.toolchest.legacy repo
-
   * Any "legacy" packages which still have not been updated to work correctly
     with the 1.0.X release series will likely be removed permanently, probably
     by creating a new repo (net.cdaniels.toolchest.deprecated). 

@@ -729,7 +729,11 @@
     * fixed incorrect presence of trailing newline in dep/ files for several 
       packages 
 
-  2017-04-19 - Charles Daniels:
+  2017-05-19 - Charles Daniels:
 
     * Added 2mif utility code-tools package. 
+
+  201705-26 - Charles Daniels:
+
+    * toolchest-doctor now scans for broken symlinks 
 

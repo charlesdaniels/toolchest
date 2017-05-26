@@ -1,4 +1,4 @@
-#!/usr/bin/env perl
+#!/bin/sh
 ########10########20########30## DOCUMENTATION #50########60########70########80
 #
 #  OVERVIEW
@@ -38,10 +38,13 @@
 # POSSIBILITY OF SUCH DAMAGE.
 ########10########20########30########40########50########60########70########80
 
-printf "INFO: searching for broken symlinks... ";
+$(acquire-toolchest-dirs)
 
-printf "DONE\n";
+find "$NET_CDANIELS_TOOLCHEST_DIR" -type f -not -ipath  "*.git*"  | \
+while read file ; do
+  if [ ! -e "$file" ] ; then
+    echo "WARNING D48: broken symlink detected: '$file'"
+  fi
+done
 
-printf "INFO: searching for package with invalid installation states... ";
-
-printf "DONE\n";
+echo "INFO: finished scanning. Problems found are displayed above."
