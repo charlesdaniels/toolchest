@@ -39,7 +39,7 @@
 #
 ########10########20########30########40########50########60########70########80
 
-FFMPEG_OPTS='-c:a libmp3lame -b:a 265k'
+FFMPEG_OPTS='-b:a 265k -f mp3'
 
 if ! check-command-exists ffmpeg ; then
   echo "ERROR 44: ffmpeg was not found on the system."
@@ -48,7 +48,7 @@ fi
 
 for f in "$@" ; do
   IF="$f"
-  OF="`audioutil-stripextension \"$IF\"`.m4a"
+  OF="`audioutil-stripextension \"$IF\"`.mp3"
   printf "INFO: converting file \"$IF\" -> \"$OF\"... "
   MSG=`ffmpeg -i "$IF" $FFMPEG_OPTS "$OF" 2>&1`
   if [ $? -ne 0 ] ; then
