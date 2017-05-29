@@ -733,7 +733,10 @@
 
     * Added 2mif utility code-tools package. 
 
-  201705-26 - Charles Daniels:
+  2017-05-26 - Charles Daniels:
 
     * toolchest-doctor now scans for broken symlinks 
 
+  2017-04-29 - Charles Daniels:
+
+    * add audioutil-2mp3
