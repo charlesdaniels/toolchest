@@ -1,0 +1,3 @@
+drivecheck - a tool for testing the integrity and performance of a hard disk.
+This tool generates a random test file from /dev/urandom, checksums it, copies
+it to the hard disk, and then checksums it again.

@@ -454,7 +454,7 @@
 
     * add audioutil-convert-m3u to audioutil package
 
-1.0.2: 
+1.0.2:
 
   2017-02-18 - Charles Daniels:
 
@@ -481,7 +481,7 @@
 
   2017-03-01 - Charles Daniels:
 
-    * added itunes_tools port 
+    * added itunes_tools port
 
     * added audioutil-macos package
 
@@ -489,7 +489,7 @@
 
       * audioutil-publish-itunes
 
-    * modified audioutil-recode to check for the environment variable 
+    * modified audioutil-recode to check for the environment variable
       AUDIOUTIL_RECODE_NOVERWRITE, if it is "YES", and the output file
       already exists, then the script exists silently.
 
@@ -501,7 +501,7 @@
     * `toolchest dir` no longer has a newline after output
 
       * this does not break acquire-toolchest-dirs, so scripts using that
-        are unaffected. 
+        are unaffected.
 
     * added texfot port
 
@@ -516,7 +516,7 @@
 
       * perl is now a dependancy of texutil
 
-      * texfot port is now a dependency of texutil 
+      * texfot port is now a dependency of texutil
 
   2017-03-04 - Charles Daniels:
 
@@ -526,12 +526,12 @@
 
   2017-03-09 - Charles Daniels:
 
-    * toolchest now checks if /bin/sh does not support `local`, if not, 
+    * toolchest now checks if /bin/sh does not support `local`, if not,
       it will attempt to run through a supported shell. Should this fail, it
-      will crash itself. 
+      will crash itself.
 
-    * toolchest now supports OpenIndiana 5.11 - this should bring support for 
-      any other UNIX which uses ksh93 or similar as /bin/sh also.  
+    * toolchest now supports OpenIndiana 5.11 - this should bring support for
+      any other UNIX which uses ksh93 or similar as /bin/sh also.
 
     * fixed the behavior of check-command-exists on OpenIndiana 5.11
 
@@ -548,9 +548,9 @@
 
   2017-03-09 - Charles Daniels:
 
-    * Fixed some typos in acquire-toolchest-dirs which caused it to crash. 
+    * Fixed some typos in acquire-toolchest-dirs which caused it to crash.
 
-1.0.3: 
+1.0.3:
 
   2017-03-10 - Charles Daniels:
 
@@ -565,7 +565,7 @@
     * texutil-mktex now supports advanced argument parsing
 
     * added --bibtex and --biber to texutil-mktex to invoke biber or bibtex
-      during compilation. 
+      during compilation.
 
     * texutil-mktex now enables shell escape by default
 
@@ -574,9 +574,9 @@
   2017-03-20 - Charles Daniels:
 
     * moved code-tools from net.cdaniels.toolchest.legacy to
-      net.cdaniels.toolchest.tools, as it still works just fine. 
+      net.cdaniels.toolchest.tools, as it still works just fine.
 
-  2017-03-21 - Charles Daniels: 
+  2017-03-21 - Charles Daniels:
 
     * added the pageget script to universal-tools
 
@@ -589,7 +589,7 @@
       it will be moved to coreutils as stability and correctness are verified
       in testing.
 
-1.0.4: 
+1.0.4:
 
   2017-03-30 - Charles Daniels:
 
@@ -610,7 +610,7 @@
 
   2017-04-11 - Charles Daniels:
 
-    * Updated `sysenv` to include additional information in reports. 
+    * Updated `sysenv` to include additional information in reports.
 
   2017-04-14 - Charles Daniels:
 
@@ -631,9 +631,9 @@
   2017-05-01 - Charles Daniels:
 
      * Fixed a bug in texutil-cleanup where it would miss the write18 test file
-      if the .tex file being used for input contained spaces. 
+      if the .tex file being used for input contained spaces.
 
-    * Created a package for toolchest-doctor and placed a stub in it. 
+    * Created a package for toolchest-doctor and placed a stub in it.
 
 
 1.1.0:
@@ -642,9 +642,9 @@
 
   * Depricated net.cdaniels.toolchest.indev/repoman
 
-  * repoman is now a core utility and is accessible only as a directive 
+  * repoman is now a core utility and is accessible only as a directive
 
-  * Broke utility functions for working with packages out to 
+  * Broke utility functions for working with packages out to
     lib/toolchest-package.lib
 
   * Moved functionality required for "toolchest package" directive into a
@@ -653,7 +653,7 @@
   * Toolchest now runs the requested directive even if setup has not been
     completed yet (setup will still run on the first run)
 
-  * Implemented support for dynamic directives 
+  * Implemented support for dynamic directives
 
   * "package" is now a dynamic directive
 
@@ -663,32 +663,32 @@
 
   * added package.cfg (optional) file to package directories, which may
     specfiy an installer or uninstaller script relative to the toolchest
-    directory. The primary use case here is to avoid using symlinks for 
-    packages in external repositories managed by toolchest repo. 
-  
+    directory. The primary use case here is to avoid using symlinks for
+    packages in external repositories managed by toolchest repo.
+
     This documented in lib/toolchest-package.lib
 
   * to demonstrate the above, macosutils now specifies it's installer and
-    uninstaller via package.cfg. 
+    uninstaller via package.cfg.
 
   * fixed a minor bug in generic-uninstall where it failed to correctly clean
-    up the packages' library directories. 
+    up the packages' library directories.
 
 
   2017-05-05 - Charles Daniels:
 
-    * "internal" is now a dynamic directive 
-    
+    * "internal" is now a dynamic directive
+
     * youtube-dl has been tested and moved to the ports repo
 
     * the following packages have been deprecated:
 
       * net.cdaniels.toolchest.legacy/240utils
-      
+
       * net.cdaniels.toolchest.legacy/check-connection
 
       * net.cdaniels.toolchest.legacy/create-project
-      
+
       * net.cdaniels.toolchest.legacy/posixcube
 
       * net.cdaniels.toolchest.legacy/python-libtest
@@ -697,18 +697,18 @@
 
     * toolchest-doc now supports directives (eg. "toolchest-doc repo" works as
       expected)
-    
+
     * moved a number of script from net.cdaniels.toolchest.tools/universal-tools
       to net.cdaniels.toolchest.tools/aliases
-    
+
     * added the alias gir->git
- 
+
     * added toolchest-dev package
 
     * added toolchest-dev/tcdev-makepkg
 
     * renamed audioutil-flac2alac -> audioutil-2alac
-    
+
     * added audioutil-stripextension command to audioutil
 
     * added audioutil/audioutil-2aac
@@ -717,26 +717,30 @@
 
   2017-05-07 - Charles Daniels:
 
-    * toolchest-package.lib will now refuse to install/uninstall a package which 
+    * toolchest-package.lib will now refuse to install/uninstall a package which
       uses a Makefile for installation/uninstallation if GNU make is not present
       on the system. To this end, packages may now safely assume that GNU make
       will be used for installation/uninstallation
-   
+
     * net.cdaniels.toolchest.tools/universal-tools is now marked as a dependency
       of net.cdaniels.toolchest.ports/cmatrix, which depends one "extract", but
-      was not correctly marked as depending on universal-tools. 
+      was not correctly marked as depending on universal-tools.
 
-    * fixed incorrect presence of trailing newline in dep/ files for several 
-      packages 
+    * fixed incorrect presence of trailing newline in dep/ files for several
+      packages
 
   2017-05-19 - Charles Daniels:
 
-    * Added 2mif utility code-tools package. 
+    * Added 2mif utility code-tools package.
 
   2017-05-26 - Charles Daniels:
 
-    * toolchest-doctor now scans for broken symlinks 
+    * toolchest-doctor now scans for broken symlinks
 
   2017-04-29 - Charles Daniels:
 
     * add audioutil-2mp3
+
+  2017-06-28 - Charles Daniels:
+
+    * Add drivecheck package.
