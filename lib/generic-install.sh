@@ -74,6 +74,9 @@ if ! (: "${PACKAGE_PATH?}") 2>/dev/null; then
   exit 1
 fi
 
+# make sure realpath is available
+. "$NET_CDANIELS_TOOLCHEST_DIR/lib/realpath.lib"
+
 # run preinstall script, if present
 if [ -e ./preinstall.sh ] ; then
   ./preinstall.sh 

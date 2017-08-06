@@ -749,3 +749,12 @@
 
     * Fixed an issue with tcdev-makepkg where dependency list stubs were
       created in the package root, rather than in the dep directory.
+
+  2017-08-06 - Charles Daniels:
+
+    * Fixed a minor bug where lib/generic-install and lib/toolchest-package.lib
+      were not using the toolchest's built-in realpath implementation, which
+      caused some functionality to not work correctly on macOS.
+
+    * Implemented the 'realpath' package to expose the toolchest's built-in
+      realpath implementation via $PATH.

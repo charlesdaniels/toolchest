@@ -1,0 +1,10 @@
+Because the realpath command is not available on every system, the toolchest
+ships with it's own implementation in pure sh (actually, it is Michael Kropat's
+implementation, graciously licensed under the MIT license).
+
+By default this implementation is only available within the toolchest itself.
+This package exposes this functionality as a shell script, which is useful when
+you have other, non-toolchest scripts that need realpath.
+
+If you are using a UNIX that ships realpath out of the box, or where it is
+available as a package, you should not use this!
