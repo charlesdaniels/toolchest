@@ -758,3 +758,5 @@
 
     * Implemented the 'realpath' package to expose the toolchest's built-in
       realpath implementation via $PATH.
+
+1.1.1:
