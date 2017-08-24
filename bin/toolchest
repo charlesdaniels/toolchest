@@ -466,7 +466,7 @@ if [ $? -ne 0 ] ; then
   exit 425
 fi
 
-TOOLCHEST_VERSION="1.1.0-git"
+TOOLCHEST_VERSION="1.1.0-RELEASE"
 
 command -v sed > /dev/null
 if [ $? -ne 0 ] ; then
