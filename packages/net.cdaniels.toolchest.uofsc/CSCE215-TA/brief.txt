@@ -1,1 +1,0 @@
-scripts and tools to assist in running CSCE215 labs

@@ -760,3 +760,8 @@
       realpath implementation via $PATH.
 
 1.1.1:
+
+  2017-08-28 - Charles Daniels:
+
+    * Deprecate net.cdaniels.toolchest.uofsc - it has been moved to a separate,
+      privately-managed repository.
