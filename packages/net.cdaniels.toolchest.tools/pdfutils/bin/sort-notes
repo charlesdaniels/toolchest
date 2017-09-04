@@ -1,15 +1,30 @@
 #!/bin/sh
 ########10########20########30## DOCUMENTATION #50########60########70########80
 #
-#  OVERVIEW
-#  ========
-#  This script will sort all the files that look like they might be school
-#  notes in the current directory into appropriate folders within the current
-#  semester's directory structure.
+# OVERVIEW
+# ========
 #
-#  This script depends on Python 3
+# This script will sort all the files that look like they might be school notes
+# in the current directory into appropriate folders within the current
+# semester's directory structure.
 #
-########10########20########30#### LISCENSE ####50########60########70########80
+# This script mostly works with my (Charles Daniels) preferred directory
+# structure and naming conventions for school related files, and is not
+# configurable.  In the long run, this script will either be updated to be
+# configurable, or it will be removed from the default toolchest repositories,
+# since in it's current state it is most likly not useful to anyone else.
+#
+# This script depends on Python 3
+#
+# The directory where the current semester's file are stored is hard-coded in
+# the school_dir variable... this should be abstracted out and plugged into a
+# configuration file at some point.
+#
+# Fair warning, this is one of these weird polyglot scripts which is both sh
+# and Python in the same file. In retrospect, I should probably not have done
+# things this way, but it works and I don't feel like re-doing it.
+#
+########10########20########30#### LICENSE #####50########60########70########80
 #  Copyright (c) 2016, Charles Daniels
 #  All rights reserved.
 #
@@ -41,7 +56,10 @@
 #
 ########10########20########30########40########50########60########70########80
 
-PY_BEGIN=66
+# this variable is the first line which should be interpreted as Python code,
+# if you add more lines to the shell part, you need to update this.
+PY_BEGIN=84
+
 TIMESTAMP=$(iso8601date)
 APPTAG="sort-notes_$TIMESTAMP"
 temputils $APPTAG create
@@ -84,7 +102,7 @@ CWD = os.getcwd()
 # file extensions which are considered valid candidates for notes
 file_extensions = ['pdf', 'rst']
 # directory where school-related documents are stored
-school_dir = os.path.join(HOME, "RCS/School/Spring 2017")
+school_dir = os.path.join(HOME, "RCS/School/2017-Fall")
 # substrings which indicate lecture notes
 lecture_notes = ['lecture notes', 'lecture']
 # substrings which indicate projects
