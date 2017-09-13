@@ -39,4 +39,15 @@
 #
 ########10########20########30########40########50########60########70########80
 
-find . -type f -iname "*.gp" -exec gnuplot '{}' \;
+START_DIR=$(pwd)
+find . -type f -iname "*.gp" | while read fn ; do
+	echo "GNUPLOT: $fn"
+	BASENAME=$(basename "$fn" .gp)
+	PARENT_DIR=$(dirname "$fn")
+	cd "$PARENT_DIR"
+	gnuplot "./$BASENAME.gp"
+	cd "$START_DIR"
+done
+
+
+
