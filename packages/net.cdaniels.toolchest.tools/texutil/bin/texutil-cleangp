@@ -1,0 +1,67 @@
+#!/bin/sh
+########10########20########30## DOCUMENTATION #50########60########70########80
+#
+# SYNOPSIS
+# ========
+#
+# This script will remove all GnuPlot build artifacts recursively relative to.
+#
+# ATTENTION: this script will recursively remove files without prompting,
+# make sure you understand what this script does before you run it!
+#
+# For the recursively-selected set of all files ending in '.gp', the basename
+# of each file cat-ed with the following file extensions will be deleted:
+#
+#	* .png
+#	* .jpg
+#	* .eps
+#	* .ps
+#	* .plt
+#	* .plot
+#	* .out
+#
+# For example, if run in a directory which contained 'foo.gp' and 'foo.png',
+# this script would delete 'foo.png'.
+#
+########10########20########30##### LICENSE ####50########60########70########80
+#  Copyright (c) 2017, Charles Daniels
+#  All rights reserved.
+#
+#  Redistribution and use in source and binary forms, with or without
+#  modification, are permitted provided that the following conditions are met:
+#
+#  1. Redistributions of source code must retain the above copyright notice,
+#     this list of conditions and the following disclaimer.
+#
+#  2. Redistributions in binary form must reproduce the above copyright
+#     notice, this list of conditions and the following disclaimer in the
+#     documentation and/or other materials provided with the distribution.
+#
+#  3. Neither the name of the copyright holder nor the names of its
+#     contributors may be used to endorse or promote products derived from
+#     this software without specific prior written permission.
+#
+#  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+#  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+#  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+#  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+#  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+#  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+#  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+#  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+#  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+#  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+#  POSSIBILITY OF SUCH DAMAGE.
+#
+########10########20########30########40########50########60########70########80
+
+find . -type f -iname "*.gp" | while read fn ; do
+	BASENAME=$(basename "$fn" .gp)
+	rm -f "$BASENAME.png"
+	rm -f "$BASENAME.jpg"
+	rm -f "$BASENAME.eps"
+	rm -f "$BASENAME.ps"
+	rm -f "$BASENAME.plt"
+	rm -f "$BASENAME.plot"
+	rm -f "$BASENAME.out"
+done

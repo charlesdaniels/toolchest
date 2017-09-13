@@ -773,3 +773,12 @@
 
     * pdfutils now depends on: gs, convert, parallel, mutool, pdftocairo,
       and pdfseparate.
+
+    * Added texutil-mkgnuplot for handling GnuPlot files.
+
+    * Added texutil-cleangp to clean up GnuPlot files.
+
+    * Added texutil-autobuild to handle calling other texutil scripts as
+      needed.
+
+    * Formatting improvements on existing texutil code.

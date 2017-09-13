@@ -186,7 +186,7 @@ printf "INFO: converting pages to images ... "
 # generate convert commands and pipe to parallel for execution
 for f in "$WORK_DIR"/page_*.pdf ; do
 	outfile=$(basename "$f" .pdf).png
-	echo "convert -density 100 \"$f\" \"$WORK_DIR/$outfile\""
+	echo "convert \"$f\" \"$WORK_DIR/$outfile\""
 done | parallel > "$WORK_DIR/2img.log" 2>&1
 
 if [ $? -ne 0 ] ; then

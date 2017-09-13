@@ -1,0 +1,74 @@
+#!/bin/sh
+########10########20########30## DOCUMENTATION #50########60########70########80
+#
+# SYNOPSIS
+# ========
+#
+# This script will do it's best to rebuild all GnuPlot and LaTeX documents
+# below . recursively, according to my conventions. This calls all of the other
+# texutil scripts in recursive mode - you should read *all* of them, as several
+# can delete your files without asking first, which could result in data loss
+# if you don't follow the conventions used in texutil rigidly.
+#
+# DOCUMENTATION
+# =============
+#
+# Conventions are as follows:
+#
+#	* Only top-level documents end in .tex - this extensions implies a PDF
+#	  of the same basename should be generated.
+#
+#	* All documents ending in .gp are GnuPlot files that should be run, and
+#	  any files sharing the same basename but with a set of extensions
+#	  defined in texutil-cleangp should be deleted after compilation.
+#
+#	* All documents ending in .tex should have related build artifacts,
+#	  except for generated PDFs purged every compile. What constitutes
+#	  related build artifacts is defined in texutil-cleanup, but generally
+#	  includes .aux files, logs, and so on.
+#
+# The idea of this script, and the related scripts in the texutil package, is
+# that you can run them at the top level directory of your documents/school/
+# project/whatever folder, and an appropriate PDF will be produced for every
+# file therein, en-mass. Where this can trip is is cases where you need to
+# insert *special sauce* into your LaTeX build process - there is nothing
+# implemented yet to handle these cases, but it will probably take the form of
+# adding something like .texutil-ignore as a file to a directory to make
+# texutil ignore it.
+#
+########10########20########30##### LICENSE ####50########60########70########80
+#  Copyright (c) 2017, Charles Daniels
+#  All rights reserved.
+#
+#  Redistribution and use in source and binary forms, with or without
+#  modification, are permitted provided that the following conditions are met:
+#
+#  1. Redistributions of source code must retain the above copyright notice,
+#     this list of conditions and the following disclaimer.
+#
+#  2. Redistributions in binary form must reproduce the above copyright
+#     notice, this list of conditions and the following disclaimer in the
+#     documentation and/or other materials provided with the distribution.
+#
+#  3. Neither the name of the copyright holder nor the names of its
+#     contributors may be used to endorse or promote products derived from
+#     this software without specific prior written permission.
+#
+#  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+#  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+#  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+#  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+#  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+#  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+#  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+#  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+#  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+#  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+#  POSSIBILITY OF SUCH DAMAGE.
+#
+########10########20########30########40########50########60########70########80
+
+texutil-mkgnuplot
+texutil-mktex -r
+texutil-cleanup
+texutil-cleangp

@@ -1,48 +1,48 @@
 #!/bin/sh
 ########10########20########30## DOCUMENTATION #50########60########70########80
 #
-#  OVERVIEW
-#  ========
-# 
-#  This script will attempt to clean up build artifacts left behind by
-#  pdflatex and similar. It will do this by recursing through ./ and all
-#  subdirectories looking for .tex file. Where found, it will look for files
-#  with the same basename but known extensions that indicate they are tex
-#  build artifacts and delete them. 
-#  
-#  To see which files would be deleted, pass "--dry-run" on $1. It must be
-#  spelled exactly, and be the first argument to the program to be recognized.
-#  
-#  Files with the following extensions will be deleted: 
-#  
-#    .aux
-#    .idx
-#    .log
-#    .out
-#    .run.xml
-#    .toc
-#    
-#  Further, files which end in "-blx.bib", or which are named exactly
-#  "texput.log" will also be deleted REGUARDLESS of their basename.
-#  
+# OVERVIEW
+# ========
+#
+# This script will attempt to clean up build artifacts left behind by pdflatex
+# and similar. It will do this by recursing through ./ and all subdirectories
+# looking for .tex file. Where found, it will look for files with the same
+# basename but known extensions that indicate they are tex build artifacts and
+# delete them.
+#
+# To see which files would be deleted, pass "--dry-run" on $1. It must be
+# spelled exactly, and be the first argument to the program to be recognized.
+#
+# Files with the following extensions will be deleted:
+#
+#	.aux
+#	.idx
+#	.log
+#	.out
+#	.run.xml
+#	.toc
+#
+# Further, files which end in "-blx.bib", or which are named exactly
+# "texput.log" will also be deleted REGARDLESS of their basename.
+#
 ########10########20########30##### LICENSE ####50########60########70########80
 #  Copyright (c) 2017, Charles Daniels
 #  All rights reserved.
-# 
+#
 #  Redistribution and use in source and binary forms, with or without
 #  modification, are permitted provided that the following conditions are met:
-# 
+#
 #  1. Redistributions of source code must retain the above copyright notice,
 #     this list of conditions and the following disclaimer.
-#  
+#
 #  2. Redistributions in binary form must reproduce the above copyright
 #     notice, this list of conditions and the following disclaimer in the
 #     documentation and/or other materials provided with the distribution.
-# 
+#
 #  3. Neither the name of the copyright holder nor the names of its
 #     contributors may be used to endorse or promote products derived from
 #     this software without specific prior written permission.
-# 
+#
 #  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
 #  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 #  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -54,7 +54,7 @@
 #  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 #  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 #  POSSIBILITY OF SUCH DAMAGE.
-#  
+#
 ########10########20########30########40########50########60########70########80
 
 
@@ -62,85 +62,85 @@ RECURSE="YES"
 TARGET_FILES="*.tex"
 DRY_RUN="NO"
 if [ "$1" = "--dry-run" ] ; then
-  DRY_RUN="YES"
-  shift
+	DRY_RUN="YES"
+	shift
 fi
 
 if [ "$DRY_RUN" = "YES" ] ; then
-  echo "DRY RUN for directory `realpath .`"
-  echo "INFO: dry run does NOT check if each file exists, it merely lists files"
-  echo "      that it will attempt to delete, should they exist!"
+	echo "DRY RUN for directory `realpath .`"
+	echo "INFO: dry run does NOT check if each file exists, it merely lists files"
+	echo "      that it will attempt to delete, should they exist!"
 fi
 
 for file in $TARGET_FILES; do
-  file_base=`basename "$file" .tex`
-  if [ "$DRY_RUN" = "YES" ] && [ -f "$file" ] ; then
-    echo "would delete:"
-    echo "\t $file_base.aux"
-    echo "\t $file_base.idx"
-    echo "\t $file_base.log"
-    echo "\t $file_base.out"
-    echo "\t $file_base.run.xml"
-    echo "\t $file_base.toc"
-    echo "\t" *-blx.bib
-    echo "\t texput.log"
-  fi
+	file_base=`basename "$file" .tex`
+	if [ "$DRY_RUN" = "YES" ] && [ -f "$file" ] ; then
+		echo "would delete:"
+		echo "\t $file_base.aux"
+		echo "\t $file_base.idx"
+		echo "\t $file_base.log"
+		echo "\t $file_base.out"
+		echo "\t $file_base.run.xml"
+		echo "\t $file_base.toc"
+		echo "\t" *-blx.bib
+		echo "\t texput.log"
+	fi
 
-  if [ "$DRY_RUN" = "NO" ] && [ -f "$file" ] ; then
-    if [ -e "$file_base.aux" ] ; then
-      rm "$file_base.aux"
-    fi
-    if [ -e "$file_base.idx" ] ; then
-      rm "$file_base.idx"
-    fi
-    if [ -e "$file_base.log" ] ; then
-      rm "$file_base.log"
-    fi
-    if [ -e "$file_base.out" ] ; then
-      rm "$file_base.out"
-    fi
-    if [ -e "$file_base.run.xml" ] ; then
-      rm "$file_base.run.xml"
-    fi
-    if [ -e "$file_base.toc" ] ; then
-      rm "$file_base.toc"
-    fi
-    if [ -e `echo "$file_base" | tr " " "_"`-blx.bib ] ; then
-      rm `echo "$file_base" | tr " " "_"`-blx.bib
-    fi
-    if [ -e "texput.log" ] ; then
-      rm texput.log
-    fi
-  fi
+	if [ "$DRY_RUN" = "NO" ] && [ -f "$file" ] ; then
+		if [ -e "$file_base.aux" ] ; then
+			rm "$file_base.aux"
+		fi
+		if [ -e "$file_base.idx" ] ; then
+			rm "$file_base.idx"
+		fi
+		if [ -e "$file_base.log" ] ; then
+			rm "$file_base.log"
+		fi
+		if [ -e "$file_base.out" ] ; then
+			rm "$file_base.out"
+		fi
+		if [ -e "$file_base.run.xml" ] ; then
+			rm "$file_base.run.xml"
+		fi
+		if [ -e "$file_base.toc" ] ; then
+			rm "$file_base.toc"
+		fi
+		if [ -e `echo "$file_base" | tr " " "_"`-blx.bib ] ; then
+			rm `echo "$file_base" | tr " " "_"`-blx.bib
+		fi
+		if [ -e "texput.log" ] ; then
+			rm texput.log
+		fi
+	fi
 
-  # handle the annoying tendency of pdflatex to create a file named 
-  # as the first space-delimited substring of the input file name for 
-  # "write testing", then failing to clean it up. 
-  write18test=`echo $file | cut -d\  -f 1`
-  if [ -e "$write18test" ] ; then
-    grep "write18-test" < $write18test > /dev/null 2>&1
-    if [ $? -eq 0 ] ; then
-      if [ "$DRY_RUN" = "YES" ] ; then
-        echo "\t $write18test";
-      else
-        rm "$write18test"
-      fi
-    fi
-  fi
+	# handle the annoying tendency of pdflatex to create a file named
+	# as the first space-delimited substring of the input file name for
+	# "write testing", then failing to clean it up.
+	write18test=`echo $file | cut -d\  -f 1`
+	if [ -e "$write18test" ] ; then
+		grep "write18-test" < $write18test > /dev/null 2>&1
+		if [ $? -eq 0 ] ; then
+			if [ "$DRY_RUN" = "YES" ] ; then
+				echo "\t $write18test";
+			else
+				rm "$write18test"
+			fi
+		fi
+	fi
 
 done
 
 if [ $RECURSE = "YES" ] ; then
-  for dir in */ ; do
-    if [ -e "$dir" ] ; then
-      if [ "$DRY_RUN" = "YES" ] ; then
-        cd "$dir" && $0 --dry-run
-      else
-        cd "$dir" && $0
-      fi
-      cd ..
-    fi
-  done 
+	for dir in */ ; do
+		if [ -e "$dir" ] ; then
+			if [ "$DRY_RUN" = "YES" ] ; then
+				cd "$dir" && $0 --dry-run
+			else
+				cd "$dir" && $0
+			fi
+			cd ..
+		fi
+	done
 fi
 
 

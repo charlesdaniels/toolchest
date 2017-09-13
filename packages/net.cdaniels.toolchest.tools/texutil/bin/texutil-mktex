@@ -3,62 +3,62 @@
 #
 # OVERVIEW
 # ========
-# 
-# This script will attempt to compile a given .tex file using pdflatex. 
-# 
-# Multiple .tex file may be specified for compilation. 
-# 
+#
+# This script will attempt to compile a given .tex file using pdflatex.
+#
+# Multiple .tex file may be specified for compilation.
+#
 # If $1 is '-r', then texutil-mktex will instead recurse into directories,
 # including ./, and attempt to compile *.tex there.
-# 
+#
 # This script will by default run pdflatex such that it will not pause on
-# errors. Further, this script will always exit with an exit code of 0, even
-# if one or more compilations failed.
-# 
+# errors. Further, this script will always exit with an exit code of 0, even if
+# one or more compilations failed.
+#
 # Further, this script will utilize texfot to display only
 # pertinent/important error messages.
-# 
-# 
+#
+#
 # USAGE
 # =====
-# 
+#
 #   -r,--recursive . . . . operate on *.tex, recurse into subdirectories, and
-#                          operate in *.tex in those as well. 
-#                          
+#                          operate in *.tex in those as well.
+#
 #   -b,--bibtex  . . . . . compile with bibtex
-# 
+#
 # CONFIGURATION
 # =============
-# 
+#
 # This script may be configured via the file
 # $NET_CDANIELS_TOOLCHEST_LOCAL/config/texutil-mktex.cfg
-# 
-# The following keys are recognized: 
-# 
+#
+# The following keys are recognized:
+#
 #   PDFLATEX_COMMAND . . . command which invokes `pdflatex`; defaults to
 #                          `pdflatex` if not specified
-#                          
+#
 #   PDFLATEX_OPTS  . . . . options to pass to pdflatex; defaults to
 #                          `-interaction=nonstopmode` if not specified
-# 
+#
 ########10########20########30##### LICENSE ####50########60########70########80
 #  Copyright (c) 2017, Charles Daniels
 #  All rights reserved.
-# 
+#
 #  Redistribution and use in source and binary forms, with or without
 #  modification, are permitted provided that the following conditions are met:
-# 
+#
 #  1. Redistributions of source code must retain the above copyright notice,
 #     this list of conditions and the following disclaimer.
-#  
+#
 #  2. Redistributions in binary form must reproduce the above copyright
 #     notice, this list of conditions and the following disclaimer in the
 #     documentation and/or other materials provided with the distribution.
-# 
+#
 #  3. Neither the name of the copyright holder nor the names of its
 #     contributors may be used to endorse or promote products derived from
 #     this software without specific prior written permission.
-# 
+#
 #  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
 #  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 #  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -70,32 +70,32 @@
 #  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 #  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 #  POSSIBILITY OF SUCH DAMAGE.
-#  
+#
 ########10########20########30########40########50########60########70########80
 
 
 use strict;
 use warnings;
 
-# This snippet is used to source sh-style .CFG files safely. 
+# This snippet is used to source sh-style .CFG files safely.
 #
 # this snippet sourced from SO
 # http://stackoverflow.com/a/6829502
 # User: Chas. Owens
 sub source {
-    my $name = shift;
+	my $name = shift;
 
-    open my $fh, "<", $name
-        or die "could not open $name: $!";
+	open my $fh, "<", $name
+		or die "could not open $name: $!";
 
-    while (<$fh>) {
-        chomp;
-        my ($k, $v) = split /=/, $_, 2;
-        $v =~ s/^(['"])(.*)\1/$2/; #' fix highlighter
-        $v =~ s/\$([a-zA-Z]\w*)/$ENV{$1}/g;
-        $v =~ s/`(.*?)`/`$1`/ge; #dangerous
-        $ENV{$k} = $v;
-    }
+	while (<$fh>) {
+		chomp;
+		my ($k, $v) = split /=/, $_, 2;
+		$v =~ s/^(['"])(.*)\1/$2/; #' fix highlighter
+		$v =~ s/\$([a-zA-Z]\w*)/$ENV{$1}/g;
+		$v =~ s/`(.*?)`/`$1`/ge; #dangerous
+		$ENV{$k} = $v;
+	}
 }
 
 # establish configuration
@@ -105,13 +105,13 @@ my $PDFLATEX_COMMAND = "pdflatex";
 my $PDFLATEX_OPTS = "-interaction=nonstopmode --shell-escape";
 
 if ( -e "$CONFIG_PATH" ) {
-  source("$CONFIG_PATH");
-  if ( exists $ENV{PDFLATEX_COMMAND} ) {
-    $PDFLATEX_COMMAND = $ENV{PDFLATEX_COMMAND};
-  }
-  if ( exists $ENV{PDFLATEX_OPTS} ) {
-    $PDFLATEX_OPTS = $ENV{PDFLATEX_OPTS};
-  }
+	source("$CONFIG_PATH");
+	if ( exists $ENV{PDFLATEX_COMMAND} ) {
+		$PDFLATEX_COMMAND = $ENV{PDFLATEX_COMMAND};
+	}
+	if ( exists $ENV{PDFLATEX_OPTS} ) {
+		$PDFLATEX_OPTS = $ENV{PDFLATEX_OPTS};
+	}
 }
 
 my $recursive = 0;  # FALSE
@@ -121,43 +121,43 @@ my @TARGET_FILES;
 
 # parse argv
 foreach (@ARGV) {
-  if ($_ eq "-r")             { $recursive = 1;          }
-  elsif ($_ eq "--recursive") { $recursive = 1;          }
-  elsif ($_ eq "-b")          { $bibtex    = 1;          }
-  elsif ($_ eq "--bibtex")    { $bibtex    = 1;          }
-  elsif ($_ eq "-i"      )    { $biber     = 1;          }
-  elsif ($_ eq "--biber")     { $biber     = 1;          }
-  else                        { push(@TARGET_FILES, $_); }
+	if ($_ eq "-r")             { $recursive = 1;          }
+	elsif ($_ eq "--recursive") { $recursive = 1;          }
+	elsif ($_ eq "-b")          { $bibtex    = 1;          }
+	elsif ($_ eq "--bibtex")    { $bibtex    = 1;          }
+	elsif ($_ eq "-i"      )    { $biber     = 1;          }
+	elsif ($_ eq "--biber")     { $biber     = 1;          }
+	else                        { push(@TARGET_FILES, $_); }
 
 }
 
 if ($recursive) {
-  @TARGET_FILES = <*.tex>;
+	@TARGET_FILES = <*.tex>;
 }
 
 foreach my $file (@TARGET_FILES) {
-  (my $without_extension = $file) =~ s/\.[^.]+$//;
-  print("\nCOMPILE: $without_extension\n");
-  `texfot $PDFLATEX_COMMAND $PDFLATEX_OPTS "$without_extension"`;
-  if ($bibtex) { 
-    print("BIBTEX:\n");
-    print(`bibtex "$without_extension"`)
-  }
-  if ($biber) { print(`biber "$without_extension"`); }
-  `texfot $PDFLATEX_COMMAND $PDFLATEX_OPTS "$without_extension"`;
-  print(`texfot $PDFLATEX_COMMAND $PDFLATEX_OPTS "$without_extension"`);
+	(my $without_extension = $file) =~ s/\.[^.]+$//;
+	print("\nCOMPILE: $without_extension\n");
+	`texfot $PDFLATEX_COMMAND $PDFLATEX_OPTS "$without_extension"`;
+	if ($bibtex) {
+		print("BIBTEX:\n");
+		print(`bibtex "$without_extension"`)
+	}
+	if ($biber) { print(`biber "$without_extension"`); }
+	`texfot $PDFLATEX_COMMAND $PDFLATEX_OPTS "$without_extension"`;
+	print(`texfot $PDFLATEX_COMMAND $PDFLATEX_OPTS "$without_extension"`);
 
 }
 
 if ( ! $recursive ) {
-  # we are done
-  exit(0);
+	# we are done
+	exit(0);
 }
 
 foreach my $file (<*>) {
-  if ( -d "$file" ) {
-    chdir $file;
-    print(`$0 -r`);
-    chdir "..";
-  }
+	if ( -d "$file" ) {
+		chdir $file;
+		print(`$0 -r`);
+		chdir "..";
+	}
 }
