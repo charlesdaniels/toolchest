@@ -55,13 +55,15 @@
 #
 ########10########20########30########40########50########60########70########80
 
-find . -type f -iname "*.gp" | while read fn ; do
+find "$(pwd)" -type f -iname "*.gp" | while read fn ; do
+	PARENT_DIR=$(dirname "$fn")
 	BASENAME=$(basename "$fn" .gp)
-	rm -f "$BASENAME.png"
-	rm -f "$BASENAME.jpg"
-	rm -f "$BASENAME.eps"
-	rm -f "$BASENAME.ps"
-	rm -f "$BASENAME.plt"
-	rm -f "$BASENAME.plot"
-	rm -f "$BASENAME.out"
+	for ext in .png .jpg .eps .ps .plt .plot .out ; do
+		ARTIFACT="$PARENT_DIR/$BASENAME$ext"
+		if [ -e "$ARTIFACT" ] ; then
+			echo "CLEANGP: '$ARTIFACT'"
+			rm "$ARTIFACT"
+		fi
+	done
+
 done
