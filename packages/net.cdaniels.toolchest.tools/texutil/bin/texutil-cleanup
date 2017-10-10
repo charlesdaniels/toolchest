@@ -82,6 +82,8 @@ for file in $TARGET_FILES; do
 		echo "\t $file_base.out"
 		echo "\t $file_base.run.xml"
 		echo "\t $file_base.toc"
+		echo "\t $file_base.bbl"
+		echo "\t $file_base.blg"
 		echo "\t" *-blx.bib
 		echo "\t texput.log"
 	fi
@@ -110,6 +112,12 @@ for file in $TARGET_FILES; do
 		fi
 		if [ -e "texput.log" ] ; then
 			rm texput.log
+		fi
+		if [ -e "$file_base.bbl" ] ; then
+			rm "$file_base.bbl"
+		fi
+		if [ -e "$file_base.blg" ] ; then
+			rm "$file_base.blg"
 		fi
 	fi
 

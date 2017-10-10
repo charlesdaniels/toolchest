@@ -782,3 +782,7 @@
       needed.
 
     * Formatting improvements on existing texutil code.
+
+  2017-10-09 - Charles Daniels:
+
+    * textil-cleanup now handles .bbl and .blg files correctly.
