@@ -23,4 +23,5 @@ packages/net.cdaniels.toolchest.ports/pv/remote
 packages/net.cdaniels.toolchest.ports/cmatrix/bin
 packages/net.cdaniels.toolchest.ports/itunes_tools/bin
 packages/net.cdaniels.toolchest.ports/clac/bin
+packages/net.cdaniels.toolchest.ports/latexrun/bin
 *.swp

@@ -1,0 +1,5 @@
+See LaTeX run. Run latexrun.
+
+latexrun fits LaTeX into a modern build environment. It hides LaTeX's circular
+dependencies, surfaces errors in a standard and user-friendly format, and
+generally enables other tools to do what they do best.
