@@ -788,3 +788,9 @@
     * textil-cleanup now handles .bbl and .blg files correctly.
 
     * Added a package for latexrun.
+
+  2017-10-14 - Charles Daniels:
+
+    * Rewrote system-statusline in Python for portability.
+
+    * Simpler, less platform-dependant system-lock.
