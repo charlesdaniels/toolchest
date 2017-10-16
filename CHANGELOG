@@ -798,3 +798,7 @@
   2017-10-16 - Charles Daniels:
 
     * texutil-mktex is now backed by latexrun.
+
+    * Implemented the new texbuild LaTeX build utility, which will ultimately
+      replace texutil in the long run. texutil will be moved to
+      net.cdaniels.toolchest.legacy by 1.2.0.
