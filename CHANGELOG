@@ -807,6 +807,9 @@
 
     * Added tomdoc.sh port.
 
-  2017-10-25 - Charles Daniels:
+  2017-10-26 - Charles Daniels:
 
     * Updated system-statusline for better Linux support.
+
+    * Added port for shellcheck (Linux version only)
+
