@@ -802,3 +802,7 @@
     * Implemented the new texbuild LaTeX build utility, which will ultimately
       replace texutil in the long run. texutil will be moved to
       net.cdaniels.toolchest.legacy by 1.2.0.
+
+  2017-10-25 - Charle Daniels:
+
+    * Added tomdoc.sh port.
