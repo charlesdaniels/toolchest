@@ -812,3 +812,20 @@
     * Updated texfot to 1.37
 
     * Removed texbuild because I finally discovered latexmk.
+
+  2017-11-17 - Charles Daniels:
+
+    * The following packages have been moved to the legacy repo, and are
+      slated for removal by the 1.2.X release series:
+
+      * aliases
+
+      * universal-tools
+
+      * code-tools
+
+      * texutil
+
+      * carbonite
+
+      * todotxt-extensions

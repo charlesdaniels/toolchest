@@ -1,0 +1,124 @@
+#!/usr/bin/env python3
+########10########20########30## DOCUMENTATION #50########60########70########80
+#
+# OVERVIEW
+# ========
+# 
+# Read in a CSV file, convert it to a table and render as an image. 
+#
+# USAGE
+# =====
+# 
+# usage: csv2img [-h] [--delimiter DELIMITER] [--input INPUT] [--output OUTPUT]
+#                [--imageformat IMAGEFORMAT] [--header HEADER] [--dpi DPI]
+# 
+# Convert CSV files to images
+# 
+# optional arguments:
+#   -h, --help            show this help message and exit
+#   --delimiter DELIMITER, -d DELIMITER
+#                         CSV delimiter (default: ,)
+#   --input INPUT, -i INPUT
+#                         Input file (-- for stdin, default: --)
+#   --output OUTPUT, -o OUTPUT
+#                         Output filename, defaults to input with .csv replaced
+#                         with the image format. Must be specified explicitly
+#                         when input is --
+#   --imageformat IMAGEFORMAT, -f IMAGEFORMAT
+#                         image output format (must be supported by
+#                         matplotlib.pyplot.savefig
+#   --header HEADER, -e HEADER
+#                         comma delimited list of header titles (defaults to
+#                         use-first row, which causes it to use row 0 of the
+#                         input file)
+#   --dpi DPI, -p DPI     DPI to render the image in
+#   
+########10########20########30##### LICENSE ####50########60########70########80
+#  Copyright (c) 2017, Charles Daniels
+#  All rights reserved.
+# 
+#  Redistribution and use in source and binary forms, with or without
+#  modification, are permitted provided that the following conditions are met:
+# 
+#  1. Redistributions of source code must retain the above copyright notice,
+#     this list of conditions and the following disclaimer.
+#  
+#  2. Redistributions in binary form must reproduce the above copyright
+#     notice, this list of conditions and the following disclaimer in the
+#     documentation and/or other materials provided with the distribution.
+# 
+#  3. Neither the name of the copyright holder nor the names of its
+#     contributors may be used to endorse or promote products derived from
+#     this software without specific prior written permission.
+# 
+#  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+#  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+#  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+#  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+#  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+#  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+#  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+#  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+#  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+#  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+#  POSSIBILITY OF SUCH DAMAGE.
+#  
+########10########20########30########40########50########60########70########80
+
+import argparse
+import numpy
+import tabular
+import sys
+import os
+
+stdout = sys.stdout.write
+stderr = sys.stderr.write
+
+parser = argparse.ArgumentParser(description="Convert CSV files to images")
+parser.add_argument("--delimiter", "-d", help="CSV delimiter (default: ,)", 
+                    default=",")
+parser.add_argument("--input", "-i", default="--",
+                    help="Input file (-- for stdin, default: --)")
+parser.add_argument("--output", "-o", default=None, 
+                    help="Output filename, defaults to input with .csv replaced with the image format. Must be specified explicitly when input is --")
+parser.add_argument("--imageformat", "-f", default="png",
+                    help="image output format (must be supported by matplotlib.pyplot.savefig")
+parser.add_argument("--header", "-e", default="use-first-row", 
+                    help="comma delimited list of header titles (defaults to use-first row, which causes it to use row 0 of the input file)")
+parser.add_argument("--dpi", "-p", default=300, type=int, 
+                    help="DPI to render the image in")
+
+args = parser.parse_args()
+input_stream = None
+if args.input == "--":
+	if args.output is None:
+		stderr("ERROR 66: input file is stdin and now output file specified")
+		exit(1)
+	input_stream = sys.stdin
+else:
+	if not os.path.isfile(args.input):
+		stderr("ERROR 71: input files does not exist!")
+		exit(1)
+
+	input_stream = open(args.input, "r")
+
+if args.imageformat not in matplotlib.pyplot.gcf().canvas.get_supported_filetypes():
+	stderr("ERROR 79: image format '{}' not supported".format(args.imageformat))
+	stderr("INFO: supported formats are: {}".format(list(matplotlib.pyplot.gcf().canvas.get_supported_filetypes().keys())))
+	exit(1)
+
+output_file = args.output
+if args.output is None:
+	output_file = args.input[:-4] + "." + args.imageformat
+
+data = []
+for line in input_stream:
+	line = line.rstrip()
+	data.append(line.split(args.delimiter))
+
+if not args.header == "use-first-row":
+	data = [args.header.split(",")] + data
+
+print(data)
+matplotlib.pyplot.imshow(data)
+matplotlib.pyplot.savefig(output_file, format=args.imageformat, dpi=args.dpi)
