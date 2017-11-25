@@ -26,3 +26,5 @@ packages/net.cdaniels.toolchest.ports/clac/bin
 packages/net.cdaniels.toolchest.ports/latexrun/bin
 *.swp
 packages/net.cdaniels.toolchest.ports/tomdoc.sh/remote/tomdoc.sh
+packages/net.cdaniels.toolchest.ports/shellcheck/remote
+packages/net.cdaniels.toolchest.ports/shellcheck/lib
